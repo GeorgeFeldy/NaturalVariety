@@ -14,7 +14,7 @@ using Terraria.DataStructures;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class Blackbird : ModNPC
+    public class EurasianJay : ModNPC
     {
         // public enum BirdType
         // {
@@ -32,7 +32,7 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetStaticDefaults()
         {
             
-            //DisplayName.SetDefault("Blackbird");
+            // DisplayName.SetDefault("");
             Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Bird];
             NPCID.Sets.CountsAsCritter[Type] = true;
             NPCID.Sets.DontDoHardmodeScaling[Type] = true;
@@ -96,7 +96,7 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "Blackbird (Turdus merula)")
+                    "Eurasian Jay (Garrulus glandarius)")
             });
         }
 
