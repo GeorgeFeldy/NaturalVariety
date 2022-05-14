@@ -1,0 +1,3 @@
+displayName = [c/0EFF0E:Natural Variety]
+author = Feldy
+version = 0.1
