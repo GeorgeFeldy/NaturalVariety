@@ -13,7 +13,6 @@ namespace NaturalVariety.NPCs.Critters
     {
         public override void SetDefaults()
         {
-           
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>();
             // Banner = Item.NPCtoBanner(NPCID.Bird);
