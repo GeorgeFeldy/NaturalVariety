@@ -1,7 +1,7 @@
 [c/0EFF0E:Natural Variety] is a new WIP personal project which will add real world variety to Terraria's animals (both critters and enemies). 
 
 So far it adds:
-	- Bird critter variants: Eurasian Jay, Blackbird.
+	- Bird critter variants: Eurasian Jay, Blackbird, Goldfinch
 
 In plans:
 	- Birds:
