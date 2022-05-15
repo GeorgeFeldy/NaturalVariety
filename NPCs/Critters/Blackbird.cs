@@ -14,20 +14,8 @@ using Terraria.DataStructures;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class Blackbird : ModNPC
+    public class Blackbird : ModNPC // TODO: derive from base bird class 
     {
-        // public enum BirdType
-        // {
-        //     Blackbird,
-        //     .....
-        // }
-
-
-        // public BirdType BirdType_local
-        // {
-        //     get => (BirdType_local)NPC.ai[3];
-        //     set => NPC.ai[3] = (int)value;
-        // }
 
         public override void SetStaticDefaults()
         {
@@ -42,7 +30,7 @@ namespace NaturalVariety.NPCs.Critters
             {
                 Velocity = 1f
             };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value); // TODO: adjust for bird critter 
         }
 
         public override void SetDefaults()
@@ -67,25 +55,8 @@ namespace NaturalVariety.NPCs.Critters
         public override bool CanHitPlayer(Player target, ref int cooldownSlot) => false;
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo) {
-			return SpawnCondition.OverworldDayBirdCritter.Chance; // Spawn with 1/5th the chance of a regular zombie.
+			return SpawnCondition.OverworldDayBirdCritter.Chance; // Spawn with regular bird chance.
 		}
-
-
-        // public override void ModifyNPCLoot(NPCLoot npcLoot)
-        // {
-        //  TODO: add loot here (dont kill pls)
-        // }
-
-        // public override void OnSpawn(IEntitySource source)
-        // {
-        //     if (?)
-        //     {
-        //             BirdType_c = (BirdType)Main.rand.Next(maxEnum);
-        //     }
-        // 
-        //     TimerRand = Main.rand.Next(80, 180);
-        //     NPC.alpha = 0;  ----- set to default NPC.alpha = 255 as Hallam did 
-        // }
      
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
