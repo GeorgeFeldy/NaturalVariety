@@ -1,1 +1,24 @@
-[c/0EFF0E:Natural Variety] is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+[c/0EFF0E:Natural Variety] is a new WIP personal project which will add real world variety to Terraria's animals (both critters and enemies). 
+
+So far it adds:
+	- Bird critter variants: Eurasian Jay, Blackbird.
+
+In plans:
+	- Birds:
+        - More songbirds 
+        - Owl varieties 
+        - Duck varieties (e.g Pochard, Merganser)
+        - Grebe varieties (e.g Great Crested, Little, Black-Necked)
+        - Swans and possibly geese
+        - Vulture enemy varieties 
+        - Eagles and other raptors (enemies which spawn in the sky) 
+    - Others:
+        - Frog varieties and other Herps 
+        - Spider varieties (enemies)
+        - Butterflies and Moths (critter, enemy)
+
+	- Mechanics related to Zoologist and Bestiary (critter friendliness mechanic, encounter rewards, etc.)
+	
+ 
+
+	
