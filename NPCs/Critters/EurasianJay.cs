@@ -1,61 +1,28 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-// using NaturalVariety.Items.Critters;
-// using NaturalVariety.Items.Placeable.Banners;
 using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-using Terraria.DataStructures;
+
+using NaturalVariety.Items.Critters;
+// using NaturalVariety.Items.Placeable.Banners;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class EurasianJay : ModNPC // TODO: derive from base bird class 
+    public class EurasianJay : Songbird 
     {
-
-        public override void SetStaticDefaults()
-        {
-            
-            // DisplayName.SetDefault("Eurasian Jay");
-            Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Bird];
-            NPCID.Sets.CountsAsCritter[Type] = true;
-            NPCID.Sets.DontDoHardmodeScaling[Type] = true;
-            NPCID.Sets.TakesDamageFromHostilesWithoutBeingFriendly[Type] = true;
-
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new(0)
-            {
-                Velocity = 1f
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value); // TODO: adjust for bird critter 
-        }
 
         public override void SetDefaults()
         {
-            NPC.width = 14;
-            NPC.height = 14;
-            NPC.defense = 0;
-            NPC.lifeMax = 5;
-            NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.value = 0;
-            NPC.knockBackResist = 0.8f;
-            NPC.aiStyle = 24;
-            NPC.alpha = 0;
-            AnimationType = NPCID.Bird; // Use vanilla bird's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
-            // placeholders:
-            NPC.catchItem = ItemID.Bird;
-            Banner = Item.NPCtoBanner(NPCID.Bird);
-            BannerItem = Item.BannerToItem(Banner);
+            base.SetDefaults();
+            NPC.catchItem = (short)ModContent.ItemType<EurasianJayItem>();
+            // Banner = Item.NPCtoBanner(NPCID.Bird);
+            // BannerItem = Item.BannerToItem(Banner);
         }
 
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot) => false;
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo) {
-			return SpawnCondition.OverworldDayBirdCritter.Chance; // Spawn with regular bird chance.
+			return SpawnCondition.OverworldDayBirdCritter.Chance; // Spawn with regular bird chance. 
 		}
 
 
@@ -67,7 +34,8 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "Eurasian Jay (Garrulus glandarius)")
+                    "Eurasian Jay (Garrulus glandarius) is a species of passerine bird in the family Corvidae with boldly patterned " +
+                    "plumage, typically having blue feathers in the wings or tail.")
             });
         }
 
