@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -32,8 +32,13 @@ namespace NaturalVariety.Utils
 
         static CageHelper()
         {
+            // list of "cage" type items, sorted by ID 
             cageList = new()
             {
+                ItemID.FishBowl,
+                ItemID.StarinaBottle,
+                ItemID.FireflyinaBottle,
+                ItemID.LightningBuginaBottle,
                 ItemID.BunnyCage,
                 ItemID.SquirrelCage,
                 ItemID.MallardDuckCage,
@@ -55,7 +60,6 @@ namespace NaturalVariety.Utils
                 ItemID.GoldButterflyCage,
                 ItemID.GoldFrogCage,
                 ItemID.GoldGrasshopperCage,
-                ItemID.GrasshopperCage,
                 ItemID.GoldMouseCage,
                 ItemID.GoldWormCage,
                 ItemID.CageEnchantedNightcrawler,
@@ -64,10 +68,12 @@ namespace NaturalVariety.Utils
                 ItemID.CageSluggy,
                 ItemID.SquirrelOrangeCage,
                 ItemID.SquirrelGoldCage,
+                ItemID.GoldGoldfishBowl,
                 ItemID.MaggotCage,
                 ItemID.RatCage,
                 ItemID.LadybugCage,
                 ItemID.OwlCage,
+                ItemID.PupfishBowl,
                 ItemID.GoldLadybugCage,
                 ItemID.TurtleCage,
                 ItemID.TurtleJungleCage,
@@ -75,9 +81,15 @@ namespace NaturalVariety.Utils
                 ItemID.SeagullCage,
                 ItemID.WaterStriderCage,
                 ItemID.GoldWaterStriderCage,
-                ItemID.GrebeCage,
                 ItemID.SeahorseCage,
                 ItemID.GoldSeahorseCage,
+                ItemID.SoulBottleLight,
+                ItemID.SoulBottleNight,
+                ItemID.SoulBottleFlight,
+                ItemID.SoulBottleSight,
+                ItemID.SoulBottleMight,
+                ItemID.SoulBottleFright,
+                ItemID.LavaflyinaBottle,
                 ItemID.MagmaSnailCage,
                 ItemID.AmethystBunnyCage,
                 ItemID.TopazBunnyCage,
@@ -93,20 +105,7 @@ namespace NaturalVariety.Utils
                 ItemID.RubySquirrelCage,
                 ItemID.DiamondSquirrelCage,
                 ItemID.AmberSquirrelCage,
-                ItemID.TruffleWormCage,
-                ItemID.FishBowl,
-                ItemID.PupfishBowl,
-                ItemID.GoldGoldfishBowl,
-                ItemID.StarinaBottle,
-                ItemID.SoulBottleLight,
-                ItemID.SoulBottleNight,
-                ItemID.SoulBottleFlight,
-                ItemID.SoulBottleSight,
-                ItemID.SoulBottleMight,
-                ItemID.SoulBottleFright,
-                ItemID.FireflyinaBottle,
-                ItemID.LightningBuginaBottle,
-                ItemID.LavaflyinaBottle
+                ItemID.TruffleWormCage
             };
 
             // bad code incoming? 
