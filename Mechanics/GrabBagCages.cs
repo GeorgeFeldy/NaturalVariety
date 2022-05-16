@@ -12,7 +12,6 @@ namespace NaturalVariety.Items.Mechanics
     /// </summary>
     public class GrabBagCages : GlobalItem 
     {
-
         public override bool AppliesToEntity(Item item, bool lateInstatiation)
         {
             return CageHelper.ItemIsCage(item);
@@ -31,15 +30,12 @@ namespace NaturalVariety.Items.Mechanics
 
         public override void RightClick(Item item, Player player)
         {
-            // if (CageHelper.ItemIsCage(item)) // necessary? 
-            // {
-                var entitySource = player.GetSource_OpenItem(item.type);
+            var entitySource = player.GetSource_OpenItem(item.type);
      
-                foreach(Item recipeItem in CageHelper.recipeItemDict[item.type])
-                {
-                    player.QuickSpawnItem(entitySource, recipeItem.type);
-                }
-            // }
+            foreach(Item recipeItem in CageHelper.recipeItemDict[item.type])
+            {
+                player.QuickSpawnItem(entitySource, recipeItem.type);
+            }
         }
     }
 }
