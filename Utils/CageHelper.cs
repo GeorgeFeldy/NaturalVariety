@@ -18,22 +18,20 @@ namespace NaturalVariety.Utils
 
         public static bool ItemIsCage(Item item)
         {
-            bool isCage = false;    
+            // foreach (int cageItem in cageList)
+            // {
+            //     if(item.type == cageItem)
+            //     {
+            //         isCage = true;
+            //     }
+            // }
 
-            foreach (int cageItem in cageList)
-            {
-                if(item.type == cageItem)
-                {
-                    isCage = true;
-                }
-            }
-            return isCage;    
+            return (cageList.BinarySearch(item.type) >= 0);    
         }
 
         static CageHelper()
         {
-            // list of "cage" type items, sorted by ID 
-            cageList = new()
+            cageList = new() // list of "cage" type items, sorted by ID 
             {
                 ItemID.FishBowl,
                 ItemID.StarinaBottle,
@@ -108,6 +106,7 @@ namespace NaturalVariety.Utils
                 ItemID.TruffleWormCage
             };
 
+
             // bad code incoming? 
             recipeItemDict = new();
             for (int i = 0; i < Recipe.numRecipes; i++)
@@ -124,5 +123,31 @@ namespace NaturalVariety.Utils
                 }
             }
         }
+
+        private static bool IsOrdered<T>(this IList<T> list, IComparer<T> comparer = null)
+        {
+            if (comparer == null)
+            {
+                comparer = Comparer<T>.Default;
+            }
+
+            if (list.Count > 1)
+            {
+                for (int i = 1; i < list.Count; i++)
+                {
+                    if (comparer.Compare(list[i - 1], list[i]) > 0)
+                    {
+
+                        T last = list[i - 1];
+                        T current = list[i];
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+
+
     }
 }
