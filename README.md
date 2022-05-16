@@ -1,2 +1,4 @@
 # NaturalVariety
-"Natural Variety" mod for tModLoader
+## "Natural Variety" mod for tModLoader
+
+
