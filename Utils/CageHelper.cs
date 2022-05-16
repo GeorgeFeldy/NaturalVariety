@@ -18,14 +18,6 @@ namespace NaturalVariety.Utils
 
         public static bool ItemIsCage(Item item)
         {
-            // foreach (int cageItem in cageList)
-            // {
-            //     if(item.type == cageItem)
-            //     {
-            //         isCage = true;
-            //     }
-            // }
-
             return (cageList.BinarySearch(item.type) >= 0);    
         }
 
