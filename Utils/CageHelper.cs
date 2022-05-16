@@ -16,11 +16,6 @@ namespace NaturalVariety.Utils
 
         public static readonly Dictionary<int,List<Item>> recipeItemDict;  // dict item recipes 
 
-        public static bool ItemIsCage(Item item)
-        {
-            return (cageList.BinarySearch(item.type) >= 0);    
-        }
-
         static CageHelper()
         {
             cageList = new() // list of "cage" type items, sorted by ID 
@@ -114,6 +109,11 @@ namespace NaturalVariety.Utils
                     }
                 }
             }
+        }
+
+        public static bool ItemIsCage(Item item)
+        {
+            return (cageList.BinarySearch(item.type) >= 0);
         }
 
         private static bool IsOrdered<T>(this IList<T> list, IComparer<T> comparer = null)

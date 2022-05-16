@@ -1,19 +1,24 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
+
 
 using NaturalVariety.Items.Critters;
 // using NaturalVariety.Items.Placeable.Banners;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class EurasianJay : Songbird 
+    public class Pochard : Waterfowl 
     {
+
+        public override string Texture => "NaturalVariety/NPCs/Critters/Pochard";
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<EurasianJayItem>();
+            // NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>(); // placeholder
+            NPC.catchItem = ItemID.Star; // placeholder
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -24,8 +29,7 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "Eurasian Jay (Garrulus glandarius) is a species of passerine bird in the family Corvidae with boldly patterned " +
-                    "plumage, typically having blue feathers in the wings or tail.")
+                   "Hee hee")
             });
         }
 

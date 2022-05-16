@@ -1,11 +1,8 @@
 using Terraria;
-using Terraria.ID;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 using NaturalVariety.Items.Critters;
-// using NaturalVariety.Items.Placeable.Banners;
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -15,14 +12,7 @@ namespace NaturalVariety.NPCs.Critters
         {
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>();
-            // Banner = Item.NPCtoBanner(NPCID.Bird);
-            // BannerItem = Item.BannerToItem(Banner);
         }
-
-
-        public override float SpawnChance(NPCSpawnInfo spawnInfo) {
-			return SpawnCondition.OverworldDayBirdCritter.Chance; // Spawn with regular bird chance.
-		}
      
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
