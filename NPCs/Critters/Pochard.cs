@@ -32,7 +32,32 @@ namespace NaturalVariety.NPCs.Critters
                    "Hee hee")
             });
         }
-
-      
     }
+
+    public class PochardFly : WaterfowlFly
+    {
+
+        public override string Texture => "NaturalVariety/NPCs/Critters/Pochard";
+
+        public override void SetDefaults()
+        {
+            base.SetDefaults();
+            // NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>(); // placeholder
+            NPC.catchItem = ItemID.Star; // placeholder
+        }
+
+        // public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        // {
+        //     bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+        //     {
+        //         BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+        //         BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
+        // 
+        //         new FlavorTextBestiaryInfoElement(
+        //            "Hee hee")
+        //     });
+        // }
+    }
+
 }
+
