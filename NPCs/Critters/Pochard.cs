@@ -46,17 +46,6 @@ namespace NaturalVariety.NPCs.Critters
             NPC.catchItem = ItemID.Heart; // placeholder
         }
 
-        // public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        // {
-        //     bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-        //     {
-        //         BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-        //         BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
-        // 
-        //         new FlavorTextBestiaryInfoElement(
-        //            "Hee hee")
-        //     });
-        // }
     }
 
 }

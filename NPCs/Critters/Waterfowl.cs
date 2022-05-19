@@ -59,6 +59,10 @@ namespace NaturalVariety.NPCs.Critters
 
 			Banner = Item.NPCtoBanner(NPCID.Duck);
 			BannerItem = Item.BannerToItem(Banner);
+
+			AI_State = 0;
+			AI_Timer = 0;
+			AI_NextDir = 0;
 		}
 
 		/// <summary>
@@ -91,7 +95,6 @@ namespace NaturalVariety.NPCs.Critters
 				NPC.TargetClosest();
 				NPC.direction = direction;
 				NPC.netUpdate = true;
-
 				return;
 			}
 
@@ -109,7 +112,6 @@ namespace NaturalVariety.NPCs.Critters
 						AI_Timer = 0;
 						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
 					}
-
 					break;
 
 				case (float)ActionState.Walk:
@@ -118,12 +120,12 @@ namespace NaturalVariety.NPCs.Critters
 
 					if(Main.player[NPC.target].Distance(NPC.Center) >= 200f)
                     {
-						NPC.direction = (int)AI_NextDir; // if player is far enough, pick distance randomly 
+						NPC.direction = (int)AI_NextDir; // if player is far enough, pick direction randomly 
 					}
 					else
                     {
                         int direction = NPC.direction;
-						NPC.TargetClosest(true);	   // else, away from closest target 
+						NPC.TargetClosest(true);	     // else, away from closest target 
 						NPC.direction = direction * -1;
 						AI_NextDir = (float)NPC.direction;
 
@@ -169,7 +171,6 @@ namespace NaturalVariety.NPCs.Critters
             base.SetDefaults();
             NPC.width = 28;
             NPC.height = 22;
-            //NPC.aiStyle = NPCAIStyleID.Duck;
             NPC.aiStyle = -1;
             AnimationType = NPCID.Duck2;                  
 
