@@ -19,7 +19,7 @@ namespace NaturalVariety.NPCs.Critters
 	public abstract class Waterfowl : Critter
 	{
 
-		// AI action state (TODO: add states if needed)
+		// AI action state 
 		private enum ActionState
 		{
 			Walk,
@@ -45,15 +45,14 @@ namespace NaturalVariety.NPCs.Critters
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			return SpawnCondition.OverworldWaterSurfaceCritter.Chance; // Spawn with regular bird chance. 
+			return SpawnCondition.OverworldWaterSurfaceCritter.Chance; // Spawn with regular duck chance. 
 		}
 
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
 			NPC.width = 22;
-			NPC.height = 26;
-			//NPC.aiStyle = NPCAIStyleID.Passive;                                                              
+			NPC.height = 26;                                                           
 			NPC.aiStyle = -1;
 			AnimationType = NPCID.Duck;
 
@@ -70,28 +69,26 @@ namespace NaturalVariety.NPCs.Critters
 		/// </summary>
 		public override void AI()
 		{
+			// distances relative to player
+			const float avoidDistance = 150f;
+			const float spookDistance = 100f;
+			const float corneredDistance = avoidDistance + 50f;
 
-			if(AI_NextDir == 0)
+			if(AI_NextDir == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
 				AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+				NPC.netUpdate = true;
 			}
 
 			NPC.TargetClosest();
-			// TODO: implement this as a function and call on every action state (?)
 			// if touching water, falling or player is really close, transform to flying regardless of action state 
 			if (Main.netMode != NetmodeID.MultiplayerClient && 
-			   (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.wet || Main.player[NPC.target].Distance(NPC.Center) < 100f))
+			   (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.wet || Main.player[NPC.target].Distance(NPC.Center) < spookDistance))
             {
 				int direction = NPC.direction;
 
-				// convert to corresponding "Duck AI" WaterfowlFly child type NPC 
-				string nextTypeString = this.GetType().Name + "Fly";
-				Type nextType = System.Type.GetType("NaturalVariety.NPCs.Critters." + nextTypeString);
-				var func = typeof(ModContent).GetMethod("NPCType");
-				var genericFunc = func.MakeGenericMethod(nextType);
-				NPC.Transform((int)genericFunc.Invoke(this, null));
+				ConvertToFlying(); // convert to corresponding "Duck AI" WaterfowlFly child type NPC 
 
-				// will this work? 
 				NPC.TargetClosest();
 				NPC.direction = direction;
 				NPC.netUpdate = true;
@@ -105,12 +102,15 @@ namespace NaturalVariety.NPCs.Critters
 					AI_Timer++;
 
 					// start walking after a few seconds or when player is close 
-					if(AI_Timer >= Main.rand.Next(240,480) || // (4sec <-> 8sec) 
-					Main.player[NPC.target].Distance(NPC.Center) < 200f) 
+					if(Main.netMode != NetmodeID.MultiplayerClient && 
+					  (AI_Timer >= Main.rand.Next(240,480)		   || // (4sec <-> 8sec) 
+					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
 					{
 						AI_State = (float)ActionState.Walk;
 						AI_Timer = 0;
 						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+
+						NPC.netUpdate = true;
 					}
 					break;
 
@@ -118,27 +118,54 @@ namespace NaturalVariety.NPCs.Critters
 
 					AI_Timer++;
 
-					if(Main.player[NPC.target].Distance(NPC.Center) >= 200f)
+					if(Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
                     {
-						NPC.direction = (int)AI_NextDir; // if player is far enough, pick direction randomly 
+						NPC.direction = (int)AI_NextDir;     // if player is far enough, pick direction randomly 
 					}
 					else
                     {
-                        int direction = NPC.direction;
-						NPC.TargetClosest(true);	     // else, away from closest target 
+						int direction = NPC.direction;
+						NPC.TargetClosest(true);	         // else, away from closest target 
 						NPC.direction = direction * -1;
 						AI_NextDir = (float)NPC.direction;
-
+    
 					}
-					NPC.velocity.X = 1 * NPC.direction;
+                    if (NPC.collideX) // TODO: replace with only two-block high collisions
+                    {
+						if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance) 
+						{
+							AI_NextDir *= -1;                // reverse direction if colliding with a block 
+							NPC.direction = (int)AI_NextDir;
+						}
+						else
+                        {
+							ConvertToFlying();				// fly away if cornered by player on collision
+						}
+                    }
 
-					if (AI_Timer >= Main.rand.Next(180, 420)){ // (3sec <-> 7sec) 
+						NPC.velocity.X = 1 * NPC.direction;
+
+					if (Main.netMode != NetmodeID.MultiplayerClient && AI_Timer >= Main.rand.Next(180, 420)) // (3sec <-> 7sec) 
+					{ 
 						NPC.velocity.X = 0;
 						AI_State = (float)ActionState.Wait;
 						AI_Timer = 0;
+
+						NPC.netUpdate = true;
 					}
 					break;
 			}
+		}
+		/// <summary>
+		/// convert to corresponding "Duck AI" WaterfowlFly child type NPC 
+		/// </summary>
+		public void ConvertToFlying()
+		{
+			string nextTypeString = this.GetType().Name + "Fly";
+			Type nextType = System.Type.GetType("NaturalVariety.NPCs.Critters." + nextTypeString);
+			var func = typeof(ModContent).GetMethod("NPCType");
+			var genericFunc = func.MakeGenericMethod(nextType);
+			NPC.Transform((int)genericFunc.Invoke(this, null));
 		}
 	}
 
@@ -276,6 +303,8 @@ namespace NaturalVariety.NPCs.Critters
 				Rectangle rectangle4 = new Rectangle((int)Main.player[NPC.target].position.X, (int)Main.player[NPC.target].position.Y, Main.player[NPC.target].width, Main.player[NPC.target].height);
 				if (new Rectangle((int)NPC.position.X - 100, (int)NPC.position.Y - 100, NPC.width + 200, NPC.height + 200).Intersects(rectangle4) || NPC.life < NPC.lifeMax)
 				{
+
+
 					NPC.ai[0] = 1f;
 					NPC.velocity.Y -= 6f;
 					NPC.netUpdate = true;
@@ -305,12 +334,7 @@ namespace NaturalVariety.NPCs.Critters
 
 							int direction5 = NPC.direction;
 
-							// convert to corresponding Passive AI "Waterfowl" child type NPC
-							string nextTypeString = (this.GetType().Name).Replace("Fly", "");
-							Type nextType = System.Type.GetType("NaturalVariety.NPCs.Critters." + nextTypeString);
-							var func = typeof(ModContent).GetMethod("NPCType");
-							var genericFunc = func.MakeGenericMethod(nextType);
-							NPC.Transform((int)genericFunc.Invoke(this, null));
+							ConvertToWalking();	
 
 							NPC.TargetClosest();
 							NPC.direction = direction5;
@@ -410,6 +434,19 @@ namespace NaturalVariety.NPCs.Critters
 					NPC.velocity.Y = -4f;
 			}
 		}
+
+		/// <summary>
+		///  convert to corresponding Passive AI "Waterfowl" child type NPC
+		/// </summary>
+		public void ConvertToWalking()
+		{
+			string nextTypeString = (this.GetType().Name).Replace("Fly", "");
+			Type nextType = System.Type.GetType("NaturalVariety.NPCs.Critters." + nextTypeString);
+			var func = typeof(ModContent).GetMethod("NPCType");
+			var genericFunc = func.MakeGenericMethod(nextType);
+			NPC.Transform((int)genericFunc.Invoke(this, null));
+		}
+
 	}
 }
 

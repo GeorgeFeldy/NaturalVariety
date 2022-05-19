@@ -3,9 +3,9 @@ using Terraria.ID;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
-
 using NaturalVariety.Items.Critters;
-// using NaturalVariety.Items.Placeable.Banners;
+
+using Terraria.Audio;
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -17,8 +17,7 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            // NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>(); // placeholder
-            NPC.catchItem = ItemID.Star; // placeholder
+            NPC.catchItem = (short)ModContent.ItemType<PochardItem>(); 
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -29,9 +28,19 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "Hee hee")
+                   "The common pochard (Aythya ferina) is a medium-sized diving duck. The adult male has a long dark bill with a grey band, a red head and neck, a black breast, red eyes and a grey back. The adult female has a brown head and body and a narrower grey bill-band.")
             });
         }
+
+        public override void AI()
+        {
+            base.AI();
+            if(Main.rand.NextBool(400) && !Main.dedServ)
+            {
+                SoundEngine.PlaySound(SoundID.Duck);    
+            }
+        }
+
     }
 
     public class PochardFly : WaterfowlFly
@@ -42,8 +51,16 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            // NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>(); // placeholder
-            NPC.catchItem = ItemID.Heart; // placeholder
+            NPC.catchItem = (short)ModContent.ItemType<PochardItem>();
+        }
+
+        public override void AI()
+        {
+            base.AI();
+            if (Main.rand.NextBool(400) && !Main.dedServ)
+            {
+                SoundEngine.PlaySound(SoundID.Duck);
+            }
         }
 
     }
