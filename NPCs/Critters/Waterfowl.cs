@@ -72,8 +72,6 @@ namespace NaturalVariety.NPCs.Critters
 				AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
 			}
 
-
-
 			NPC.TargetClosest();
 			// TODO: implement this as a function and call on every action state (?)
 			// if touching water, falling or player is really close, transform to flying regardless of action state 

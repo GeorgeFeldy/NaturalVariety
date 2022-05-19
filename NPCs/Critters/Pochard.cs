@@ -43,7 +43,7 @@ namespace NaturalVariety.NPCs.Critters
         {
             base.SetDefaults();
             // NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>(); // placeholder
-            NPC.catchItem = ItemID.Star; // placeholder
+            NPC.catchItem = ItemID.Heart; // placeholder
         }
 
         // public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
