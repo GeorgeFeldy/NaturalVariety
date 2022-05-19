@@ -1,4 +1,4 @@
 displayName = [c/0EFF0E:Natural Variety]
 author = Feldy
-version = 0.2.2.1
+version = 0.2.3
 homepage = https://discord.gg/N2qghPbC
