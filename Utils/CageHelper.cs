@@ -12,14 +12,9 @@ namespace NaturalVariety.Utils
     public static class CageHelper
     {
 
-        private static readonly List<int> cageList;  // only vanilla, ok to use int ID :-? 
+        private static readonly List<int> cageList;  // only vanilla, ok to use <int> ID :-? 
 
         public static readonly Dictionary<int,List<Item>> recipeItemDict;  // dict item recipes 
-
-        public static bool ItemIsCage(Item item)
-        {
-            return (cageList.BinarySearch(item.type) >= 0);    
-        }
 
         static CageHelper()
         {
@@ -98,8 +93,6 @@ namespace NaturalVariety.Utils
                 ItemID.TruffleWormCage
             };
 
-
-            // bad code incoming? 
             recipeItemDict = new();
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
@@ -116,30 +109,9 @@ namespace NaturalVariety.Utils
             }
         }
 
-        private static bool IsOrdered<T>(this IList<T> list, IComparer<T> comparer = null)
+        public static bool ItemIsCage(Item item)
         {
-            if (comparer == null)
-            {
-                comparer = Comparer<T>.Default;
-            }
-
-            if (list.Count > 1)
-            {
-                for (int i = 1; i < list.Count; i++)
-                {
-                    if (comparer.Compare(list[i - 1], list[i]) > 0)
-                    {
-
-                        T last = list[i - 1];
-                        T current = list[i];
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return (cageList.BinarySearch(item.type) >= 0);
         }
-
-
-
     }
 }
