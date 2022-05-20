@@ -17,6 +17,7 @@ namespace NaturalVariety.Items.Critters
         {
             base.SetDefaults();
             Item.makeNPC = (short)ModContent.NPCType<GoldSeagull>();
+            Item.value = Item.sellPrice(gold: 10);
         }
     }
 }

@@ -2,12 +2,15 @@
 
 So far it adds:
      QoL Mechanics: Right click to release any critter from a cage (Terrarrium, Bowl, Bottle). (Might release as separate mod if requested)
-	 Bird critter variants: Eurasian Jay, Blackbird, Goldfinch
+	 
+     Bird critter variants: Eurasian Jay, Blackbird, Goldfinch
      Duck variants: Pochard, along with improved Vanilla duck-type AI  
+     Golden critters: Seagull 
 
 Join me on Discord: https://discord.gg/N2qghPbC
 
 In plans:
+    More golden critter variants (Duck, penguin..) 
     More songbirds 
     Owl varieties 
     Duck varieties (Merganser, Red Duck)

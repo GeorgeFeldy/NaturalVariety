@@ -17,6 +17,7 @@ namespace NaturalVariety.Items.Critters
         {
             base.SetDefaults();
             Item.makeNPC = (short)ModContent.NPCType<Pochard>();
+            Item.value = Item.sellPrice(silver: 7, copper: 50);
         }
     }
 }
