@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
+
 
 
 // TODO: Eventually, merge the two classes with full custom AI  
@@ -41,11 +41,6 @@ namespace NaturalVariety.NPCs.Critters
 				Velocity = 1f
 			};
 			NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
-		}
-
-		public override float SpawnChance(NPCSpawnInfo spawnInfo)
-		{
-			return SpawnCondition.OverworldWaterSurfaceCritter.Chance; // Spawn with regular duck chance. 
 		}
 
 		public override void SetDefaults()
