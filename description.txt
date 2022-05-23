@@ -4,7 +4,7 @@ So far it adds:
      QoL Mechanics: Right click to release any critter from a cage (Terrarrium, Bowl, Bottle). (Might release as separate mod if requested)
 	 
      Bird critter variants: Eurasian Jay, Blackbird, Goldfinch
-     Duck variants: Pochard, along with improved Vanilla duck-type AI  
+     Duck variants: Pochard and Ferruginous Duck, along with improved Vanilla duck-type AI  
      Golden critters: Seagull 
 
 Join me on Discord: https://discord.gg/N2qghPbC
@@ -15,11 +15,10 @@ In plans:
     Golden (animal-like) enemies :O
     More songbirds.
     Owl varieties. 
-    Duck varieties (Merganser, Red Duck).
-    Grebe varieties (Great Crested, Little).
+    Duck-like varieties (Coots, Cormorants, Grebes).
     Swans and possibly geese.
     Vulture enemy varieties. 
-    Eagles and other raptors (as enemies which spawn in the sky). 
+    Eagles and other raptors (as harpy-like enemies)
     Frog varieties and other Herps. 
     Spider varieties (enemies).
     Butterflies and Moths (critter, enemy).
