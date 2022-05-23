@@ -59,8 +59,59 @@ namespace NaturalVariety.NPCs.Critters
 			AI_NextDir = 0;
 		}
 
+		public override void HitEffect(int hitDirection, double damage)
+		{
+			if (NPC.life > 0)
+			{
+				for (int idx = 0; (double)idx < damage / (double)NPC.lifeMax * 20.0; idx++)
+				{
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hitDirection, -1f);
+				}
+				return;
+			}
+
+			if (Main.netMode == NetmodeID.Server)
+			{
+				return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
+			}
+
+			if (NPC.life <= 0)
+			{
+
+				int headGoreType;
+				int bodyGoreType;
+				int wingGoreType;
+
+				string className = this.GetType().Name;
+
+				try
+				{
+					headGoreType = Mod.Find<ModGore>(className + "_Gore_Head").Type;
+					bodyGoreType = Mod.Find<ModGore>(className + "_Gore_Body").Type;
+					wingGoreType = Mod.Find<ModGore>(className + "_Gore_Wing").Type;
+				}
+				catch
+				{
+					headGoreType = 555;
+					bodyGoreType = 556;
+					wingGoreType = 557;
+				}
+
+				var entitySource = NPC.GetSource_Death();
+
+				for (int idx = 0; idx < 10; idx++)
+				{
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 2 * hitDirection, -2f);
+				}
+
+				Gore.NewGore(entitySource, NPC.position, NPC.velocity, headGoreType);
+				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, bodyGoreType);
+				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, wingGoreType);
+			}
+		}
+
 		/// <summary>
-		/// Copy-paste adaption for Passive AI Duck-type NPC
+		/// Adaption of Passive AI Duck-type NPC
 		/// </summary>
 		public override void AI()
 		{
@@ -200,12 +251,63 @@ namespace NaturalVariety.NPCs.Critters
             BannerItem = Item.BannerToItem(Banner);
         }
 
+		public override void HitEffect(int hitDirection, double damage)
+		{
+			if (NPC.life > 0)
+			{
+				for (int idx = 0; (double)idx < damage / (double)NPC.lifeMax * 20.0; idx++)
+				{
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hitDirection, -1f);
+				}
+				return; 
+			}
+
+			if (Main.netMode == NetmodeID.Server)
+			{
+				return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
+			}
+
+			if (NPC.life <= 0)
+			{
+
+				int headGoreType;
+				int bodyGoreType;
+				int wingGoreType;
+
+				string className = (this.GetType().Name).Replace("Fly", "");
+
+				try
+				{
+					headGoreType = Mod.Find<ModGore>(className + "_Gore_Head").Type;
+					bodyGoreType = Mod.Find<ModGore>(className + "_Gore_Body").Type;
+					wingGoreType = Mod.Find<ModGore>(className + "_Gore_Wing").Type;
+				}
+				catch
+				{
+					headGoreType = 555;
+					bodyGoreType = 556;
+					wingGoreType = 557;
+				}
+
+				var entitySource = NPC.GetSource_Death();
+
+				for (int idx = 0; idx < 10; idx++)
+				{
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 2 * hitDirection, -2f);
+				}
+
+				Gore.NewGore(entitySource, NPC.position, NPC.velocity, headGoreType);
+				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, bodyGoreType);
+				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, wingGoreType);
+			}
+		}
+
 		/// <summary>
 		/// Copy-paste adaption of Vanilla Duck AI (id 68) :) 
 		/// TODO: make code more readable with action states and NPC.ai refs
 		/// TODO: eventually merge with Waterfowl class
 		/// </summary>
-        public override void AI()
+		public override void AI()
         {
 			NPC.noGravity = true;
 			if (NPC.ai[0] == 0f)

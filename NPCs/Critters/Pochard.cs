@@ -1,13 +1,13 @@
-using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 
 using NaturalVariety.Items.Critters;
 
-using Terraria.Audio;
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -41,6 +41,7 @@ namespace NaturalVariety.NPCs.Critters
             return chance;
         }
 
+
         public override void AI()
         {
             base.AI();
@@ -49,7 +50,6 @@ namespace NaturalVariety.NPCs.Critters
                 SoundEngine.PlaySound(SoundID.Duck);    
             }
         }
-
     }
 
     public class PochardFly : WaterfowlFly

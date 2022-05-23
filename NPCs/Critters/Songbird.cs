@@ -42,6 +42,45 @@ namespace NaturalVariety.NPCs.Critters
             Banner = Item.NPCtoBanner(NPCID.Bird);
             BannerItem = Item.BannerToItem(Banner);
         }
-      
+
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            if (NPC.life > 0)
+            {
+                for (int idx = 0; (double)idx < damage / (double)NPC.lifeMax * 20.0; idx++)
+                {
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hitDirection, -1f);
+                }
+
+                return;
+            }
+
+            if (Main.netMode == NetmodeID.Server)
+            {
+                return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
+            }
+
+            if(NPC.life <= 0)
+            {
+                int songbirdGore;
+
+                string className = this.GetType().Name;
+
+                try
+                {
+                    songbirdGore = Mod.Find<ModGore>(className + "_Gore").Type;
+                }
+                catch
+                {
+                    songbirdGore = 100;
+                }
+
+                var entitySource = NPC.GetSource_Death();
+
+                Gore.NewGore(entitySource, NPC.position, NPC.velocity, songbirdGore);
+            }
+
+        }
+
     }
 }

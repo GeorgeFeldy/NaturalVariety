@@ -10,19 +10,25 @@ So far it adds:
 Join me on Discord: https://discord.gg/N2qghPbC
 
 In plans:
-    More golden critter variants (Duck, penguin..) 
-    More songbirds 
-    Owl varieties 
-    Duck varieties (Merganser, Red Duck)
-    Grebe varieties (Great Crested, Little)
-    Swans and possibly geese
-    Vulture enemy varieties 
-    Eagles and other raptors (as enemies which spawn in the sky) 
-    Frog varieties and other Herps 
-    Spider varieties (enemies)
-    Butterflies and Moths (critter, enemy)
 
-	Mechanics related to Zoologist and Bestiary (critter friendliness mechanic, encounter rewards, etc.)
+    More golden critter variants. 
+    Golden (animal-like) enemies :O
+    More songbirds.
+    Owl varieties. 
+    Duck varieties (Merganser, Red Duck).
+    Grebe varieties (Great Crested, Little).
+    Swans and possibly geese.
+    Vulture enemy varieties. 
+    Eagles and other raptors (as enemies which spawn in the sky). 
+    Frog varieties and other Herps. 
+    Spider varieties (enemies).
+    Butterflies and Moths (critter, enemy).
+
+	Mechanics related to Zoologist and Bestiary: 
+    
+    See kill count in bestiary: every 50 by default, precise number with Tally Counter.
+    Critter friendliness mechanic: they will be less likely to avoid players if they have Guide to Critter Companionship, luck is high or the kill count is low.  
+    Encounter rewards. For example: find all birds species to get Finch Staff from Zoologist. 
 	
  
 

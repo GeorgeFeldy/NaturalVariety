@@ -70,17 +70,18 @@ namespace NaturalVariety.NPCs.Critters
 
         public override void HitEffect(int hitDirection, double damage)
         {
-            base.HitEffect(hitDirection, damage);
+            // full override (no call to base) 
+
             if (NPC.life > 0)
             {
-                for (int num305 = 0; num305 < 10; num305++)
+                for (int idx = 0; idx < 10; idx++)
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), hitDirection, -1f);
                 }
             }
             else
             {
-                for (int num306 = 0; num306 < 20; num306++)
+                for (int idx = 0; idx < 20; idx++)
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), 2 * hitDirection, -2f);
                 }
@@ -125,17 +126,18 @@ namespace NaturalVariety.NPCs.Critters
 
         public override void HitEffect(int hitDirection, double damage)
         {
-            base.HitEffect(hitDirection, damage);
+            // full override (no call to base) 
+
             if (NPC.life > 0)
             {
-                for (int num305 = 0; num305 < 10; num305++)
+                for (int idx = 0; idx < 10; idx++)
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), hitDirection, -1f);
                 }
             }
             else
             {
-                for (int num306 = 0; num306 < 20; num306++)
+                for (int idx = 0; idx < 20; idx++)
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), 2 * hitDirection, -2f);
                 }
