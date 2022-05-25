@@ -37,7 +37,6 @@ namespace NaturalVariety.NPCs.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance;
-            //bool condition = Math.Abs(spawnInfo.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3; // inner third 
             return chance;
         }
 
