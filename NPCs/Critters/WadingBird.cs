@@ -23,7 +23,7 @@ namespace NaturalVariety.NPCs.Critters
 			Fly
 		}
 
-		public const int wadingFrameCount = 10; // walikng only 
+		public const int wadingFrameCount = 9; // walikng only 
 
 		public ref float AI_State => ref NPC.ai[0];
 		public ref float AI_Timer => ref NPC.ai[1];
@@ -71,26 +71,13 @@ namespace NaturalVariety.NPCs.Critters
 			}
 
 			NPC.TargetClosest();
-			// if touching water, falling or player is really close, transform to flying regardless of action state 
-			if (Main.netMode != NetmodeID.MultiplayerClient &&
-			   (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.wet || Main.player[NPC.target].Distance(NPC.Center) < spookDistance))
-			{
-				int direction = NPC.direction;
-
-
-				NPC.TargetClosest();
-				NPC.direction = direction;
-				NPC.netUpdate = true;
-				return;
-			}
+			AI_Timer++;
 
 			switch (AI_State)
 			{
 				case (float)ActionState.Wait:
 
-					AI_Timer++;
 
-					// start walking after a few seconds or when player is close 
 					if (Main.netMode != NetmodeID.MultiplayerClient &&
 					  (AI_Timer >= Main.rand.Next(240, 480) || // (4sec <-> 8sec) 
 					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
@@ -105,7 +92,6 @@ namespace NaturalVariety.NPCs.Critters
 
 				case (float)ActionState.Walk:
 
-					AI_Timer++;
 
 					if (Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
 					{
@@ -119,20 +105,26 @@ namespace NaturalVariety.NPCs.Critters
 						AI_NextDir = (float)NPC.direction;
 
 					}
-					if (NPC.collideX) // TODO: replace with only two-block high collisions
+					if (NPC.collideX) 
 					{
-						if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance)
-						{
-							AI_NextDir *= -1;                // reverse direction if colliding with a block 
-							NPC.direction = (int)AI_NextDir;
+						Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+						
+						if(NPC.velocity.X == 0)
+                        {
+							if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance)
+							{
+								AI_NextDir *= -1;                // reverse direction if colliding with a block 
+								NPC.direction = (int)AI_NextDir;
+							}
+							//else
+							//{
+							//	ConvertToFlying();              // fly away if cornered by player on collision
+							//}
 						}
-						//else
-						//{
-						//	ConvertToFlying();              // fly away if cornered by player on collision
-						//}
+						
 					}
 
-					NPC.velocity.X = 1 * NPC.direction;
+					NPC.velocity.X = 1.25f * (float)NPC.direction;
 
 					if (Main.netMode != NetmodeID.MultiplayerClient && AI_Timer >= Main.rand.Next(180, 420)) // (3sec <-> 7sec) 
 					{
@@ -148,20 +140,27 @@ namespace NaturalVariety.NPCs.Critters
 
         public override void FindFrame(int frameHeight)
         {
-            switch (AI_State)
+
+
+			NPC.spriteDirection = NPC.direction;
+
+			switch (AI_State)
             {
 				case (float)ActionState.Wait:
-					NPC.frame.Y = 0;
+
+					NPC.frameCounter = 0;
+					NPC.frame.Y = 0 * frameHeight;
+
 					break;
 
 				case (float)ActionState.Walk:
 
 					NPC.frameCounter++;
 
-					if(NPC.frameCounter < 80)
+					if(NPC.frameCounter < 70) // 7 walking frames 
                     {
-						NPC.frame.Y = ((int)NPC.frameCounter / 8) * frameHeight;
-                    }
+						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 2) * frameHeight; // draw evenly frames 2 to 9
+					}
 					else 
 						NPC.frameCounter = 0;
 
@@ -191,6 +190,7 @@ namespace NaturalVariety.NPCs.Critters
 				int headGoreType;
 				int bodyGoreType;
 				int wingGoreType;
+				int legsGoreType;
 
 				string className = this.GetType().Name;
 
@@ -199,12 +199,15 @@ namespace NaturalVariety.NPCs.Critters
 					headGoreType = Mod.Find<ModGore>(className + "_Gore_Head").Type;
 					bodyGoreType = Mod.Find<ModGore>(className + "_Gore_Body").Type;
 					wingGoreType = Mod.Find<ModGore>(className + "_Gore_Wing").Type;
+					legsGoreType = Mod.Find<ModGore>(className + "_Gore_Legs").Type;
 				}
 				catch
 				{
-					headGoreType = 555;
-					bodyGoreType = 556;
-					wingGoreType = 557;
+					// TODO: check gore ID 0 
+					headGoreType = 555;	
+					bodyGoreType = 556;	
+					wingGoreType = 557;	
+					legsGoreType = 577; 
 				}
 
 				var entitySource = NPC.GetSource_Death();
@@ -217,6 +220,7 @@ namespace NaturalVariety.NPCs.Critters
 				Gore.NewGore(entitySource, NPC.position, NPC.velocity, headGoreType);
 				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, bodyGoreType);
 				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, wingGoreType);
+				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, legsGoreType);
 			}
 		}
 

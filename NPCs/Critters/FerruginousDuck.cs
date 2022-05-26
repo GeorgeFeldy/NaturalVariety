@@ -14,6 +14,7 @@ namespace NaturalVariety.NPCs.Critters
     public class FerruginousDuck : Waterfowl 
     {
 
+
         public override string Texture => "NaturalVariety/NPCs/Critters/FerruginousDuck";
 
         public override void SetDefaults()
@@ -56,6 +57,13 @@ namespace NaturalVariety.NPCs.Critters
     {
 
         public override string Texture => "NaturalVariety/NPCs/Critters/FerruginousDuck";
+
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+
+            DisplayName.SetDefault("Ferruginous Duck");
+        }
 
         public override void SetDefaults()
         {

@@ -44,10 +44,10 @@ namespace NaturalVariety.NPCs.Critters
         public override void AI()
         {
             base.AI();
-            if(Main.rand.NextBool(400) && !Main.dedServ)
-            {
-                SoundEngine.PlaySound(SoundID.Duck);    
-            }
+            // if(Main.rand.NextBool(400) && !Main.dedServ)
+            // {
+            //     SoundEngine.PlaySound(SoundID.Duck);    
+            // }
         }
     }
 
