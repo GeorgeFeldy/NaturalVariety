@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 
 using NaturalVariety.Items.Critters;
-
+using Terraria.DataStructures;
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -16,10 +16,13 @@ namespace NaturalVariety.NPCs.Critters
 
         public override string Texture => "NaturalVariety/NPCs/Critters/Flamingo";
 
+        public ref float AI_spawnInFlocks => ref NPC.ai[3];
+
         public override void SetDefaults()
         {
             base.SetDefaults(); 
             NPC.catchItem = ItemID.MolluskWhistle;
+            NPC.ai[3] = 1f;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -40,6 +43,29 @@ namespace NaturalVariety.NPCs.Critters
             return chance;
         }
 
+
+        public override void OnSpawn(IEntitySource source)
+        {
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                return;
+            }
+
+            // small chance to recurse to NPC cap :D 
+            bool spawnAnother = Main.rand.NextBool(3);
+
+            if (spawnAnother)
+            {
+                int index = NPC.NewNPC(source, (int)NPC.position.X, (int)NPC.position.Y,
+                ModContent.NPCType<Flamingo>());
+
+                if (Main.netMode == NetmodeID.Server && index < Main.maxNPCs)
+                    NetMessage.SendData(MessageID.SyncNPC, number: index);
+            }
+          
+            base.OnSpawn(source);
+        }
 
         public override void AI()
         {
