@@ -23,7 +23,7 @@ namespace NaturalVariety.NPCs.Critters
 			Fly
 		}
 
-		public const int wadingFrameCount = 9; // walikng only 
+		public const int wadingFrameCount = 11; // 1 idle, 8 walikng, 2 flying  
 
 		public ref float AI_State => ref NPC.ai[0];
 		public ref float AI_Timer => ref NPC.ai[1];
@@ -77,14 +77,29 @@ namespace NaturalVariety.NPCs.Critters
 			{
 				case (float)ActionState.Wait:
 
+					NPC.noGravity = false;
+
 
 					if (Main.netMode != NetmodeID.MultiplayerClient &&
 					  (AI_Timer >= Main.rand.Next(240, 480) || // (4sec <-> 8sec) 
 					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
 					{
-						AI_State = (float)ActionState.Walk;
-						AI_Timer = 0;
-						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+
+						if(NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+						{
+							AI_State = (float)ActionState.Fly;
+							AI_Timer = 0;
+							NPC.direction = (int)AI_NextDir;
+							NPC.velocity.X = 4f * NPC.direction;
+							AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+						}
+						else
+                        {
+							AI_State = (float)ActionState.Walk;
+							AI_Timer = 0;
+							AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+						}
+					
 
 						NPC.netUpdate = true;
 					}
@@ -92,6 +107,13 @@ namespace NaturalVariety.NPCs.Critters
 
 				case (float)ActionState.Walk:
 
+					NPC.noGravity = false;
+
+					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+                    {
+						AI_State = (float)ActionState.Fly;
+						AI_Timer = 0;
+					}
 
 					if (Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
 					{
@@ -116,10 +138,13 @@ namespace NaturalVariety.NPCs.Critters
 								AI_NextDir *= -1;                // reverse direction if colliding with a block 
 								NPC.direction = (int)AI_NextDir;
 							}
-							//else
-							//{
-							//	ConvertToFlying();              // fly away if cornered by player on collision
-							//}
+							else
+							{
+								AI_State = (float)ActionState.Fly;
+								AI_Timer = 0;
+								NPC.direction = (int)AI_NextDir;
+								NPC.velocity.X = 4f * NPC.direction;
+							}
 						}
 						
 					}
@@ -135,6 +160,135 @@ namespace NaturalVariety.NPCs.Critters
 						NPC.netUpdate = true;
 					}
 					break;
+
+
+				case (float)ActionState.Fly: // from vanilla Duck AI 
+
+
+					NPC.noGravity = true;
+
+					if (Main.player[NPC.target].dead)
+						return;
+
+					bool flag58 = false;
+					AI_Timer += 1f;
+					if (AI_Timer >= 300f)
+						flag58 = true;
+
+					if (flag58)
+					{
+						if (NPC.velocity.Y == 0f || NPC.collideY || NPC.wet)
+						{
+							NPC.velocity.X = 0f;
+							NPC.velocity.Y = 0f;
+							NPC.ai[0] = 0f;
+							AI_Timer = 0f;
+							if (Main.netMode != NetmodeID.MultiplayerClient)
+							{
+
+								int direction5 = NPC.direction;
+
+								AI_State = (float)ActionState.Walk;
+
+								NPC.TargetClosest();
+								NPC.direction = direction5;
+								// NPC.ai[0] = 0f;
+								AI_Timer = 200 + Main.rand.Next(200);
+
+								NPC.netUpdate = true;
+							}
+						}
+						else
+						{
+							NPC.velocity.X *= 0.98f;
+							NPC.velocity.Y += 0.1f;
+							if (NPC.velocity.Y > 2f)
+								NPC.velocity.Y = 2f;
+						}
+
+						return;
+					}
+
+					if (NPC.collideX)
+					{
+						NPC.direction *= -1;
+						NPC.velocity.X = NPC.oldVelocity.X * -0.5f;
+						if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
+							NPC.velocity.X = 2f;
+
+						if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
+							NPC.velocity.X = -2f;
+					}
+
+					if (NPC.collideY)
+					{
+						NPC.velocity.Y = NPC.oldVelocity.Y * -0.5f;
+						if (NPC.velocity.Y > 0f && NPC.velocity.Y < 1f)
+							NPC.velocity.Y = 1f;
+
+						if (NPC.velocity.Y < 0f && NPC.velocity.Y > -1f)
+							NPC.velocity.Y = -1f;
+					}
+
+					if (NPC.direction == -1 && NPC.velocity.X > -3f)
+					{
+						NPC.velocity.X -= 0.1f;
+						if (NPC.velocity.X > 3f)
+							NPC.velocity.X -= 0.1f;
+						else if (NPC.velocity.X > 0f)
+							NPC.velocity.X -= 0.05f;
+
+						if (NPC.velocity.X < -3f)
+							NPC.velocity.X = -3f;
+					}
+					else if (NPC.direction == 1 && NPC.velocity.X < 3f)
+					{
+						NPC.velocity.X += 0.1f;
+						if (NPC.velocity.X < -3f)
+							NPC.velocity.X += 0.1f;
+						else if (NPC.velocity.X < 0f)
+							NPC.velocity.X += 0.05f;
+
+						if (NPC.velocity.X > 3f)
+							NPC.velocity.X = 3f;
+					}
+
+					int num1038 = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+					int num1039 = (int)((NPC.position.Y + (float)NPC.height) / 16f);
+					bool flag59 = true;
+					int num1040 = 15;
+					bool flag60 = false;
+					for (int num1041 = num1039; num1041 < num1039 + num1040; num1041++)
+					{
+						// if (Main.tile[num1038, num1041] == null)
+						// 	Main.tile[num1038, num1041] = new Tile();
+
+						if ((Main.tile[num1038, num1041].HasUnactuatedTile && Main.tileSolid[Main.tile[num1038, num1041].TileType]) || Main.tile[num1038, num1041].LiquidAmount > 0)
+						{
+							if (num1041 < num1039 + 5)
+								flag60 = true;
+
+							flag59 = false;
+							break;
+						}
+					}
+
+					if (flag59)
+						NPC.velocity.Y += 0.1f;
+					else
+						NPC.velocity.Y -= 0.1f;
+
+					if (flag60)
+						NPC.velocity.Y -= 0.2f;
+
+					if (NPC.velocity.Y > 3f)
+						NPC.velocity.Y = 3f;
+
+					if (NPC.velocity.Y < -4f)
+						NPC.velocity.Y = -4f;
+
+					break;
+
 			}
 		}
 
@@ -165,7 +319,21 @@ namespace NaturalVariety.NPCs.Critters
 						NPC.frameCounter = 0;
 
 					break;
-            }
+
+				case (float)ActionState.Fly:
+
+					NPC.frameCounter++;
+					if (NPC.frameCounter < 10) // 2 walking frames 
+					{
+						NPC.frame.Y = ((int)NPC.frameCounter / 5 + 9) * frameHeight;
+
+					}
+					else
+						NPC.frameCounter = 0;
+
+					break;
+
+			}
         }
 
         public override void HitEffect(int hitDirection, double damage)

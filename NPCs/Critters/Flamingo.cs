@@ -57,7 +57,7 @@ namespace NaturalVariety.NPCs.Critters
 
             if (spawnAnother)
             {
-                int index = NPC.NewNPC(source, (int)NPC.position.X, (int)NPC.position.Y,
+                int index = NPC.NewNPC(source, (int)NPC.position.X + Main.rand.Next(-30, NPC.width + 30), (int)NPC.position.Y + NPC.height,
                 ModContent.NPCType<Flamingo>());
 
                 if (Main.netMode == NetmodeID.Server && index < Main.maxNPCs)
