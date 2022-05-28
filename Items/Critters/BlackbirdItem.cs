@@ -23,6 +23,7 @@ namespace NaturalVariety.Items.Critters
         {
             Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
             roastedRecipe.AddIngredient<BlackbirdItem>();
+            roastedRecipe.AddTile(TileID.CookingPots);
             roastedRecipe.Register();
         }
     }

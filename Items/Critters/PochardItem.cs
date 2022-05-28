@@ -24,6 +24,7 @@ namespace NaturalVariety.Items.Critters
         {
             Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedDuck);
             roastedRecipe.AddIngredient<PochardItem>();
+            roastedRecipe.AddTile(TileID.CookingPots);
             roastedRecipe.Register();
         }
     }

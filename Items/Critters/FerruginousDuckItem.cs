@@ -24,6 +24,7 @@ namespace NaturalVariety.Items.Critters
         {
             Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedDuck);
             roastedRecipe.AddIngredient<FerruginousDuckItem>();
+            roastedRecipe.AddTile(TileID.CookingPots);
             roastedRecipe.Register();
         }
     }
