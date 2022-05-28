@@ -18,6 +18,13 @@ namespace NaturalVariety.Items.Critters
             base.SetDefaults();
             Item.makeNPC = (short)ModContent.NPCType<EurasianJay>();
         }
+
+        public override void AddRecipes()
+        {
+            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
+            roastedRecipe.AddIngredient<EurasianJayItem>();
+            roastedRecipe.Register();
+        }
     }
 }
 

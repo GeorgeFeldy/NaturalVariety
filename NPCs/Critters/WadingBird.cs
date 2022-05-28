@@ -23,7 +23,7 @@ namespace NaturalVariety.NPCs.Critters
 			Fly
 		}
 
-		public const int wadingFrameCount = 11; // 1 idle, 8 walikng, 2 flying  
+		public const int wadingFrameCount = 13; // 1 idle, 8 walikng, 4 flying  
 
 		public ref float AI_State => ref NPC.ai[0];
 		public ref float AI_Timer => ref NPC.ai[1];
@@ -70,7 +70,6 @@ namespace NaturalVariety.NPCs.Critters
 				NPC.netUpdate = true;
 			}
 
-			NPC.TargetClosest();
 			AI_Timer++;
 
 			switch (AI_State)
@@ -78,6 +77,10 @@ namespace NaturalVariety.NPCs.Critters
 				case (float)ActionState.Wait:
 
 					NPC.noGravity = false;
+					NPC.width = 38;
+					NPC.height = 58;
+
+					NPC.TargetClosest();
 
 
 					if (Main.netMode != NetmodeID.MultiplayerClient &&
@@ -100,7 +103,6 @@ namespace NaturalVariety.NPCs.Critters
 							AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
 						}
 					
-
 						NPC.netUpdate = true;
 					}
 					break;
@@ -108,8 +110,17 @@ namespace NaturalVariety.NPCs.Critters
 				case (float)ActionState.Walk:
 
 					NPC.noGravity = false;
+					NPC.width = 38;
+					NPC.height = 58;
 
-					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					NPC.TargetClosest();
+
+					int walkingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+					int walkingCenterY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
+
+					bool walkingCenterUnderwater = (Main.tile[walkingCenterX, walkingCenterY].LiquidAmount > 0);
+
+					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || walkingCenterUnderwater || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
                     {
 						AI_State = (float)ActionState.Fly;
 						AI_Timer = 0;
@@ -129,6 +140,7 @@ namespace NaturalVariety.NPCs.Critters
 					}
 					if (NPC.collideX) 
 					{
+
 						Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
 						
 						if(NPC.velocity.X == 0)
@@ -164,20 +176,36 @@ namespace NaturalVariety.NPCs.Critters
 
 				case (float)ActionState.Fly: // from vanilla Duck AI 
 
-
+					NPC.width = 90;
+					NPC.height = 40;
 					NPC.noGravity = true;
 
 					if (Main.player[NPC.target].dead)
 						return;
 
-					bool flag58 = false;
+					bool attemptLand = false;
 					AI_Timer += 1f;
-					if (AI_Timer >= 300f)
-						flag58 = true;
+					if (AI_Timer >= 600f)
+						attemptLand = true;
 
-					if (flag58)
+					int flyingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+					int flyingCenterY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
+					int belowY = (int)((NPC.position.Y + 60) / 16f); // offset is non-flying height 
+
+					bool tileBelowSolid = (Main.tile[flyingCenterX, belowY].HasUnactuatedTile && Main.tileSolid[Main.tile[flyingCenterX, belowY].TileType]);
+
+					bool partiallySubmerged = Main.tile[flyingCenterX, flyingCenterY].LiquidAmount > 0;
+
+					if (attemptLand)
 					{
-						if (NPC.velocity.Y == 0f || NPC.collideY || NPC.wet)
+
+                        if (partiallySubmerged) // restart flight if center is submerged in liquid 
+                        {
+							AI_Timer = 0;
+							return;
+						}
+
+						if (NPC.velocity.Y == 0f || tileBelowSolid)
 						{
 							NPC.velocity.X = 0f;
 							NPC.velocity.Y = 0f;
@@ -192,7 +220,6 @@ namespace NaturalVariety.NPCs.Critters
 
 								NPC.TargetClosest();
 								NPC.direction = direction5;
-								// NPC.ai[0] = 0f;
 								AI_Timer = 200 + Main.rand.Next(200);
 
 								NPC.netUpdate = true;
@@ -303,7 +330,7 @@ namespace NaturalVariety.NPCs.Critters
 				case (float)ActionState.Wait:
 
 					NPC.frameCounter = 0;
-					NPC.frame.Y = 0 * frameHeight;
+					NPC.frame.Y = 0 * frameHeight; // frame 1 idle 
 
 					break;
 
@@ -311,9 +338,9 @@ namespace NaturalVariety.NPCs.Critters
 
 					NPC.frameCounter++;
 
-					if(NPC.frameCounter < 70) // 7 walking frames 
+					if(NPC.frameCounter < 70) // 7 walking frames (without frame 2)
                     {
-						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 2) * frameHeight; // draw evenly frames 2 to 9
+						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 2) * frameHeight;  // (70 game frames / 10) + 2 frame offset 
 					}
 					else 
 						NPC.frameCounter = 0;
@@ -323,9 +350,9 @@ namespace NaturalVariety.NPCs.Critters
 				case (float)ActionState.Fly:
 
 					NPC.frameCounter++;
-					if (NPC.frameCounter < 10) // 2 walking frames 
+					if (NPC.frameCounter < 20) // 4 flying frames 
 					{
-						NPC.frame.Y = ((int)NPC.frameCounter / 5 + 9) * frameHeight;
+						NPC.frame.Y = ((int)NPC.frameCounter / 5 + 9) * frameHeight; // (20 game frames / 5) + 9 frame offset   
 
 					}
 					else

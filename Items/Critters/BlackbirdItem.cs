@@ -19,6 +19,11 @@ namespace NaturalVariety.Items.Critters
             Item.makeNPC = (short)ModContent.NPCType<Blackbird>();
         }
 
-
+        public override void AddRecipes()
+        {
+            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
+            roastedRecipe.AddIngredient<BlackbirdItem>();
+            roastedRecipe.Register();
+        }
     }
 }

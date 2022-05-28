@@ -19,5 +19,12 @@ namespace NaturalVariety.Items.Critters
             Item.makeNPC = (short)ModContent.NPCType<FerruginousDuck>();
             Item.value = Item.sellPrice(silver: 7, copper: 50);
         }
+
+        public override void AddRecipes()
+        {
+            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedDuck);
+            roastedRecipe.AddIngredient<FerruginousDuckItem>();
+            roastedRecipe.Register();
+        }
     }
 }

@@ -57,3 +57,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+/Assets/Sounds/Critters/flamingo_calls_full.ogg
+/Sounds/Critters/flamingo_calls_full.ogg

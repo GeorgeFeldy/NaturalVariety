@@ -178,7 +178,9 @@ namespace NaturalVariety.NPCs.Critters
 					}
                     if (NPC.collideX) 
                     {
+
 						Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+
 						if(NPC.velocity.X == 0)
                         {
 							if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance)

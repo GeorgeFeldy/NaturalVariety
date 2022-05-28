@@ -19,5 +19,12 @@ namespace NaturalVariety.Items.Critters
             Item.makeNPC = (short)ModContent.NPCType<Goldfinch>();
         }
 
+        public override void AddRecipes()
+        {
+            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
+            roastedRecipe.AddIngredient<GoldfinchItem>();
+            roastedRecipe.Register();
+        }
+
     }
 }
