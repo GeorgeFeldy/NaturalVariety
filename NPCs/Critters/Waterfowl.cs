@@ -127,6 +127,9 @@ namespace NaturalVariety.NPCs.Critters
 			}
 
 			NPC.TargetClosest();
+			AI_Timer++;
+
+
 			// if touching water, falling or player is really close, transform to flying regardless of action state 
 			if (Main.netMode != NetmodeID.MultiplayerClient && 
 			   (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.wet || Main.player[NPC.target].Distance(NPC.Center) < spookDistance))
@@ -145,7 +148,6 @@ namespace NaturalVariety.NPCs.Critters
             {
 				case (float)ActionState.Wait:
 
-					AI_Timer++;
 
 					// start walking after a few seconds or when player is close 
 					if(Main.netMode != NetmodeID.MultiplayerClient && 
@@ -162,8 +164,6 @@ namespace NaturalVariety.NPCs.Critters
 
 				case (float)ActionState.Walk:
 
-					AI_Timer++;
-
 					if(Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
                     {
 						NPC.direction = (int)AI_NextDir;     // if player is far enough, pick direction randomly 
@@ -176,17 +176,24 @@ namespace NaturalVariety.NPCs.Critters
 						AI_NextDir = (float)NPC.direction;
     
 					}
-                    if (NPC.collideX) // TODO: replace with only two-block high collisions
+                    if (NPC.collideX) 
                     {
-						if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance) 
-						{
-							AI_NextDir *= -1;                // reverse direction if colliding with a block 
-							NPC.direction = (int)AI_NextDir;
-						}
-						else
+
+						Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+
+						if(NPC.velocity.X == 0)
                         {
-							ConvertToFlying();				// fly away if cornered by player on collision
+							if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance)
+							{
+								AI_NextDir *= -1;                // reverse direction if colliding with a block 
+								NPC.direction = (int)AI_NextDir;
+							}
+							else
+							{
+								ConvertToFlying();              // fly away if cornered by player on collision
+							}
 						}
+					
                     }
 
 						NPC.velocity.X = 1 * NPC.direction;

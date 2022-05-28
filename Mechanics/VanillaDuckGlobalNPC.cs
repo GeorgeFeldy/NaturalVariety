@@ -4,10 +4,9 @@ using Terraria.ModLoader;
 using NaturalVariety.NPCs.Critters;
 
 
-
 namespace NaturalVariety.Mechanics
 {
-    public class ImproveVanillaDuckAI : GlobalNPC
+    public class VanillaDuckGlobalNPC : GlobalNPC
     {
 
 		private enum ActionState
@@ -103,14 +102,20 @@ namespace NaturalVariety.Mechanics
 
 					if (npc.collideX)
 					{
-						if (Main.player[npc.target].Distance(npc.Center) >= corneredDistance)
-						{
-							npc.ai[2] *= -1;                  // reverse direction if colliding with a block 
-							npc.direction = (int)npc.ai[2];
-						}
-						else
-						{
-							npc.Transform(npc.type + 1);      // fly away if cornered by player on collision
+
+						Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+
+						if(npc.velocity.X == 0)
+                        {
+							if (Main.player[npc.target].Distance(npc.Center) >= corneredDistance)
+							{
+								npc.ai[2] *= -1;                  // reverse direction if colliding with a block 
+								npc.direction = (int)npc.ai[2];
+							}
+							else
+							{
+								npc.Transform(npc.type + 1);      // fly away if cornered by player on collision
+							}
 						}
 					}
 

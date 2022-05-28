@@ -18,11 +18,19 @@ namespace NaturalVariety.NPCs.Critters
 
         public override string Texture => "NaturalVariety/NPCs/Critters/GoldSeagull";
 
+
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            NPCID.Sets.NormalGoldCritterBestiaryPriority.Add(Type);
+            NPCID.Sets.GoldCrittersCollection.Add(Type);
+        }
+
         public override void SetDefaults()
         {
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<GoldSeagullItem>();
-            NPC.rarity = 3;
+            // NPC.rarity = 3;
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

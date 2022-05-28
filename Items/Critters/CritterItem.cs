@@ -24,9 +24,9 @@ namespace NaturalVariety.Items.Critters
            Item.useTurn = true;
            Item.useAnimation = 15;
            Item.useTime = 10;
-           Item.maxStack = 999;
+           Item.maxStack = 9999;
            Item.consumable = true;
-           Item.value = Item.sellPrice(silver: 5);
+           Item.value = Item.sellPrice(silver: 5); // most will override this 
            Item.width = 12;
            Item.height = 12;            
            Item.noUseGraphic = true;      
