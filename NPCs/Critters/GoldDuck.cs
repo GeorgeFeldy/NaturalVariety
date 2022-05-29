@@ -13,10 +13,10 @@ using NaturalVariety.Items.Critters;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class GoldSeagull : Waterfowl 
+    public class GoldDuck : Waterfowl 
     {
 
-        public override string Texture => "NaturalVariety/NPCs/Critters/GoldSeagull";
+        public override string Texture => "NaturalVariety/NPCs/Critters/GoldDuck";
 
 
         public override void SetStaticDefaults()
@@ -29,7 +29,7 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<GoldSeagullItem>();
+            NPC.catchItem = (short)ModContent.ItemType<GoldDuckItem>();
             NPC.rarity = 3;
         }
 
@@ -37,35 +37,21 @@ namespace NaturalVariety.NPCs.Critters
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
-                // BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "The golden seagull (Larus aururs) is a gull species endemic to Terraria's beaches. It is classified as endangered (EN) in the IUCN red list, due to illegal captures for their precious plumage.")
+                   "The golden duck (Anas aurus) is a near-threatened species of duck with distinctive golden plumage. It is a common victim of illegal captures due to it's high value amongst collectors.")
             });
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            // TODO: adjust chances based on player luck 
-            //spawnInfo.Player.RollLuck(NPC.goldCritterChance);
-            float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00125f; // 1/800 water surface (for spawning in water)
-            float baseLandChance = SpawnCondition.Overworld.Chance * 0.00125f; // 1/800 any surface enemy (for spawning on sand or shell piles)
-
-            bool beachCondition = spawnInfo.Player.ZoneBeach;
-
-            ushort tileType = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].TileType;
-            bool sandCondition = (tileType == TileID.Sand) || (tileType == TileID.ShellPile); 
-            
-            return (beachCondition && sandCondition) ? baseWaterChance + baseLandChance : 0f;
-        }
 
         public override void AI()
         {
             base.AI();
             if(Main.rand.NextBool(400) && !Main.dedServ)
             {
-                SoundEngine.PlaySound(SoundID.Seagull);    
+                SoundEngine.PlaySound(SoundID.Duck);    
             }
 
             if (Main.rand.NextBool(20))
@@ -97,22 +83,28 @@ namespace NaturalVariety.NPCs.Critters
         }
     }
 
-    public class GoldSeagullFly : WaterfowlFly
+    public class GoldDuckFly : WaterfowlFly
     {
 
-        public override string Texture => "NaturalVariety/NPCs/Critters/GoldSeagull";
+        public override string Texture => "NaturalVariety/NPCs/Critters/GoldDuck";
 
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
-            DisplayName.SetDefault("Gold Seagull");
+            DisplayName.SetDefault("Gold Duck");
         }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<GoldSeagullItem>();
+            NPC.catchItem = (short)ModContent.ItemType<GoldDuckItem>();
             NPC.rarity = 3;
+        }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00250f;
+            return chance;
         }
 
         public override void AI()
@@ -121,7 +113,7 @@ namespace NaturalVariety.NPCs.Critters
 
             if (Main.rand.NextBool(400) && !Main.dedServ)
             {
-                SoundEngine.PlaySound(SoundID.Seagull);
+                SoundEngine.PlaySound(SoundID.Duck);
             }
 
             if (Main.rand.NextBool(20))

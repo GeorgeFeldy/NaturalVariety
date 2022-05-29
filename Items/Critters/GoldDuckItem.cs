@@ -6,24 +6,24 @@ using NaturalVariety.NPCs.Critters;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class GoldSeagullItem : CritterItem 
+    public class GoldDuckItem : CritterItem 
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Gold Seagull");
+            DisplayName.SetDefault("Gold Duck");
         }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.makeNPC = (short)ModContent.NPCType<GoldSeagull>();
+            Item.makeNPC = (short)ModContent.NPCType<GoldDuck>();
             Item.value = Item.sellPrice(gold: 10);
         }
 
         public override void AddRecipes()
         {
             Recipe delightRecipe = Mod.CreateRecipe(ItemID.GoldenDelight);
-            delightRecipe.AddIngredient<GoldSeagullItem>();
+            delightRecipe.AddIngredient<GoldDuckItem>();
             delightRecipe.AddTile(TileID.CookingPots);
             delightRecipe.Register();
         }

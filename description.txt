@@ -6,13 +6,13 @@ So far it adds:
      New critters: Flamingoes 
      Bird critter variants: Eurasian Jay, Blackbird, Goldfinch
      Duck variants: Pochard and Ferruginous Duck, along with improved Vanilla duck-type AI  
-     Golden critters: Seagull 
+     Golden critters: Seagull, Duck 
 
 Join me on Discord: https://discord.gg/N2qghPbC
 
 In plans:
 
-    More golden critter variants (duck, penguin)
+    More golden critter variants (penguin, snail)
     Golden (animal-like) enemies :O
     More songbirds.
     Owl varieties. 
