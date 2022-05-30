@@ -54,9 +54,10 @@ namespace NaturalVariety.Projectiles.Minions
 			return true;
 		}
 
-		// The AI of this minion is split into multiple methods to avoid bloat. This method just passes values between calls actual parts of the AI.
-		public override void AI()
-		{
+
+        public override void AI()
+        {
+
 			Player owner = Main.player[Projectile.owner];
 
 			if (!CheckActive(owner))
@@ -64,29 +65,236 @@ namespace NaturalVariety.Projectiles.Minions
 				return;
 			}
 
-			GeneralBehavior(owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition);
-			SearchForTargets(owner, out bool foundTarget, out float distanceFromTarget, out Vector2 targetCenter);
-			Movement(foundTarget, distanceFromTarget, targetCenter, distanceToIdlePosition, vectorToIdlePosition);
-			Visuals();
-		}
+			if (Main.dayTime)
+            {
+				DayAI(owner);
 
-		// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
-		private bool CheckActive(Player owner)
-		{
-			if (owner.dead || !owner.active)
+            }
+			else 
+            {
+				NightAI(owner);
+            }
+        }
+
+        private void NightAI(Player owner)
+        {
+
+			// for each projectile
+			for (int projIdx = 0; projIdx < Main.maxProjectiles; projIdx++)
 			{
-				owner.ClearBuff(ModContent.BuffType<RaptorMinionBuff>());
+				Projectile other = Main.projectile[projIdx];
 
-				return false;
+				// for every other minion of the same type, owned by the same player, if they overlap, move them 
+				if (projIdx != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < (float)Projectile.width)
+				{
+					if (Projectile.position.X < other.position.X)
+						Projectile.velocity.X -= 0.05f;
+					else
+						Projectile.velocity.X += 0.05f;
+
+					if (Projectile.position.Y < other.position.Y)
+						Projectile.velocity.Y -= 0.05f;
+					else
+						Projectile.velocity.Y += 0.05f;
+				}
 			}
 
-			if (owner.HasBuff(ModContent.BuffType<RaptorMinionBuff>()))
+			Vector2 projectileCenter = Projectile.position;
+			float distfromTarget = 900f;
+			bool foundTarget = false;
+
+			int maxPlrDist = 500;
+			if (Projectile.ai[1] != 0f || Projectile.friendly)
+				maxPlrDist = 1400;
+
+			// if distance between player and minion is greater than maxPlrDist
+			if (Math.Abs(Projectile.Center.X - Main.player[Projectile.owner].Center.X) + Math.Abs(Projectile.Center.Y - Main.player[Projectile.owner].Center.Y) > (float)maxPlrDist)
+				Projectile.ai[0] = 1f;
+
+			if (owner.HasMinionAttackTargetNPC)
 			{
-				Projectile.timeLeft = 2;
+				Projectile.tileCollide = true;
+				NPC targetNPC = Projectile.OwnerMinionAttackTargetNPC;
+
+				float distBetween = Vector2.Distance(targetNPC.Center, Projectile.Center);
+
+				if (targetNPC.CanBeChasedBy(this))
+					{
+						if (distBetween < distfromTarget && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, targetNPC.position, targetNPC.width, targetNPC.height))
+						{
+							distfromTarget = distBetween;
+							projectileCenter = targetNPC.Center;
+							foundTarget = true;
+						}
+					}
+
+				if (!foundTarget)
+				{
+					for (int npcIdx = 0; npcIdx < 200; npcIdx++)
+					{
+
+						targetNPC = Main.npc[npcIdx];
+
+						if (Main.npc[npcIdx].CanBeChasedBy(this))
+						{
+							float between = Vector2.Distance(targetNPC.Center, Projectile.Center);
+							bool inRange = between < distfromTarget;
+
+							if (inRange && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, Main.npc[npcIdx].position, Main.npc[npcIdx].width, Main.npc[npcIdx].height))
+								{
+									distfromTarget = between;
+									projectileCenter = targetNPC.Center;
+									foundTarget = true;
+								}
+							}
+					}
+				}
+			}
+			else
+			{
+				Projectile.tileCollide = false;
 			}
 
-			return true;
+			if (!foundTarget)
+			{
+				Projectile.friendly = true;
+
+				float projSpeed;
+				float inertia;
+
+				Vector2 vectorToIdlePosition = owner.Center;
+				vectorToIdlePosition.Y -= 60f; // adjust a few coords
+
+				vectorToIdlePosition -= Projectile.Center;
+
+				float distanceToIdlePosition = vectorToIdlePosition.Length();
+
+				if (distanceToIdlePosition < 100f)
+				{
+					projSpeed = 8f;
+				} 
+				else
+				{
+					projSpeed = 12f;
+				}
+
+				if (distanceToIdlePosition > 2000f)
+				{	
+					// teleport to player 
+					Projectile.position.X = owner.Center.X - (float)(Projectile.width / 2);
+					Projectile.position.Y = owner.Center.Y - (float)(Projectile.width / 2);
+				}
+
+				if (distanceToIdlePosition > 70f)
+				{
+					distanceToIdlePosition = projSpeed / distanceToIdlePosition;
+					Projectile.velocity.X = (Projectile.velocity.X * 20f + Projectile.position.X * distanceToIdlePosition) / 21f;
+					Projectile.velocity.Y = (Projectile.velocity.Y * 20f + Projectile.position.Y * distanceToIdlePosition) / 21f;
+				}
+				else
+				{
+					if (Projectile.velocity.X == 0f && Projectile.velocity.Y == 0f)
+					{
+						Projectile.velocity.X = -0.15f;
+						Projectile.velocity.Y = -0.05f;
+					}
+
+					Projectile.velocity *= 1.01f;
+				}
+
+				Projectile.friendly = false;
+				Projectile.rotation = Projectile.velocity.X * 0.05f;
+				Projectile.frameCounter++;
+				if (Projectile.frameCounter >= 4)
+				{
+					Projectile.frameCounter = 0;
+					Projectile.frame++;
+				}
+
+				if (Projectile.frame > 3)
+					Projectile.frame = 0;
+
+				if ((double)Math.Abs(Projectile.velocity.X) > 0.2)
+					Projectile.spriteDirection = -Projectile.direction;
+
+				return;
+			}
+
+			if (Projectile.ai[1] == -1f)
+				Projectile.ai[1] = 17f;
+
+			if (Projectile.ai[1] > 0f)
+				Projectile.ai[1] -= 1f;
+
+			if (Projectile.ai[1] == 0f)
+			{
+				Projectile.friendly = true;
+				float num476 = 16f;
+				float num477 = distfromTarget - Projectile.Center.X;
+				float num478 = distfromTarget - Projectile.Center.Y;
+				float num479 = (float)Math.Sqrt(num477 * num477 + num478 * num478);
+
+				if (num479 < 100f)
+					num476 = 10f;
+
+				num479 = num476 / num479;
+				num477 *= num479;
+				num478 *= num479;
+				Projectile.velocity.X = (Projectile.velocity.X * 14f + num477) / 15f;
+				Projectile.velocity.Y = (Projectile.velocity.Y * 14f + num478) / 15f;
+			}
+			else
+			{
+				Projectile.friendly = false;
+				if (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y) < 10f)
+					Projectile.velocity *= 1.05f;
+			}
+
+			Projectile.rotation = Projectile.velocity.X * 0.05f;
+			Projectile.frameCounter++;
+			if (Projectile.frameCounter >= 4)
+			{
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+			}
+
+			if (Projectile.frame < 4)
+				Projectile.frame = 4;
+
+			if (Projectile.frame > 7)
+				Projectile.frame = 4;
+
+			if ((double)Math.Abs(Projectile.velocity.X) > 0.2)
+				Projectile.spriteDirection = -Projectile.direction;
 		}
+
+
+			// The AI of this minion is split into multiple methods to avoid bloat. This method just passes values between calls actual parts of the AI.
+			private void DayAI(Player owner)
+			{
+				GeneralBehavior(owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition);
+				SearchForTargets(owner, out bool foundTarget, out float distanceFromTarget, out Vector2 targetCenter);
+				Movement(foundTarget, distanceFromTarget, targetCenter, distanceToIdlePosition, vectorToIdlePosition);
+				Visuals();
+			}
+
+			// This is the "active check", makes sure the minion is alive while the player is alive, and despawns if not
+			private bool CheckActive(Player owner)
+			{
+				if (owner.dead || !owner.active)
+				{
+					owner.ClearBuff(ModContent.BuffType<RaptorMinionBuff>());
+
+					return false;
+				}
+
+				if (owner.HasBuff(ModContent.BuffType<RaptorMinionBuff>()))
+				{
+					Projectile.timeLeft = 2;
+				}
+
+				return true;
+			}
 
 		private void GeneralBehavior(Player owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition)
 		{
@@ -97,8 +305,6 @@ namespace NaturalVariety.Projectiles.Minions
 			// The index is projectile.minionPos
 			float minionPositionOffsetX = (10 + Projectile.minionPos * 40) * -owner.direction;
 			idlePosition.X += minionPositionOffsetX; // Go behind the player
-
-			Projectile.spriteDirection = (Projectile.velocity.X > 0) ? 1 : -1; // get direction from current velocity vector 
 
 			// All of this code below this line is adapted from Spazmamini code (ID 388, aiStyle 66)
 
@@ -255,8 +461,6 @@ namespace NaturalVariety.Projectiles.Minions
 			}
 		}
 
-
-		
 		private void Visuals()
 		{
 			// So it will lean slightly towards the direction it's moving
@@ -281,6 +485,6 @@ namespace NaturalVariety.Projectiles.Minions
 			// Some visuals here
 			Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.78f);
 		}
+		}
 	}
-}
 
