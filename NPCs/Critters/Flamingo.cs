@@ -39,11 +39,37 @@ namespace NaturalVariety.NPCs.Critters
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance;
-            return chance;
+            Tile tile;
+
+            float landChance = SpawnCondition.OverworldDay.Chance * 0.25f;
+            float waterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.25f;
+
+            bool landModifier = false;
+            bool waterModifier;
+
+
+            // set spawn on solid ground modifier to true only if there is water in close vicinity
+            for(int i = -15; i <= 15; i++)
+            {
+                for(int j = -3; j <= 3; j++)
+                {
+                    tile = Main.tile[spawnInfo.SpawnTileX + i, spawnInfo.SpawnTileY + j];
+                    if (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Water)
+                    {
+                        landModifier = true;
+                    }
+                }
+            }
+
+            landChance = landModifier ? landChance : 0f;
+
+            waterModifier = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1].LiquidAmount < 0 ;
+
+            waterChance = waterModifier ? waterChance : 0f;
+
+            return landChance + waterChance;
         }
         
-
 
         public override void OnSpawn(IEntitySource source)
         {

@@ -59,11 +59,13 @@ namespace NaturalVariety.NPCs.Critters
 
         public override void AI()
         {
+
 			// distances relative to player
 			const float avoidDistance = 150f;
 			const float spookDistance = 100f;
 			const float corneredDistance = avoidDistance + 50f;
 
+			// pick a random direction initally 
 			if (AI_NextDir == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
@@ -72,6 +74,17 @@ namespace NaturalVariety.NPCs.Critters
 
 			AI_Timer++;
 
+			// underwater while idle or walking?
+			bool walkingUnderwater = false;
+			if(AI_State == (float)ActionState.Wait || AI_State == (float)ActionState.Walk)
+            {
+				int walkingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+				int walkingCenterY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
+
+				walkingUnderwater = Main.tile[walkingCenterX, walkingCenterY - 1].LiquidAmount > 0 &&
+									Main.tile[walkingCenterX, walkingCenterY    ].LiquidAmount > 0 &&
+									Main.tile[walkingCenterX, walkingCenterY + 1].LiquidAmount > 0;
+			}
 			switch (AI_State)
 			{
 				case (float)ActionState.Wait:
@@ -82,13 +95,16 @@ namespace NaturalVariety.NPCs.Critters
 
 					NPC.TargetClosest();
 
-
 					if (Main.netMode != NetmodeID.MultiplayerClient &&
 					  (AI_Timer >= Main.rand.Next(240, 480) || // (4sec <-> 8sec) 
 					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
 					{
 
-						if(NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+						if(NPC.velocity.Y > 4f ||
+							NPC.velocity.Y < -4f ||
+							NPC.life < NPC.lifeMax ||
+							walkingUnderwater ||
+							Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
 						{
 							AI_State = (float)ActionState.Fly;
 							AI_Timer = 0;
@@ -115,12 +131,13 @@ namespace NaturalVariety.NPCs.Critters
 
 					NPC.TargetClosest();
 
-					int walkingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
-					int walkingCenterY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
+					
 
-					bool walkingCenterUnderwater = (Main.tile[walkingCenterX, walkingCenterY].LiquidAmount > 0);
-
-					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || walkingCenterUnderwater || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					if (NPC.velocity.Y > 4f || 
+						NPC.velocity.Y < -4f || 
+						walkingUnderwater || 
+						NPC.life < NPC.lifeMax ||
+						Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
                     {
 						AI_State = (float)ActionState.Fly;
 						AI_Timer = 0;
@@ -194,12 +211,14 @@ namespace NaturalVariety.NPCs.Critters
 
 					bool tileBelowSolid = (Main.tile[flyingCenterX, belowY].HasUnactuatedTile && Main.tileSolid[Main.tile[flyingCenterX, belowY].TileType]);
 
-					bool partiallySubmerged = Main.tile[flyingCenterX, flyingCenterY].LiquidAmount > 0;
+					bool aboveDeepWater = Main.tile[flyingCenterX, flyingCenterY    ].LiquidAmount > 0 &&
+										  Main.tile[flyingCenterX, flyingCenterY + 1].LiquidAmount > 0 &&
+										  Main.tile[flyingCenterX, flyingCenterY + 2].LiquidAmount > 0   ;
 
 					if (attemptLand)
 					{
 
-                        if (partiallySubmerged) // restart flight if center is submerged in liquid 
+                        if (aboveDeepWater) // restart flight if center is submerged in liquid 
                         {
 							AI_Timer = 0;
 							return;
