@@ -8,7 +8,7 @@ So far it adds:
      Duck variants: Pochard and Ferruginous Duck, along with improved Vanilla duck-type AI  
      Golden critters: Seagull, Duck 
 
-Join me on Discord: https://discord.gg/N2qghPbC
+Join me on Discord: https://discord.gg/7D3BKPJ77F
 
 In plans:
 

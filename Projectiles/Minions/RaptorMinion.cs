@@ -77,8 +77,8 @@ namespace NaturalVariety.Projectiles.Minions
 			else 
             {
 				NightGeneralBehavior(owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition);
-				NightSearchForTargets(owner, out bool foundTarget, out float distanceFromTarget, out Vector2 targetCenter);
-				NightMovement(foundTarget, distanceFromTarget, targetCenter, distanceToIdlePosition, vectorToIdlePosition);
+				NightSearchForTargets(owner, out bool foundTarget, out NPC targetNPC, out float distanceFromTarget, out Vector2 targetCenter);
+				NightMovement(foundTarget, targetNPC, distanceFromTarget, targetCenter, distanceToIdlePosition, vectorToIdlePosition);
 				NightVisuals();
 			}
         }
@@ -298,8 +298,8 @@ namespace NaturalVariety.Projectiles.Minions
 
 			// If your minion doesn't aimlessly move around when it's idle, you need to "put" it into the line of other summoned minions
 			// The index is projectile.minionPos
-			//float minionPositionOffsetX = (5 + Projectile.minionPos * 20) * -owner.direction;
-			//idlePosition.X += minionPositionOffsetX; // Go behind the player
+			float minionPositionOffsetX = (5 + Projectile.minionPos * 20) * -owner.direction;
+			idlePosition.X += minionPositionOffsetX; // Go behind the player
 
 			// All of this code below this line is adapted from Spazmamini code (ID 388, aiStyle 66)
 
@@ -347,12 +347,13 @@ namespace NaturalVariety.Projectiles.Minions
 			}
 		}
 
-		private void NightSearchForTargets(Player owner, out bool foundTarget, out float distanceFromTarget, out Vector2 targetCenter)
+		private void NightSearchForTargets(Player owner, out bool foundTarget, out NPC targetNPC, out float distanceFromTarget, out Vector2 targetCenter)
 		{
 			// Starting search distance
 			distanceFromTarget = 700f;
 			targetCenter = Projectile.position;
 			foundTarget = false;
+			targetNPC = new();
 
 			// This code is required if your minion weapon has the targeting feature
 			if (owner.HasMinionAttackTargetNPC)
@@ -365,6 +366,7 @@ namespace NaturalVariety.Projectiles.Minions
 				{
 					distanceFromTarget = between;
 					targetCenter = npc.Center;
+					targetNPC = npc;
 					foundTarget = true;
 				}
 			}
@@ -384,12 +386,13 @@ namespace NaturalVariety.Projectiles.Minions
 						bool lineOfSight = Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, npc.position, npc.width, npc.height);
 						// Additional check for this specific minion behavior, otherwise it will stop attacking once it dashed through an enemy while flying though tiles afterwards
 						// The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
-						bool closeThroughWall = between < 100f;
+						bool closeThroughWall = between < 200f;
 
 						if (((closest && inRange) || !foundTarget) && (lineOfSight || closeThroughWall))
 						{
 							distanceFromTarget = between;
 							targetCenter = npc.Center;
+							targetNPC = npc;
 							foundTarget = true;
 						}
 					}
@@ -403,23 +406,36 @@ namespace NaturalVariety.Projectiles.Minions
 			Projectile.friendly = foundTarget;
 		}
 
-		private void NightMovement(bool foundTarget, float distanceFromTarget, Vector2 targetCenter, float distanceToIdlePosition, Vector2 vectorToIdlePosition)
+		private void NightMovement(bool foundTarget, NPC targetNPC, float distanceFromTarget, Vector2 targetCenter, float distanceToIdlePosition, Vector2 vectorToIdlePosition)
 		{
 			// Default movement parameters (here for attacking)
-			float speed = 8f;
-			float inertia = 20f;
+			float speed = 20f;
+			float inertia = 40f;
 
-			if (foundTarget)
+			if (foundTarget && targetNPC != null)
 			{
-				// Minion has a target: attack (here, fly towards the enemy)
-				if (distanceFromTarget > 40f)
-				{
-					// The immediate range around the target (so it doesn't latch onto it when close)
-					Vector2 direction = targetCenter - Projectile.Center;
-					direction.Normalize();
-					direction *= speed;
 
-					Projectile.velocity = (Projectile.velocity * (inertia - 1) + direction) / inertia;
+				Vector2 direction = targetCenter - Projectile.Center;
+				direction.Normalize();
+				// Minion has a target: attack (here, fly towards the enemy)
+				if (distanceFromTarget > 80f)
+				{
+					Projectile.velocity.X = (Projectile.velocity.X * (inertia - 1) + direction.X * speed) / inertia;
+					Projectile.velocity.Y = (Projectile.velocity.Y * (inertia - 1) + direction.Y * speed) / inertia;
+				}
+                else
+                {
+					//if (Projectile.Center.X < targetCenter.X + targetNPC.width / 2 && Projectile.Center.Y < targetCenter.Y + targetNPC.height / 2)
+					if (Projectile.Center.X < targetNPC.position.X + targetNPC.width / 2 && Projectile.Center.Y < targetNPC.position.Y + targetNPC.height / 2)
+					{
+						Projectile.velocity.X = (Projectile.velocity.X * (inertia - 1) - direction.X * speed) / inertia;
+						Projectile.velocity.Y = (Projectile.velocity.Y * (inertia - 1) - direction.Y * speed) / inertia;
+					}
+					else
+					{
+						Projectile.velocity.X = (Projectile.velocity.X * (inertia - 1) + direction.X * speed) / inertia;
+						Projectile.velocity.Y = (Projectile.velocity.Y * (inertia - 1) + direction.Y * speed) / inertia;
+					}
 				}
 			}
 			else
@@ -438,7 +454,7 @@ namespace NaturalVariety.Projectiles.Minions
 					inertia = 80f;
 				}
 
-				if (distanceToIdlePosition > 70f)
+				if (distanceToIdlePosition > 170f)
 				{
 					// The immediate range around the player (when it passively floats about)
 
@@ -449,7 +465,7 @@ namespace NaturalVariety.Projectiles.Minions
 				}
 				else 
 				{
-					Projectile.velocity = Projectile.velocity +  ((-vectorToIdlePosition * speed) / (vectorToIdlePosition.Length() * vectorToIdlePosition.Length()));
+					//Projectile.position = Vector2.Transform(Projectile.position - Projectile.Center, Matrix.CreateRotationZ(0.1f)) + Projectile.Center;
 
 					if (Projectile.velocity == Vector2.Zero)
                     {
