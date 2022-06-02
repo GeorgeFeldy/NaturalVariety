@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 
 
 namespace NaturalVariety.NPCs.Critters
@@ -57,7 +58,42 @@ namespace NaturalVariety.NPCs.Critters
 			AI_NextDir = 0;
 		}
 
-        public override void AI()
+		public override float SpawnChance(NPCSpawnInfo spawnInfo)
+		{
+			Tile tile;
+
+			float landChance = (SpawnCondition.OverworldDay.Chance + SpawnCondition.TownCritter.Chance) * 0.25f;
+			float waterChance = (SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance) * 0.25f;
+
+			bool landModifier = false;
+			bool waterModifier;
+
+
+			// set spawn on solid ground modifier to true only if there is water in close vicinity
+			for (int i = -15; i <= 15; i++)
+			{
+				for (int j = -3; j <= 3; j++)
+				{
+					tile = Main.tile[spawnInfo.SpawnTileX + i, spawnInfo.SpawnTileY + j];
+					if (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Water)
+					{
+						landModifier = true;
+					}
+				}
+			}
+
+			landChance = landModifier ? landChance : 0f;
+
+			waterModifier = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1].LiquidAmount < 0;
+
+			waterChance = waterModifier ? waterChance : 0f;
+
+			return landChance + waterChance;
+		}
+
+
+
+		public override void AI()
         {
 
 			// distances relative to player

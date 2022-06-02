@@ -49,10 +49,11 @@ namespace NaturalVariety.NPCs.Critters
         {
             // TODO: adjust chances based on player luck 
             //spawnInfo.Player.RollLuck(NPC.goldCritterChance);
+            
             float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00125f; // 1/800 water surface (for spawning in water)
             float baseLandChance = SpawnCondition.Overworld.Chance * 0.00125f; // 1/800 any surface enemy (for spawning on sand or shell piles)
 
-            bool beachCondition = spawnInfo.Player.ZoneBeach;
+            bool beachCondition = spawnInfo.Player.ZoneBeach && !spawnInfo.Player.ZoneDesert;
 
             ushort tileType = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].TileType;
             bool sandCondition = (tileType == TileID.Sand) || (tileType == TileID.ShellPile); 

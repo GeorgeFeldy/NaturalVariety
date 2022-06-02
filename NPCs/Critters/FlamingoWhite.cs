@@ -12,17 +12,23 @@ using NaturalVariety.Sounds;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class Flamingo : WadingBird 
+    public class FlamingoWhite : WadingBird 
     {
 
-        public override string Texture => "NaturalVariety/NPCs/Critters/Flamingo";
+        public override string Texture => "NaturalVariety/NPCs/Critters/FlamingoWhite";
 
         // public ref float AI_spawnInFlocks => ref NPC.ai[3];
+
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Flamingo");
+        }
 
         public override void SetDefaults()
         {
             base.SetDefaults(); 
-            NPC.catchItem = (short)ModContent.ItemType<FlamingoItem>();
+            NPC.catchItem = (short)ModContent.ItemType<FlamingoWhiteItem>();
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -32,12 +38,10 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
-
                 new FlavorTextBestiaryInfoElement(
-                   "The greater flamingo (Phoenicopterus roseus) is the most widespread and largest species of the flamingo family. " + 
-                   "It is found in Africa, the Indian subcontinent, the Middle East, and in southern Europe. " +
-                   "The bright pink color of some flamingoes comes from beta-carotene, a red-orange pigment that’s found in high amounts within the algae, " +
-                   "brine fly larvae, and brine shrimp that flamingos eat in their wetland environment.")
+                   "The greater flamingo (Phoenicopterus roseus) is the most widespread and largest species of the flamingo family." + 
+                   " It is found in Africa, the Indian subcontinent, the Middle East, and in southern Europe." + 
+                   " Most of its plumage is white, but the primary and secondary flight feathers are black.")
             });
         }
 

@@ -28,7 +28,7 @@ namespace NaturalVariety.NPCs.Critters
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnCondition.OverworldDayBirdCritter.Chance; // Spawn with regular bird chance. 
+            return SpawnCondition.OverworldDayBirdCritter.Chance + SpawnCondition.TownGeneralCritter.Chance; // Spawn with regular bird chance. 
         }
 
         public override void SetDefaults()

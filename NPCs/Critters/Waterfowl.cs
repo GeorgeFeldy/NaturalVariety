@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 
 
 
@@ -57,6 +58,13 @@ namespace NaturalVariety.NPCs.Critters
 			AI_State = 0;
 			AI_Timer = 0;
 			AI_NextDir = 0;
+		}
+
+		public override float SpawnChance(NPCSpawnInfo spawnInfo)
+		{
+			float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance;
+			//bool condition = Math.Abs(spawnInfo.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3; // inner third 
+			return chance;
 		}
 
 		public override void HitEffect(int hitDirection, double damage)
@@ -257,6 +265,13 @@ namespace NaturalVariety.NPCs.Critters
             Banner = Item.NPCtoBanner(NPCID.Duck);
             BannerItem = Item.BannerToItem(Banner);
         }
+
+		public override float SpawnChance(NPCSpawnInfo spawnInfo)
+		{
+			float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance;
+			//bool condition = Math.Abs(spawnInfo.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3; // inner third 
+			return chance;
+		}
 
 		public override void HitEffect(int hitDirection, double damage)
 		{

@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using NaturalVariety.Utils;
 using System.Collections.Generic;
 
-namespace NaturalVariety.Items.Mechanics
+namespace NaturalVariety.Mechanics
 {
     /// <summary>
     /// GlobalItem to edit each "cage" item found in Utils.CageHelper.cageList
