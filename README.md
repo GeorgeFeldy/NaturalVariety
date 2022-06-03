@@ -6,8 +6,8 @@ _Natural Variety_ is a new WIP personal project which will add real world variet
 
 So far it adds:
 - QoL Mechanics: Right click to release any critter from a cage (Terrarrium, Bowl, Bottle). (Might release as separate mod if requested)
-- New critters: Flamingoes 
-- Bird critter variants: Eurasian Jay, Blackbird, Goldfinch
+- New critters: Flamingoes (pink and white variants)
+- Bird critter variants: Eurasian Jay, Blackbird, Goldfinch, Bee-eater
 - Duck variants: Pochard and Ferruginous Duck, along with improved Vanilla duck-type AI  
 - Golden critters: Seagull, Duck
 
