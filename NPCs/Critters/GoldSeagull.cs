@@ -41,7 +41,7 @@ namespace NaturalVariety.NPCs.Critters
                 // BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "The golden seagull (Larus aururs) is a gull species endemic to Terraria's beaches. It is classified as endangered (EN) in the IUCN red list, due to illegal captures for their precious plumage.")
+                   "The golden seagull (Larus midas) is a gull species endemic to Terraria's beaches. It is classified as endangered (EN) in the IUCN red list, due to illegal captures for their precious plumage.")
             });
         }
 
@@ -53,12 +53,14 @@ namespace NaturalVariety.NPCs.Critters
             float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00125f; // 1/800 water surface (for spawning in water)
             float baseLandChance = SpawnCondition.Overworld.Chance * 0.00125f; // 1/800 any surface enemy (for spawning on sand or shell piles)
 
-            bool beachCondition = spawnInfo.Player.ZoneBeach && !spawnInfo.Player.ZoneDesert;
+            bool beachCondition = (spawnInfo.SpawnTileX < 250 || spawnInfo.SpawnTileX > Main.maxTilesX - 250);
 
-            ushort tileType = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].TileType;
-            bool sandCondition = (tileType == TileID.Sand) || (tileType == TileID.ShellPile); 
-            
-            return (beachCondition && sandCondition) ? baseWaterChance + baseLandChance : 0f;
+            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
+            bool sandCondition = (tile.TileType == TileID.Sand) || (tile.TileType == TileID.ShellPile); 
+
+            float chance = (beachCondition && sandCondition) ? (baseWaterChance + baseLandChance) : 0f;
+
+            return chance;
         }
 
         public override void AI()

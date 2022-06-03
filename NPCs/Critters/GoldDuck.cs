@@ -41,7 +41,7 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "The golden duck (Anas aurus) is a near-threatened species of duck with distinctive golden plumage. It is a common victim of illegal captures due to it's high value amongst collectors.")
+                   "The golden duck (Anas midas) is a near-threatened species of duck with distinctive golden plumage. It is a common victim of illegal captures due to it's high value amongst collectors.")
             });
         }
 
@@ -104,6 +104,12 @@ namespace NaturalVariety.NPCs.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00250f;
+
+            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
+            bool modifier = (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass);
+
+            chance = modifier ? chance : 0f;
+
             return chance;
         }
 

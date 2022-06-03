@@ -61,13 +61,15 @@ namespace NaturalVariety.NPCs.Critters
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
 			Tile tile;
+			tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
 
 			float landChance = (SpawnCondition.OverworldDay.Chance + SpawnCondition.TownCritter.Chance) * 0.25f;
 			float waterChance = (SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance) * 0.25f;
+			float finalChance;
 
 			bool landModifier = false;
 			bool waterModifier;
-
+			bool grassModifier = (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass);
 
 			// set spawn on solid ground modifier to true only if there is water in close vicinity
 			for (int i = -15; i <= 15; i++)
@@ -84,11 +86,14 @@ namespace NaturalVariety.NPCs.Critters
 
 			landChance = landModifier ? landChance : 0f;
 
-			waterModifier = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1].LiquidAmount < 0;
+			tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1];
+			waterModifier = tile.LiquidAmount < 0;
 
 			waterChance = waterModifier ? waterChance : 0f;
 
-			return landChance + waterChance;
+			finalChance = grassModifier ? (landChance + waterChance) : 0f;
+
+			return finalChance;
 		}
 
 
@@ -131,29 +136,23 @@ namespace NaturalVariety.NPCs.Critters
 
 					NPC.TargetClosest();
 
+					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f ||NPC.life < NPC.lifeMax || walkingUnderwater || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					{
+						AI_State = (float)ActionState.Fly;
+						AI_Timer = 0;
+						NPC.direction = (int)AI_NextDir;
+						NPC.velocity.X = 4f * NPC.direction;
+						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+					}
+
 					if (Main.netMode != NetmodeID.MultiplayerClient &&
 					  (AI_Timer >= Main.rand.Next(240, 480) || // (4sec <-> 8sec) 
 					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
 					{
 
-						if(NPC.velocity.Y > 4f ||
-							NPC.velocity.Y < -4f ||
-							NPC.life < NPC.lifeMax ||
-							walkingUnderwater ||
-							Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
-						{
-							AI_State = (float)ActionState.Fly;
-							AI_Timer = 0;
-							NPC.direction = (int)AI_NextDir;
-							NPC.velocity.X = 4f * NPC.direction;
-							AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
-						}
-						else
-                        {
-							AI_State = (float)ActionState.Walk;
-							AI_Timer = 0;
-							AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
-						}
+						AI_State = (float)ActionState.Walk;
+						AI_Timer = 0;
+						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
 					
 						NPC.netUpdate = true;
 					}
@@ -166,8 +165,6 @@ namespace NaturalVariety.NPCs.Critters
 					NPC.height = 58;
 
 					NPC.TargetClosest();
-
-					
 
 					if (NPC.velocity.Y > 4f || 
 						NPC.velocity.Y < -4f || 

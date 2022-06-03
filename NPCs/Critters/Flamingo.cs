@@ -41,32 +41,6 @@ namespace NaturalVariety.NPCs.Critters
             });
         }
 
-        
-        // 1/3 chance to spawn another on spawn 
-        public override void OnSpawn(IEntitySource source)
-        {
-
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                return;
-            }
-
-            // small chance to recurse to NPC cap :D 
-            bool spawnAnother = Main.rand.NextBool(3);
-
-            if (spawnAnother)
-            {
-                int index = NPC.NewNPC(source, (int)NPC.position.X + Main.rand.Next(-30, NPC.width + 30), (int)NPC.position.Y + NPC.height,
-                ModContent.NPCType<Flamingo>());
-
-                if (Main.netMode == NetmodeID.Server && index < Main.maxNPCs)
-                    NetMessage.SendData(MessageID.SyncNPC, number: index);
-            }
-          
-            base.OnSpawn(source);
-        }
-
-
         public override void AI()
         {
             base.AI();

@@ -19,6 +19,7 @@ namespace NaturalVariety.Mechanics
                 group.ValidItems.Add(ModContent.ItemType<Items.Critters.BlackbirdItem>());
                 group.ValidItems.Add(ModContent.ItemType<Items.Critters.EurasianJayItem>());
                 group.ValidItems.Add(ModContent.ItemType<Items.Critters.GoldfinchItem>());
+                group.ValidItems.Add(ModContent.ItemType<Items.Critters.BeeEaterItem>());
 
             }
 

@@ -268,8 +268,14 @@ namespace NaturalVariety.NPCs.Critters
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance;
-			//bool condition = Math.Abs(spawnInfo.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3; // inner third 
+			float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance;
+
+			Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
+
+			bool modifier = (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass);
+
+			chance = modifier ? chance : 0f;
+
 			return chance;
 		}
 
