@@ -18,9 +18,9 @@ namespace NaturalVariety.NPCs.GlobalNPCs
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
             return entity.type == NPCID.Duck ||
-                    entity.type == NPCID.DuckWhite ||
-                    entity.type == NPCID.Grebe ||
-                    entity.type == NPCID.Seagull;
+                   entity.type == NPCID.DuckWhite ||
+                   entity.type == NPCID.Grebe ||
+                   entity.type == NPCID.Seagull;
         }
 
 
@@ -51,7 +51,7 @@ namespace NaturalVariety.NPCs.GlobalNPCs
             }
 
             npc.TargetClosest();
-            // if touching water, falling or player is really close, transform to flying regardless of action state 
+            // if touching water, falling or player is really close, transform to flying regardless of ai state 
             if (Main.netMode != NetmodeID.MultiplayerClient &&
                (npc.velocity.Y > 4f || npc.velocity.Y < -4f || npc.wet || Main.player[npc.target].Distance(npc.Center) < spookDistance))
             {
