@@ -41,11 +41,13 @@ namespace NaturalVariety.NPCs.Critters
                 flockSize.Add(i, 3); // 3/5 to be multiple (2 to 5)
             }
 
-            int flamingoTypePicker = Main.rand.Next(1, numberOfFlamingoes); // 2 types of flamingoes (TODO: add weighted random when adding Gold Flamingo)
+            int flamingoTypePicker; 
             int flamingoType = ModContent.NPCType<Flamingo>();
 
             for (int i = 0; i < flockSize; i++)
             {
+
+                flamingoTypePicker = Main.rand.Next(2) + 1;
 
                 switch (flamingoTypePicker)
                 {
@@ -53,7 +55,6 @@ namespace NaturalVariety.NPCs.Critters
                     case 2: flamingoType = ModContent.NPCType<FlamingoWhite>(); break;
                 }
 
-                flamingoTypePicker = Main.rand.Next(1, numberOfFlamingoes);
 
                 int index = NPC.NewNPC(new EntitySource_SpawnNPC(), (int)NPC.position.X + Main.rand.Next(-30, NPC.width + 30), (int)NPC.position.Y + NPC.height,
                   flamingoType);
