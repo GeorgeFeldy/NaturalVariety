@@ -5,9 +5,12 @@ using Terraria;
 using Terraria.ID;
 using Terraria.UI;
 using Terraria.ModLoader;
-using NaturalVariety.NPCs.Critters;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.Elements;
+using NaturalVariety.NPCs.Critters;
+using NaturalVariety.Utils;
+
+
 
 namespace NaturalVariety.Mechanics
 {
@@ -18,21 +21,22 @@ namespace NaturalVariety.Mechanics
 
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
-            return !(entity.ExcludedFromDeathTally());
+            return true;
         }
 
         public override bool SpecialOnKill(NPC npc)
         {
-            BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(npc.netID);
-
+            int baseNetId = NetIdHelper.MapBaseIdForVariants(npc.netID);
+            BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(baseNetId);
             tallyInfo = new TallyBestiaryInfoElement(npc, npc.netID);
             entry.Info.RemoveAll(IsTallyBestiaryInfoElement);
             entry.Info.Add(tallyInfo);
 
             Main.BestiaryDB.Register(entry);
 
+
             return false;
-        }
+        } 
 
         public static bool IsTallyBestiaryInfoElement(IBestiaryInfoElement element)
         {
@@ -61,6 +65,8 @@ namespace NaturalVariety.Mechanics
         private readonly int bannerTally;
         private readonly int bestiaryTally;
 
+        private readonly int noOfElements = 1;
+
         public TallyBestiaryInfoElement(NPC npc, int npcNetId) : base(npcNetId)
         {
 
@@ -70,7 +76,7 @@ namespace NaturalVariety.Mechanics
             if (bestiaryTally > 0)
             {
                 bestiaryTally++;
-                if (npc.boss)
+                if (npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type])
                 {
                     displayBossTally = true;    
                 }
@@ -84,7 +90,16 @@ namespace NaturalVariety.Mechanics
             {
                 bannerTally++;
                 displayBannerTally = true;
+                if(bestiaryTally == bannerTally)
+                {
+                    displayBestiaryTally = false; 
+                }
             }   
+
+            if(displayBannerTally && displayBestiaryTally)
+            {
+                noOfElements = 2;
+            }
 
         }
        
@@ -99,7 +114,7 @@ namespace NaturalVariety.Mechanics
             UIElement element = new UIElement //= new UIPanel(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Stat_Panel"), null, 12, 7)
             {
                 Width = new StyleDimension(0f, 1f),
-                Height = new StyleDimension(70f, 0f),
+                Height = new StyleDimension(35f * noOfElements, 0f),
                 // BackgroundColor = new Color(43, 56, 101),
                 // BorderColor = Color.Transparent,
                 //Left = new StyleDimension(5f, 0f)
@@ -141,7 +156,7 @@ namespace NaturalVariety.Mechanics
 
             UIElement fieldImageBestiary = new UIImage(ModContent.Request<Texture2D>("NaturalVariety/Assets/UI/TallyBestiary"))
             {
-                Top = new StyleDimension(35, 0f),
+                Top = new StyleDimension(35f * (noOfElements - 1), 0f),
                 Left = new StyleDimension(3, 0f)
             };
 
@@ -150,11 +165,12 @@ namespace NaturalVariety.Mechanics
 
             UIElement fieldImageBoss = new UIImage(ModContent.Request<Texture2D>("NaturalVariety/Assets/UI/TallyBoss"))
             {
-                Top = new StyleDimension(0, 0f),
+                Top = new StyleDimension(35f * (noOfElements - 1), 0f),
                 Left = new StyleDimension(3, 0f)
             };
 
             fieldImageBoss.HAlign = 0f;
+            fieldImageBoss.Left = new StyleDimension(5f, 0f);
 
             UIText uITextBestiary = new UIText(bestiaryTally.ToString())
             {
@@ -174,20 +190,28 @@ namespace NaturalVariety.Mechanics
                 Top = new StyleDimension(0 + 35 * 2, 0f)
             };
 
-  
+
             if (fieldImageBestiary != null && displayBestiaryTally)
+            {
                 fieldImageBestiary.Append(uITextBestiary);
                 element.Append(fieldImageBestiary);
+                fieldImageBestiary.OnUpdate += ShowNameBestiary;
+            }
+
+            if (fieldImageBoss != null && displayBossTally)
+            {
+                fieldImageBoss.Append(uITextBestiary);
+                element.Append(fieldImageBoss);
+                fieldImageBoss.OnUpdate += ShowNameBoss;
+            }
+
 
             if (fieldImageBanner != null && displayBannerTally)
+            {
                 fieldImageBanner.Append(uITextBanner);
                 element.Append(fieldImageBanner);
-
-
-
-
-            fieldImageBanner.OnUpdate += ShowNameBanner;
-            fieldImageBestiary.OnUpdate += ShowNameBestiary;
+                fieldImageBanner.OnUpdate += ShowNameBanner;
+            }         
 
             return element;
 
@@ -198,7 +222,7 @@ namespace NaturalVariety.Mechanics
         {
             if (element.IsMouseHovering && element != null)
             {
-                Main.instance.MouseText("Kill count (banner)", 0, 0);
+                Main.instance.MouseText("Kill count", 0, 0);
             }
         }
 
@@ -206,7 +230,15 @@ namespace NaturalVariety.Mechanics
         {
             if (element.IsMouseHovering && element != null)
             {
-                Main.instance.MouseText("Kill count (bestiary)", 0, 0);
+                Main.instance.MouseText("Kill count for this variant", 0, 0);
+            }
+        }
+
+        private void ShowNameBoss(UIElement element)
+        {
+            if (element.IsMouseHovering && element != null)
+            {
+                Main.instance.MouseText("Boss kill count", 0, 0);
             }
         }
 
