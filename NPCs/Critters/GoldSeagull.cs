@@ -9,7 +9,7 @@ using Terraria.ModLoader.Utilities;
 using Terraria.Audio;
 
 using NaturalVariety.Items.Critters;
-
+using NaturalVariety.Utils;
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -47,20 +47,7 @@ namespace NaturalVariety.NPCs.Critters
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            // TODO: adjust chances based on player luck 
-            //spawnInfo.Player.RollLuck(NPC.goldCritterChance);
-            
-            float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00125f; // 1/800 water surface (for spawning in water)
-            float baseLandChance = SpawnCondition.Overworld.Chance * 0.00125f; // 1/800 any surface enemy (for spawning on sand or shell piles)
-
-            bool beachCondition = (spawnInfo.SpawnTileX < 250 || spawnInfo.SpawnTileX > Main.maxTilesX - 250);
-
-            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
-            bool sandCondition = (tile.TileType == TileID.Sand) || (tile.TileType == TileID.ShellPile); 
-
-            float chance = (beachCondition && sandCondition) ? (baseWaterChance + baseLandChance) : 0f;
-
-            return chance;
+            return SpawnHelper.GoldCritterModifier(spawnInfo, SpawnHelper.SeagullChance(spawnInfo));
         }
 
         public override void AI()

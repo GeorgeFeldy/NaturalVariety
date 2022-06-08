@@ -9,7 +9,7 @@ using Terraria.ModLoader.Utilities;
 using Terraria.Audio;
 
 using NaturalVariety.Items.Critters;
-
+using NaturalVariety.Utils;
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -31,6 +31,11 @@ namespace NaturalVariety.NPCs.Critters
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<GoldDuckItem>();
             NPC.rarity = 3;
+        }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            return SpawnHelper.GoldCritterModifier(spawnInfo, SpawnHelper.DuckChance(spawnInfo));
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -99,18 +104,6 @@ namespace NaturalVariety.NPCs.Critters
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<GoldDuckItem>();
             NPC.rarity = 3;
-        }
-
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance * 0.00250f;
-
-            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
-            bool modifier = (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass);
-
-            chance = modifier ? chance : 0f;
-
-            return chance;
         }
 
         public override void AI()

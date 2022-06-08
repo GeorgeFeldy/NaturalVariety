@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
+using NaturalVariety.Utils;
 
 
 namespace NaturalVariety.NPCs.Critters
@@ -60,43 +61,8 @@ namespace NaturalVariety.NPCs.Critters
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			Tile tile;
-			tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
-
-			float landChance = (SpawnCondition.OverworldDay.Chance + SpawnCondition.TownCritter.Chance) * 0.25f;
-			float waterChance = (SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance) * 0.25f;
-			float finalChance;
-
-			bool landModifier = false;
-			bool waterModifier;
-			bool grassModifier = (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass);
-
-			// set spawn on solid ground modifier to true only if there is water in close vicinity
-			for (int i = -15; i <= 15; i++)
-			{
-				for (int j = -3; j <= 3; j++)
-				{
-					tile = Main.tile[spawnInfo.SpawnTileX + i, spawnInfo.SpawnTileY + j];
-					if (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Water)
-					{
-						landModifier = true;
-					}
-				}
-			}
-
-			landChance = landModifier ? landChance : 0f;
-
-			tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1];
-			waterModifier = tile.LiquidAmount < 0;
-
-			waterChance = waterModifier ? waterChance : 0f;
-
-			finalChance = grassModifier ? (landChance + waterChance) : 0f;
-
-			return finalChance;
+			return SpawnHelper.WadingBirdChance(spawnInfo);
 		}
-
-
 
 		public override void AI()
         {

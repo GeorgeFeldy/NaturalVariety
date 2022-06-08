@@ -8,12 +8,12 @@ using NaturalVariety.Utils;
 
 namespace NaturalVariety.NPCs.Critters
 { 
-    public class BeeEater: Songbird 
+    public class Kingfisher : Songbird 
     {
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<BeeEaterItem>();
+            NPC.catchItem = (short)ModContent.ItemType<KingfisherItem>();
         }
      
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -24,7 +24,7 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "The European bee-eater (Merops apiaster) is a near passerine bird in the bee-eater family, Meropidae. It breeds in southern Europe and in parts of north Africa and western Asia. This species, like other bee-eaters, is a richly coloured, slender bird. It has brown and yellow upper parts, whilst the wings and under parts are blueish-green."
+                    "The common kingfisher (Alcedo atthis), also known as the Eurasian kingfisher and river kingfisher, is a small kingfisher found across Eurasia and North Africa. It has the typical short-tailed, large-headed kingfisher profile; it has blue upperparts, orange underparts and a long bill. It feeds mainly on fish, caught by diving, and has special visual adaptations to enable it to see prey under water."
                     )
             });
         }
@@ -32,8 +32,9 @@ namespace NaturalVariety.NPCs.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
 
-            return SpawnHelper.JungleBirdChance(spawnInfo); 
+            return SpawnHelper.JungleBirdChance(spawnInfo);
 
         }
+
     }
 }
