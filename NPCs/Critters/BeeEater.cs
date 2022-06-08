@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 
 using NaturalVariety.Items.Critters;
+using NaturalVariety.Utils;
 
 namespace NaturalVariety.NPCs.Critters
 { 
@@ -31,12 +32,8 @@ namespace NaturalVariety.NPCs.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
 
-            return SpawnCondition.SurfaceJungle.Chance + SpawnCondition.TownJungleCritter.Chance; // Spawn with regular bird chance. 
+            return SpawnHelper.JungleBirdChance(spawnInfo); 
 
         }
-
-
-
-
     }
 }

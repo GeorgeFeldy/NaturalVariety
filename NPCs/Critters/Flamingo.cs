@@ -25,6 +25,11 @@ namespace NaturalVariety.NPCs.Critters
             NPC.catchItem = (short)ModContent.ItemType<FlamingoItem>();
         }
 
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            return 0f; // can only spawn via Flamingo spawner
+        }
+
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]

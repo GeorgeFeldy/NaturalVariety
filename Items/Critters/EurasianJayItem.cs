@@ -10,7 +10,7 @@ namespace NaturalVariety.Items.Critters
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Eurasian Jay");
+            DisplayName.SetDefault("Jay");
         }
 
         public override void SetDefaults()
