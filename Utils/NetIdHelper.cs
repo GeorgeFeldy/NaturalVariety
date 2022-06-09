@@ -1,104 +1,129 @@
-﻿using Terraria;
+﻿using System;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace NaturalVariety.Utils
 {
-
     /// <summary>
-    /// Used to get NPC IDs of variants (yes i checked those manually for the sake of quality)
+    /// Helper for vanilla NPC variant conversion 
     /// </summary>
     public static class NetIdHelper
     {
+
+
+        public static List<NPC> GetListOfSameBannerVariants(NPC npc)
+        {
+            List <NPC> listOfSameBannerVariants = new();
+
+            for(int npcId = 0; npcId < NPCLoader.NPCCount; npcId++)
+            {
+                NPC newNPC = new() { type = npcId };
+                if(Item.NPCtoBanner(npcId) == Item.NPCtoBanner(Item.BannerToNPC(npc.type)))
+                {
+                    listOfSameBannerVariants.Add(newNPC);
+                }
+            }
+            return listOfSameBannerVariants;
+        }
+
+        /// <summary>
+        /// Maps the NetID of some variants to their base class for bestiary update purposes
+        /// Similar to Vanilla ContentSamples 
+        /// (yes i checked those manually for the sake of quality)
+        /// </summary>
+        /// <param name="netId"></param>
+        /// <returns></returns>
         public static int MapBaseIdForVariants(int netId)
         {
             switch (netId)
             {
                 // hornets
-                case (NPCID.BigHornetStingy)         : return NPCID.Hornet;
-                case (NPCID.LittleHornetStingy)      : return NPCID.Hornet;
-                case (NPCID.BigHornetSpikey)         : return NPCID.Hornet;
-                case (NPCID.LittleHornetSpikey)      : return NPCID.Hornet;
-                case (NPCID.BigHornetLeafy)          : return NPCID.Hornet;
-                case (NPCID.LittleHornetLeafy)       : return NPCID.Hornet;
-                case (NPCID.BigHornetHoney)          : return NPCID.Hornet;
-                case (NPCID.LittleHornetHoney)       : return NPCID.Hornet;
-                case (NPCID.BigHornetFatty)          : return NPCID.Hornet;
-                case (NPCID.LittleHornetFatty)       : return NPCID.Hornet;
+                case (NPCID.BigHornetStingy): return NPCID.Hornet;
+                case (NPCID.LittleHornetStingy): return NPCID.Hornet;
+                case (NPCID.BigHornetSpikey): return NPCID.Hornet;
+                case (NPCID.LittleHornetSpikey): return NPCID.Hornet;
+                case (NPCID.BigHornetLeafy): return NPCID.Hornet;
+                case (NPCID.LittleHornetLeafy): return NPCID.Hornet;
+                case (NPCID.BigHornetHoney): return NPCID.Hornet;
+                case (NPCID.LittleHornetHoney): return NPCID.Hornet;
+                case (NPCID.BigHornetFatty): return NPCID.Hornet;
+                case (NPCID.LittleHornetFatty): return NPCID.Hornet;
 
                 // raincoat zombies 
-                case (NPCID.BigRainZombie)            : return NPCID.ZombieRaincoat;
-                case (NPCID.SmallRainZombie)          : return NPCID.ZombieRaincoat;
+                case (NPCID.BigRainZombie): return NPCID.ZombieRaincoat;
+                case (NPCID.SmallRainZombie): return NPCID.ZombieRaincoat;
 
                 // skeletons                          
-                case (NPCID.BigPantlessSkeleton)      : return NPCID.PantlessSkeleton;
-                case (NPCID.SmallPantlessSkeleton)    : return NPCID.PantlessSkeleton;
-                case (NPCID.BigMisassembledSkeleton)  : return NPCID.MisassembledSkeleton;
+                case (NPCID.BigPantlessSkeleton): return NPCID.PantlessSkeleton;
+                case (NPCID.SmallPantlessSkeleton): return NPCID.PantlessSkeleton;
+                case (NPCID.BigMisassembledSkeleton): return NPCID.MisassembledSkeleton;
                 case (NPCID.SmallMisassembledSkeleton): return NPCID.MisassembledSkeleton;
-                case (NPCID.BigHeadacheSkeleton)      : return NPCID.HeadacheSkeleton;
-                case (NPCID.SmallHeadacheSkeleton)    : return NPCID.HeadacheSkeleton;
-                case (NPCID.BigSkeleton)              : return NPCID.Skeleton;
-                case (NPCID.SmallSkeleton)            : return NPCID.Skeleton;
-                case (NPCID.BigFemaleZombie)          : return NPCID.FemaleZombie;
-                case (NPCID.SmallFemaleZombie)        : return NPCID.FemaleZombie;
+                case (NPCID.BigHeadacheSkeleton): return NPCID.HeadacheSkeleton;
+                case (NPCID.SmallHeadacheSkeleton): return NPCID.HeadacheSkeleton;
+                case (NPCID.BigSkeleton): return NPCID.Skeleton;
+                case (NPCID.SmallSkeleton): return NPCID.Skeleton;
+                case (NPCID.BigFemaleZombie): return NPCID.FemaleZombie;
+                case (NPCID.SmallFemaleZombie): return NPCID.FemaleZombie;
 
                 // map negative id eye variants to their counterparts
-                case (NPCID.DemonEye2)                : return NPCID.DemonEye;     
-                case (NPCID.PurpleEye2)               : return NPCID.PurpleEye;    
-                case (NPCID.GreenEye2)                : return NPCID.GreenEye;     
-                case (NPCID.DialatedEye2)             : return NPCID.DialatedEye;  
-                case (NPCID.SleepyEye2)               : return NPCID.SleepyEye;    
-                case (NPCID.CataractEye2)             : return NPCID.CataractEye;
+                case (NPCID.DemonEye2): return NPCID.DemonEye;
+                case (NPCID.PurpleEye2): return NPCID.PurpleEye;
+                case (NPCID.GreenEye2): return NPCID.GreenEye;
+                case (NPCID.DialatedEye2): return NPCID.DialatedEye;
+                case (NPCID.SleepyEye2): return NPCID.SleepyEye;
+                case (NPCID.CataractEye2): return NPCID.CataractEye;
 
                 // some more zombies
-                case (NPCID.BigTwiggyZombie)         : return NPCID.TwiggyZombie;
-                case (NPCID.SmallTwiggyZombie)       : return NPCID.TwiggyZombie;
-                case (NPCID.BigSwampZombie)          : return NPCID.SwampZombie;
-                case (NPCID.SmallSwampZombie)        : return NPCID.SwampZombie;
-                case (NPCID.BigSlimedZombie)         : return NPCID.SlimedZombie;
-                case (NPCID.SmallSlimedZombie)       : return NPCID.SlimedZombie;
-                case (NPCID.BigPincushionZombie)     : return NPCID.PincushionZombie;
-                case (NPCID.SmallPincushionZombie)   : return NPCID.PincushionZombie;
-                case (NPCID.BigBaldZombie)           : return NPCID.BaldZombie;
-                case (NPCID.SmallBaldZombie)         : return NPCID.BaldZombie;
-                case (NPCID.BigZombie)               : return NPCID.Zombie;
-                case (NPCID.SmallZombie)             : return NPCID.Zombie;
+                case (NPCID.BigTwiggyZombie): return NPCID.TwiggyZombie;
+                case (NPCID.SmallTwiggyZombie): return NPCID.TwiggyZombie;
+                case (NPCID.BigSwampZombie): return NPCID.SwampZombie;
+                case (NPCID.SmallSwampZombie): return NPCID.SwampZombie;
+                case (NPCID.BigSlimedZombie): return NPCID.SlimedZombie;
+                case (NPCID.SmallSlimedZombie): return NPCID.SlimedZombie;
+                case (NPCID.BigPincushionZombie): return NPCID.PincushionZombie;
+                case (NPCID.SmallPincushionZombie): return NPCID.PincushionZombie;
+                case (NPCID.BigBaldZombie): return NPCID.BaldZombie;
+                case (NPCID.SmallBaldZombie): return NPCID.BaldZombie;
+                case (NPCID.BigZombie): return NPCID.Zombie;
+                case (NPCID.SmallZombie): return NPCID.Zombie;
 
                 // crimson 
-                case (NPCID.BigCrimslime)            : return NPCID.Crimslime;
-                case (NPCID.LittleCrimslime)         : return NPCID.Crimslime;
-                case (NPCID.BigCrimera)              : return NPCID.Crimera;
-                case (NPCID.LittleCrimera)           : return NPCID.Crimera;
+                case (NPCID.BigCrimslime): return NPCID.Crimslime;
+                case (NPCID.LittleCrimslime): return NPCID.Crimslime;
+                case (NPCID.BigCrimera): return NPCID.Crimera;
+                case (NPCID.LittleCrimera): return NPCID.Crimera;
 
                 // moss hornets 
-                case (NPCID.GiantMossHornet)         : return NPCID.MossHornet;
-                case (NPCID.BigMossHornet)           : return NPCID.MossHornet;
-                case (NPCID.LittleMossHornet)        : return NPCID.MossHornet;
-                case (NPCID.TinyMossHornet)          : return NPCID.MossHornet;
+                case (NPCID.GiantMossHornet): return NPCID.MossHornet;
+                case (NPCID.BigMossHornet): return NPCID.MossHornet;
+                case (NPCID.LittleMossHornet): return NPCID.MossHornet;
+                case (NPCID.TinyMossHornet): return NPCID.MossHornet;
 
                 // base hornet variants 
-                case (NPCID.BigStinger)              : return NPCID.Hornet;
-                case (NPCID.LittleStinger)           : return NPCID.Hornet;
+                case (NPCID.BigStinger): return NPCID.Hornet;
+                case (NPCID.LittleStinger): return NPCID.Hornet;
 
                 // special skeles
-                case (NPCID.HeavySkeleton)           : return NPCID.ArmoredSkeleton;
-                case (NPCID.BigBoned)                : return NPCID.AngryBones;
-                case (NPCID.ShortBones)              : return NPCID.AngryBones;
+                case (NPCID.HeavySkeleton): return NPCID.ArmoredSkeleton;
+                case (NPCID.BigBoned): return NPCID.AngryBones;
+                case (NPCID.ShortBones): return NPCID.AngryBones;
 
-                case (NPCID.BigEater)                : return NPCID.EaterofSouls;
-                case (NPCID.LittleEater)             : return NPCID.EaterofSouls;
+                case (NPCID.BigEater): return NPCID.EaterofSouls;
+                case (NPCID.LittleEater): return NPCID.EaterofSouls;
 
                 // keep those 
-                // case (NPCID.JungleSlime)             :
-                // case (NPCID.YellowSlime)             :
-                // case (NPCID.RedSlime)                :
-                // case (NPCID.PurpleSlime)             :
-                // case (NPCID.BlackSlime)              :
-                // case (NPCID.BabySlime)               :
-                // case (NPCID.Pinky)                   :
-                // case (NPCID.GreenSlime)              :
-                // case (NPCID.Slimer2)                 :
-                // case (NPCID.Slimeling)               :     
+                // case (NPCID.JungleSlime):
+                // case (NPCID.YellowSlime):
+                // case (NPCID.RedSlime):
+                // case (NPCID.PurpleSlime):
+                // case (NPCID.BlackSlime):
+                // case (NPCID.BabySlime):
+                // case (NPCID.Pinky):
+                // case (NPCID.GreenSlime):
+                // case (NPCID.Slimer2):
+                // case (NPCID.Slimeling):     
 
                 case (NPCID.GiantShelly2): return NPCID.GiantShelly2;
                 case (NPCID.Crawdad2): return NPCID.Crawdad; // not even used 
@@ -115,11 +140,11 @@ namespace NaturalVariety.Utils
                 case (NPCID.ArmedTorchZombie): return NPCID.TorchZombie;
                 case (NPCID.ArmedZombie): return NPCID.Zombie;
                 case (NPCID.ArmedZombieCenx): return NPCID.FemaleZombie; // ??
-                case (NPCID.ArmedZombieEskimo): return NPCID.ZombieEskimo; 
-                case (NPCID.ArmedZombiePincussion): return NPCID.PincushionZombie; 
-                case (NPCID.ArmedZombieSlimed): return NPCID.SlimedZombie; 
-                case (NPCID.ArmedZombieSwamp): return NPCID.SwampZombie; 
-                case (NPCID.ArmedZombieTwiggy): return NPCID.TwiggyZombie; 
+                case (NPCID.ArmedZombieEskimo): return NPCID.ZombieEskimo;
+                case (NPCID.ArmedZombiePincussion): return NPCID.PincushionZombie;
+                case (NPCID.ArmedZombieSlimed): return NPCID.SlimedZombie;
+                case (NPCID.ArmedZombieSwamp): return NPCID.SwampZombie;
+                case (NPCID.ArmedZombieTwiggy): return NPCID.TwiggyZombie;
 
                 // spiders (fighter) to wall variant 
                 case (NPCID.WallCreeper): return NPCID.WallCreeperWall;
@@ -169,15 +194,8 @@ namespace NaturalVariety.Utils
                 case (NPCID.EaterofWorldsTail): return NPCID.EaterofWorldsHead;
 
                 default: return netId;
-             }
+            }
         }
-
-        public static int GetBaseIdFromName(string name)
-        {
-            return 0;
-        }
-
-
 
         // negatives mapping 
         // NPCID.FromNetId(netID);
@@ -187,7 +205,7 @@ namespace NaturalVariety.Utils
         /// </summary>
         /// <param name="netID"></param>
         /// <returns></returns>
-        private static int GetBaseIdFromVariantWithEntry(int netID)
+        public static int GetBaseIdFromVariantWithEntry(int netID)
         {
             switch (netID)
             {

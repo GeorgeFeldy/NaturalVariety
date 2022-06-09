@@ -14,12 +14,12 @@ namespace NaturalVariety.Mechanics
     {
         public override bool AppliesToEntity(Item item, bool lateInstatiation)
         {
-            return CageHelper.ItemIsCage(item);
+            return CageHelper.IsCageItem(item);
         }
 
         public override bool CanRightClick(Item item)
         {
-            return CageHelper.ItemIsCage(item);
+            return CageHelper.IsCageItem(item);
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)

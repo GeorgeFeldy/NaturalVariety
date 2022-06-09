@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -11,14 +12,26 @@ using NaturalVariety.NPCs.Critters;
 using NaturalVariety.Utils;
 
 
-
 namespace NaturalVariety.Mechanics
 {
-    public class BestiaryTally : GlobalNPC
+    public class BestiaryTallyWorldLoad : ModSystem
+    { 
+        public override void OnWorldLoad()
+        {
+            //for(int modNpcId = NPCID.Count; modNpcId < NPCLoader.NPCCount; modNpcId++) modded
+            for(int npcId = 0; npcId < NPCLoader.NPCCount; npcId++)
+            {
+                NPC npc = new()
+                {
+                    type = npcId
+                };
+                BestiaryTally.SetKillCountsInBestiary(npc);
+            }
+        }
+    }
+
+    public class BestiaryTallyGlobalNPC : GlobalNPC
     {
-
-        private static IBestiaryInfoElement tallyInfo;
-
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
             return true;
@@ -26,36 +39,51 @@ namespace NaturalVariety.Mechanics
 
         public override bool SpecialOnKill(NPC npc)
         {
+            BestiaryTally.SetKillCountsInBestiaryForAllVariants(npc);
+            return false;
+        }
+    }
+
+    // public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+    // {
+    //     
+    //     bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+    //     {
+    //         new BestiaryTallyInfoElement(npc.type),
+    //     });
+    // }
+
+    public static class BestiaryTally
+    {
+        public static void SetKillCountsInBestiaryForAllVariants(NPC npc)
+        {
+            List<NPC> listOfVariants = NetIdHelper.GetListOfSameBannerVariants(npc);
+
+            foreach (NPC varNpc in listOfVariants)
+            {
+                SetKillCountsInBestiary(varNpc);
+            }
+        }
+
+        public static void SetKillCountsInBestiary(NPC npc)
+        {
+            IBestiaryInfoElement tallyInfo;
             int baseNetId = NetIdHelper.MapBaseIdForVariants(npc.netID);
             BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(baseNetId);
-            tallyInfo = new TallyBestiaryInfoElement(npc, npc.netID);
+            tallyInfo = new BestiaryTallyInfoElement(npc, npc.netID);
             entry.Info.RemoveAll(IsTallyBestiaryInfoElement);
             entry.Info.Add(tallyInfo);
 
             Main.BestiaryDB.Register(entry);
-
-
-            return false;
-        } 
+        }
 
         public static bool IsTallyBestiaryInfoElement(IBestiaryInfoElement element)
         {
-            return element.GetType() == typeof(TallyBestiaryInfoElement);
+            return element.GetType() == typeof(BestiaryTallyInfoElement);
         }
-
-
-        // public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        // {
-        //     
-        //     bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-        //     {
-        //         new TallyBestiaryInfoElement(npc.type),
-        //         new FlavorTextBestiaryInfoElement(NPC.killCount[npc.type].ToString())
-        //     });
-        // }
     }
 
-    public class TallyBestiaryInfoElement : NPCNetIdBestiaryInfoElement, IBestiaryInfoElement
+    public class BestiaryTallyInfoElement : NPCNetIdBestiaryInfoElement, IBestiaryInfoElement
     {
 
         private readonly bool displayBannerTally = false;
@@ -67,7 +95,7 @@ namespace NaturalVariety.Mechanics
 
         private readonly int noOfElements = 1;
 
-        public TallyBestiaryInfoElement(NPC npc, int npcNetId) : base(npcNetId)
+        public BestiaryTallyInfoElement(NPC npc, int npcNetId) : base(npcNetId)
         {
 
             bannerTally = NPC.killCount[Item.NPCtoBanner(npc.BannerID())];
@@ -217,7 +245,6 @@ namespace NaturalVariety.Mechanics
 
         }
 
-
         private void ShowNameBanner(UIElement element)
         {
             if (element.IsMouseHovering && element != null)
@@ -241,10 +268,6 @@ namespace NaturalVariety.Mechanics
                 Main.instance.MouseText("Boss kill count", 0, 0);
             }
         }
-
-
-
-
     }
 
 
