@@ -12,44 +12,195 @@ namespace NaturalVariety.Utils
     public static class NetIdHelper
     {
 
-
-        public static List<NPC> GetListOfSameBannerVariants(NPC npc)
+        public static string MapNetIdToBaseCreditId(NPC npc)
         {
-            List <NPC> listOfSameBannerVariants = new();
 
-            for(int npcId = 0; npcId < NPCLoader.NPCCount; npcId++)
+            int netId = npc.netID;
+
+            string defaultCreditId = npc.GetBestiaryCreditId();
+
+            switch (netId)
             {
-                NPC newNPC = new() { type = npcId };
-                if(Item.NPCtoBanner(npcId) == Item.NPCtoBanner(Item.BannerToNPC(npc.type)))
-                {
-                    listOfSameBannerVariants.Add(newNPC);
-                }
+                case (NPCID.BigHornetStingy) : return "HornetStingy";
+                case (NPCID.LittleHornetStingy) : return "HornetStingy";
+                case (NPCID.BigHornetSpikey) : return "HornetSpikey";
+                case (NPCID.LittleHornetSpikey) : return "HornetSpikey";
+                case (NPCID.BigHornetLeafy) : return "HornetLeafy";
+                case (NPCID.LittleHornetLeafy) : return "HornetLeafy";
+                case (NPCID.BigHornetHoney) : return "HornetHoney";
+                case (NPCID.LittleHornetHoney) : return "HornetHoney";
+                case (NPCID.BigHornetFatty) : return "HornetFatty";
+                case (NPCID.LittleHornetFatty) : return "HornetFatty";
+
+                // raincoat zombies 
+                case (NPCID.BigRainZombie) : return "ZombieRaincoat";
+                case (NPCID.SmallRainZombie) : return "ZombieRaincoat";
+
+                // skeletons                          
+                case (NPCID.BigPantlessSkeleton) : return "PantlessSkeleton";
+                case (NPCID.SmallPantlessSkeleton) : return "PantlessSkeleton";
+                case (NPCID.BigMisassembledSkeleton) : return "MisassembledSkeleton";
+                case (NPCID.SmallMisassembledSkeleton) : return "MisassembledSkeleton";
+                case (NPCID.BigHeadacheSkeleton) : return "HeadacheSkeleton";
+                case (NPCID.SmallHeadacheSkeleton) : return "HeadacheSkeleton";
+                case (NPCID.BigSkeleton) : return "Skeleton";
+                case (NPCID.SmallSkeleton) : return "Skeleton";
+                case (NPCID.BigFemaleZombie) : return "FemaleZombie";
+                case (NPCID.SmallFemaleZombie) : return "FemaleZombie";
+
+                // map negative id eye variants to their counterparts
+                case (NPCID.DemonEye2) : return "DemonEye";
+                case (NPCID.PurpleEye2) : return "PurpleEye";
+                case (NPCID.GreenEye2) : return "GreenEye";
+                case (NPCID.DialatedEye2) : return "DialatedEye";
+                case (NPCID.SleepyEye2) : return "SleepyEye";
+                case (NPCID.CataractEye2) : return "CataractEye";
+
+                // some more zombies
+                case (NPCID.BigTwiggyZombie) : return "TwiggyZombie";
+                case (NPCID.SmallTwiggyZombie) : return "TwiggyZombie";
+                case (NPCID.BigSwampZombie) : return "SwampZombie";
+                case (NPCID.SmallSwampZombie) : return "SwampZombie";
+                case (NPCID.BigSlimedZombie) : return "SlimedZombie";
+                case (NPCID.SmallSlimedZombie) : return "SlimedZombie";
+                case (NPCID.BigPincushionZombie) : return "PincushionZombie";
+                case (NPCID.SmallPincushionZombie) : return "PincushionZombie";
+                case (NPCID.BigBaldZombie) : return "BaldZombie";
+                case (NPCID.SmallBaldZombie) : return "BaldZombie";
+                case (NPCID.BigZombie) : return "Zombie";
+                case (NPCID.SmallZombie) : return "Zombie";
+
+                // crimson 
+                case (NPCID.BigCrimslime) : return "Crimslime";
+                case (NPCID.LittleCrimslime) : return "Crimslime";
+                case (NPCID.BigCrimera) : return "Crimera";
+                case (NPCID.LittleCrimera) : return "Crimera";
+
+                // moss hornets 
+                case (NPCID.GiantMossHornet) : return "MossHornet";
+                case (NPCID.BigMossHornet) : return "MossHornet";
+                case (NPCID.LittleMossHornet) : return "MossHornet";
+                case (NPCID.TinyMossHornet) : return "MossHornet";
+
+                // base hornet variants 
+                case (NPCID.BigStinger) : return "Hornet";
+                case (NPCID.LittleStinger) : return "Hornet";
+
+                // special skeles
+                case (NPCID.HeavySkeleton) : return "ArmoredSkeleton";
+                case (NPCID.BigBoned) : return "AngryBones";
+                case (NPCID.ShortBones) : return "AngryBones";
+
+                case (NPCID.BigEater) : return "EaterofSouls";
+                case (NPCID.LittleEater) : return "EaterofSouls";
+
+                // keep those 
+                // case (NPCID.JungleSlime): 
+                // case (NPCID.YellowSlime): 
+                // case (NPCID.RedSlime): 
+                // case (NPCID.PurpleSlime): 
+                // case (NPCID.BlackSlime): 
+                // case (NPCID.BabySlime): 
+                // case (NPCID.Pinky): 
+                // case (NPCID.GreenSlime): 
+                // case (NPCID.Slimer2): 
+                // case (NPCID.Slimeling) :     
+
+                case (NPCID.GiantShelly2) : return "GiantShelly2";
+                case (NPCID.Crawdad2) : return "Crawdad"; // not even used 
+                case (NPCID.Salamander) : return "Salamander2";
+                case (NPCID.Salamander3) : return "Salamander2";
+                case (NPCID.Salamander4) : return "Salamander2";
+                case (NPCID.Salamander5) : return "Salamander2";
+                case (NPCID.Salamander6) : return "Salamander2";
+                case (NPCID.Salamander7) : return "Salamander2";
+                case (NPCID.Salamander8) : return "Salamander2";
+                case (NPCID.Salamander9) : return "Salamander2";
+
+                // armed zombies to normal 
+                case (NPCID.ArmedTorchZombie) : return "TorchZombie";
+                case (NPCID.ArmedZombie) : return "Zombie";
+                case (NPCID.ArmedZombieCenx) : return "FemaleZombie"; // ??
+                case (NPCID.ArmedZombieEskimo) : return "ZombieEskimo";
+                case (NPCID.ArmedZombiePincussion) : return "PincushionZombie";
+                case (NPCID.ArmedZombieSlimed) : return "SlimedZombie";
+                case (NPCID.ArmedZombieSwamp) : return "SwampZombie";
+                case (NPCID.ArmedZombieTwiggy) : return "TwiggyZombie";
+
+                // spiders (fighter) to wall variant 
+                case (NPCID.WallCreeper) : return "WallCreeperWall";
+                case (NPCID.JungleCreeper) : return "JungleCreeperWall";
+                case (NPCID.BlackRecluse) : return "BlackRecluseWall";
+                case (NPCID.BloodCrawler) : return "BloodCrawlerWall";
+                case (NPCID.DesertScorpionWalk) : return "DesertScorpionWall";
+
+                case (NPCID.BoneThrowingSkeleton) : return "Skeleton";
+                case (NPCID.BoneThrowingSkeleton2) : return "HeadacheSkeleton";
+                case (NPCID.BoneThrowingSkeleton3) : return "MisassembledSkeleton";
+                case (NPCID.BoneThrowingSkeleton4) : return "PantlessSkeleton";
+
+                case (NPCID.BlackDragonfly) : return "RedDragonfly";
+                case (NPCID.BlueDragonfly) : return "RedDragonfly";
+                case (NPCID.GreenDragonfly) : return "RedDragonfly";
+                case (NPCID.OrangeDragonfly) : return "RedDragonfly";
+                case (NPCID.YellowDragonfly) : return "RedDragonfly";
+
+                case (NPCID.GoldfishWalker) : return "Goldfish";
+                case (NPCID.GoldGoldfishWalker) : return "GoldGoldfish";
+
+                case (NPCID.Slimer2) : return "Slimer";
+
+                case (NPCID.LostGirl) : return "Nymph";
+                case (NPCID.Lihzahrd) : return "LihzahrdCrawler";
+
+                case (NPCID.VampireBat) : return "Vampire";
+
+                case (NPCID.DD2WitherBeastT2) : return "DD2WitherBeastT3";
+                case (NPCID.DD2SkeletonT1) : return "DD2SkeletonT3";
+                case (NPCID.DD2OgreT2) : return "DD2OgreT3";
+                case (NPCID.DD2WyvernT1) : return "DD2WyvernT3";
+                case (NPCID.DD2WyvernT2) : return "DD2WyvernT3";
+                case (NPCID.DD2GoblinT1) : return "DD2GoblinT3";
+                case (NPCID.DD2GoblinT2) : return "DD2GoblinT3";
+                case (NPCID.DD2DarkMageT1) : return "DD2DarkMageT3";
+                case (NPCID.DD2DrakinT2) : return "DD2DrakinT3";
+                case (NPCID.DD2GoblinBomberT1) : return "DD2GoblinBomberT3";
+                case (NPCID.DD2GoblinBomberT2) : return "DD2GoblinBomberT3";
+                case (NPCID.DD2KoboldFlyerT2) : return "DD2KoboldFlyerT3";
+                case (NPCID.DD2KoboldWalkerT2) : return "DD2KoboldWalkerT3";
+                case (NPCID.DD2JavelinstT1) : return "DD2JavelinstT3";
+                case (NPCID.DD2JavelinstT2) : return "DD2JavelinstT3";
+
+                case (NPCID.EaterofWorldsBody) : return "EaterofWorldsHead";
+                case (NPCID.EaterofWorldsTail) : return "EaterofWorldsHead";
+
+                default: return defaultCreditId;
             }
-            return listOfSameBannerVariants;
         }
 
+
         /// <summary>
-        /// Maps the NetID of some variants to their base class for bestiary update purposes
+        /// Maps the NetID of some variants to their base type with entry in bestiary for bestiary update purposes
         /// Similar to Vanilla ContentSamples 
         /// (yes i checked those manually for the sake of quality)
         /// </summary>
         /// <param name="netId"></param>
         /// <returns></returns>
-        public static int MapBaseIdForVariants(int netId)
+        public static int MapBaseIdForVariantsBestiary(int netId)
         {
             switch (netId)
             {
                 // hornets
-                case (NPCID.BigHornetStingy): return NPCID.Hornet;
-                case (NPCID.LittleHornetStingy): return NPCID.Hornet;
-                case (NPCID.BigHornetSpikey): return NPCID.Hornet;
-                case (NPCID.LittleHornetSpikey): return NPCID.Hornet;
-                case (NPCID.BigHornetLeafy): return NPCID.Hornet;
-                case (NPCID.LittleHornetLeafy): return NPCID.Hornet;
-                case (NPCID.BigHornetHoney): return NPCID.Hornet;
-                case (NPCID.LittleHornetHoney): return NPCID.Hornet;
-                case (NPCID.BigHornetFatty): return NPCID.Hornet;
-                case (NPCID.LittleHornetFatty): return NPCID.Hornet;
+                case (NPCID.BigHornetStingy): return NPCID.HornetStingy;
+                case (NPCID.LittleHornetStingy): return NPCID.HornetStingy;
+                case (NPCID.BigHornetSpikey): return NPCID.HornetSpikey;
+                case (NPCID.LittleHornetSpikey): return NPCID.HornetSpikey;
+                case (NPCID.BigHornetLeafy): return NPCID.HornetLeafy;
+                case (NPCID.LittleHornetLeafy): return NPCID.HornetLeafy;
+                case (NPCID.BigHornetHoney): return NPCID.HornetHoney;
+                case (NPCID.LittleHornetHoney): return NPCID.HornetHoney;
+                case (NPCID.BigHornetFatty): return NPCID.HornetFatty;
+                case (NPCID.LittleHornetFatty): return NPCID.HornetFatty;
 
                 // raincoat zombies 
                 case (NPCID.BigRainZombie): return NPCID.ZombieRaincoat;
@@ -205,7 +356,7 @@ namespace NaturalVariety.Utils
         /// </summary>
         /// <param name="netID"></param>
         /// <returns></returns>
-        public static int GetBaseIdFromVariantWithEntry(int netID)
+        public static int MapBaseIdForVariantsBanner(int netID)
         {
             switch (netID)
             {
@@ -322,5 +473,31 @@ namespace NaturalVariety.Utils
 		    }
         }
 
+        public static List<NPC> GetListOfSameBannerVariants(NPC npc)
+        {
+            List<NPC> listOfSameBannerVariants = new();
+
+            for (int netId = -65; netId < NPCLoader.NPCCount; netId++)
+            {
+                NPC newNpc = ContentSamples.NpcsByNetId[netId];
+
+                int a = Item.NPCtoBanner(netId);
+                int b = Item.NPCtoBanner(npc.netID);
+
+                if (a == b && a > 0 && b > 0)
+                //if (newNPC.BannerID() == npc.BannerID() && newNPC.BannerID() > 0 && npc.BannerID() > 0)
+                {
+                    listOfSameBannerVariants.Add(newNpc);
+                }
+            }
+            return listOfSameBannerVariants;
+        }
+
+
+
     }
+
+
+
+
 }
