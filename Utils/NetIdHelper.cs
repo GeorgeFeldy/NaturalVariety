@@ -12,6 +12,93 @@ namespace NaturalVariety.Utils
     public static class NetIdHelper
     {
 
+
+        /// <summary>
+        /// NPCs excluded from bestiary display due to inconsistencies 
+        /// TODO: replace with BoolSet  
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <returns></returns>
+        public static bool IsExcludedFromVariantsDisplay(NPC npc)
+        {
+
+            return (npc.netID == NPCID.BigHornetStingy ||
+                    npc.netID == NPCID.LittleHornetStingy ||
+                    npc.netID == NPCID.HornetStingy ||
+                    npc.netID == NPCID.BigHornetSpikey ||
+                    npc.netID == NPCID.LittleHornetSpikey ||
+                    npc.netID == NPCID.HornetSpikey ||
+                    npc.netID == NPCID.BigHornetLeafy ||
+                    npc.netID == NPCID.LittleHornetLeafy ||
+                    npc.netID == NPCID.HornetLeafy ||
+                    npc.netID == NPCID.BigHornetHoney ||
+                    npc.netID == NPCID.LittleHornetHoney ||
+                    npc.netID == NPCID.HornetHoney ||
+                    npc.netID == NPCID.BigHornetFatty ||
+                    npc.netID == NPCID.LittleHornetFatty ||
+                    npc.netID == NPCID.HornetFatty ||
+                    npc.netID == NPCID.BigPantlessSkeleton ||
+                    npc.netID == NPCID.SmallPantlessSkeleton ||
+                    npc.netID == NPCID.PantlessSkeleton ||
+                    npc.netID == NPCID.BigMisassembledSkeleton ||
+                    npc.netID == NPCID.SmallMisassembledSkeleton ||
+                    npc.netID == NPCID.MisassembledSkeleton ||
+                    npc.netID == NPCID.BigHeadacheSkeleton ||
+                    npc.netID == NPCID.SmallHeadacheSkeleton ||
+                    npc.netID == NPCID.HeadacheSkeleton ||
+                    npc.netID == NPCID.BigSkeleton ||
+                    npc.netID == NPCID.SmallSkeleton ||
+                    npc.netID == NPCID.Skeleton ||
+                    npc.netID == NPCID.BigFemaleZombie ||
+                    npc.netID == NPCID.SmallFemaleZombie ||
+                    npc.netID == NPCID.FemaleZombie ||
+                    npc.netID == NPCID.DemonEye ||
+                    npc.netID == NPCID.PurpleEye ||
+                    npc.netID == NPCID.GreenEye ||
+                    npc.netID == NPCID.DialatedEye ||
+                    npc.netID == NPCID.SleepyEye ||
+                    npc.netID == NPCID.CataractEye ||
+                    npc.netID == NPCID.DemonEye2 ||
+                    npc.netID == NPCID.PurpleEye2 ||
+                    npc.netID == NPCID.GreenEye2 ||
+                    npc.netID == NPCID.DialatedEye2 ||
+                    npc.netID == NPCID.SleepyEye2 ||
+                    npc.netID == NPCID.CataractEye2 ||
+                    //npc.netID == NPCID.TorchZombie ||
+                    npc.netID == NPCID.BigTwiggyZombie ||
+                    npc.netID == NPCID.SmallTwiggyZombie ||
+                    npc.netID == NPCID.TwiggyZombie ||
+                    npc.netID == NPCID.BigSwampZombie ||
+                    npc.netID == NPCID.SmallSwampZombie ||
+                    npc.netID == NPCID.SwampZombie ||
+                    npc.netID == NPCID.BigSlimedZombie ||
+                    npc.netID == NPCID.SmallSlimedZombie ||
+                    npc.netID == NPCID.SlimedZombie ||
+                    npc.netID == NPCID.BigPincushionZombie ||
+                    npc.netID == NPCID.SmallPincushionZombie ||
+                    npc.netID == NPCID.PincushionZombie ||
+                    npc.netID == NPCID.BigBaldZombie ||
+                    npc.netID == NPCID.SmallBaldZombie ||
+                    npc.netID == NPCID.BaldZombie ||
+                    npc.netID == NPCID.BigZombie ||
+                    npc.netID == NPCID.SmallZombie ||
+                    npc.netID == NPCID.Zombie ||
+                    //npc.netID == NPCID.ArmedTorchZombie ||
+                    npc.netID == NPCID.ArmedZombie ||
+                    npc.netID == NPCID.ArmedZombieCenx ||
+                    npc.netID == NPCID.ArmedZombieEskimo ||
+                    npc.netID == NPCID.ArmedZombiePincussion ||
+                    npc.netID == NPCID.ArmedZombieSlimed ||
+                    npc.netID == NPCID.ArmedZombieSwamp ||
+                    npc.netID == NPCID.ArmedZombieTwiggy ||
+                    npc.netID == NPCID.BoneThrowingSkeleton ||
+                    npc.netID == NPCID.BoneThrowingSkeleton2 ||
+                    npc.netID == NPCID.BoneThrowingSkeleton3 ||
+                    npc.netID == NPCID.BoneThrowingSkeleton4 );
+        }
+        
+
+
         public static string MapNetIdToBaseCreditId(NPC npc)
         {
 
@@ -485,7 +572,6 @@ namespace NaturalVariety.Utils
                 int b = Item.NPCtoBanner(npc.netID);
 
                 if (a == b && a > 0 && b > 0)
-                //if (newNPC.BannerID() == npc.BannerID() && newNPC.BannerID() > 0 && npc.BannerID() > 0)
                 {
                     listOfSameBannerVariants.Add(newNpc);
                 }

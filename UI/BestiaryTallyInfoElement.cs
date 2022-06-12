@@ -13,6 +13,7 @@ namespace NaturalVariety.UI
     public class BestiaryTallyInfoElement : NPCNetIdBestiaryInfoElement, IBestiaryInfoElement
     {
 
+
         private readonly bool displayBannerTally = false;
         private readonly bool displayBestiaryTally = false;
         private readonly bool displayBossTally = false;
@@ -20,23 +21,24 @@ namespace NaturalVariety.UI
         private readonly int bannerTally;
         private readonly int bestiaryTally;
 
-        private readonly int noOfElements = 1;
+        private readonly string npcTypeName = "";
+        private readonly string npcBestiaryAdditionalText = "";
+
+        private readonly int noOfElements = 0;
+
 
         public BestiaryTallyInfoElement(NPC npc, int npcNetId) : base(npcNetId)
         {
 
-            NPC netNpc = ContentSamples.NpcsByNetId[npcNetId];
+            // NPC netNpc = ContentSamples.NpcsByNetId[npcNetId];
             bannerTally = NPC.killCount[Item.NPCtoBanner(npc.BannerID())];
 
             bestiaryTally = Main.BestiaryTracker.Kills.GetKillCount(npc.GetBestiaryCreditId()); 
 
-            if (npcNetId == -41 || npcNetId == 193)
+            if (!NetIdHelper.IsExcludedFromVariantsDisplay(npc) && bestiaryTally > 0)
             {
-                ;
-            }
+                noOfElements = 1;
 
-            if (bestiaryTally > 0)
-            {
                 if (npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type])
                 {
                     displayBossTally = true;
@@ -49,7 +51,13 @@ namespace NaturalVariety.UI
 
             if (bannerTally > 0)
             {
+                noOfElements = 1;
+
                 displayBannerTally = true;
+
+
+                npcTypeName = GetBannerTypeName(npc);
+
                 if (bestiaryTally == bannerTally)
                 {
                     displayBestiaryTally = false;
@@ -58,7 +66,13 @@ namespace NaturalVariety.UI
 
             if (displayBannerTally && displayBestiaryTally)
             {
+                npcBestiaryAdditionalText = "for this variant";
                 noOfElements = 2;
+            }
+
+            if(npc.netID == 54)
+            {
+                 ;
             }
 
         }
@@ -105,7 +119,7 @@ namespace NaturalVariety.UI
             fieldImageBanner.HAlign = 0f;
             fieldImageBanner.Left = new StyleDimension(5f, 0f);
 
-            UIText uITextBanner = new UIText((bannerTally + 1).ToString())
+            UIText uITextBanner = new UIText((bannerTally).ToString())
             {
                 HAlign = 0f,
                 Left = new StyleDimension(38f, 0f),
@@ -132,7 +146,7 @@ namespace NaturalVariety.UI
             fieldImageBoss.HAlign = 0f;
             fieldImageBoss.Left = new StyleDimension(5f, 0f);
 
-            UIText uITextBestiary = new UIText((bestiaryTally + 1).ToString())
+            UIText uITextBestiary = new UIText((bestiaryTally).ToString())
             {
                 HAlign = 0f,
                 Left = new StyleDimension(38f, 0f),
@@ -147,9 +161,13 @@ namespace NaturalVariety.UI
                 Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
                 Color = new Color(89, 116, 213, 255) * 0.9f,
                 Left = new StyleDimension(0f, 0f),
-                Top = new StyleDimension(0 + 35 * 2, 0f)
+                Top = new StyleDimension(0 + 35 * noOfElements, 0f)
             };
 
+            if(noOfElements > 0)
+            {
+                element.Append(separator);
+            }
 
             if (fieldImageBestiary != null && displayBestiaryTally)
             {
@@ -177,11 +195,40 @@ namespace NaturalVariety.UI
 
         }
 
+        private string GetBannerTypeName(NPC npc)
+        {
+            string bannerTypeName = "";
+            string currentNpcTypeName = "";
+
+
+            currentNpcTypeName = Lang.GetNPCNameValue(npc.netID);
+
+            if (npc.ModNPC == null)
+            {
+                bannerTypeName = Lang.GetNPCNameValue(Item.BannerToNPC(Item.NPCtoBanner(npc.BannerID())));
+            }
+            else
+            {
+                bannerTypeName = Lang.GetNPCNameValue(Item.BannerToNPC(npc.ModNPC.Banner));
+            }    
+
+                
+            if (bannerTypeName != currentNpcTypeName)
+            {
+                return "(" + bannerTypeName + ")";
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
         private void ShowNameBanner(UIElement element)
         {
             if (element.IsMouseHovering && element != null)
             {
-                Main.instance.MouseText("Kill count", 0, 0);
+                Main.instance.MouseText("Kill count " + npcTypeName, 0, 0);
             }
         }
 
@@ -189,7 +236,7 @@ namespace NaturalVariety.UI
         {
             if (element.IsMouseHovering && element != null)
             {
-                Main.instance.MouseText("Kill count for this variant", 0, 0);
+                Main.instance.MouseText("Kill count " + npcBestiaryAdditionalText, 0, 0);
             }
         }
 

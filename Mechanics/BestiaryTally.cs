@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using NaturalVariety.UI;
-using NaturalVariety.Utils;
 
 namespace NaturalVariety.Mechanics
 {
@@ -24,10 +22,10 @@ namespace NaturalVariety.Mechanics
             return true;
         }
 
-        public override bool SpecialOnKill(NPC npc)
+        public override void OnKill(NPC npc)
         {
+            base.OnKill(npc);
             BestiaryTally.SetKillCountsInBestiary();
-            return false;
         }
     }
 
@@ -42,7 +40,7 @@ namespace NaturalVariety.Mechanics
             for (int npcId = -65; npcId < NPCLoader.NPCCount; npcId++)
             {
                 NPC npc = ContentSamples.NpcsByNetId[npcId];
-                BestiaryTally.SetKillCountsInBestiary(npc);
+                BestiaryTally.SetKillCountsInBestiary(npc);  
             }
         }
 
@@ -52,9 +50,18 @@ namespace NaturalVariety.Mechanics
         /// <param name="npc"></param>
         public static void SetKillCountsInBestiary(NPC npc) // for 1 npc 
         {
-            IBestiaryInfoElement tallyInfo;
             
             BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(npc.netID);
+
+            if (BestiaryEntryIsHidden(entry) && npc.ModNPC != null)
+            {
+                entry.Info.Clear();
+                Main.BestiaryDB.Register(entry);
+                return;
+            }
+
+            IBestiaryInfoElement tallyInfo;
+
             tallyInfo = new BestiaryTallyInfoElement(npc, npc.netID);
             entry.Info.RemoveAll(IsTallyBestiaryInfoElement);
             entry.Info.Add(tallyInfo);
@@ -80,5 +87,16 @@ namespace NaturalVariety.Mechanics
         {
             return element.GetType() == typeof(BestiaryTallyInfoElement);
         }
+
+        public static bool BestiaryEntryIsHidden(BestiaryEntry entry)
+        {
+            if(entry.Icon == null)
+            {
+                return true;
+            }
+
+            return (entry.Info.Count <= 0) || (entry.Icon.GetType() != typeof(UnlockableNPCEntryIcon));
+        }
+
     }
 }
