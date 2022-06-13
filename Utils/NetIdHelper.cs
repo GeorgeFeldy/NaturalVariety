@@ -12,15 +12,23 @@ namespace NaturalVariety.Utils
     public static class NetIdHelper
     {
 
-
         /// <summary>
-        /// NPCs excluded from bestiary display due to inconsistencies 
-        /// TODO: replace with BoolSet  
+        /// NPCs specifically excluded from banner display in bestiary 
         /// </summary>
         /// <param name="npc"></param>
         /// <returns></returns>
-        public static bool IsExcludedFromVariantsDisplay(NPC npc)
+        public static bool IsExcludedFromBannerTally(NPC npc)
         {
+            return npc.netID == NPCID.StardustCellSmall;
+        }
+
+        /// <summary>
+        /// NPCs specifically excluded from bestiary display due to inconsistencies 
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <returns></returns>
+        public static bool IsExcludedFromVariantsDisplay(NPC npc) // TODO: replace with BoolSet  
+        {                                                         // Commented ones actually work 
 
             return (npc.netID == NPCID.BigHornetStingy ||
                     npc.netID == NPCID.LittleHornetStingy ||
@@ -74,8 +82,8 @@ namespace NaturalVariety.Utils
                     npc.netID == NPCID.BigSlimedZombie ||
                     npc.netID == NPCID.SmallSlimedZombie ||
                     npc.netID == NPCID.SlimedZombie ||
-                    npc.netID == NPCID.BigPincushionZombie ||
-                    npc.netID == NPCID.SmallPincushionZombie ||
+                    //npc.netID == NPCID.BigPincushionZombie ||
+                    //npc.netID == NPCID.SmallPincushionZombie ||
                     npc.netID == NPCID.PincushionZombie ||
                     npc.netID == NPCID.BigBaldZombie ||
                     npc.netID == NPCID.SmallBaldZombie ||
@@ -98,7 +106,12 @@ namespace NaturalVariety.Utils
         }
         
 
-
+        /// <summary>
+        /// Maps variant IDs to their base counterpart. 
+        /// ContentSamples does this but is inconsistent for Zombies, Skeletons, Hornets and Demon Eyes.. 
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <returns></returns>
         public static string MapNetIdToBaseCreditId(NPC npc)
         {
 
@@ -434,156 +447,5 @@ namespace NaturalVariety.Utils
                 default: return netId;
             }
         }
-
-        // negatives mapping 
-        // NPCID.FromNetId(netID);
-
-        /// <summary>
-        /// a messier version of the above function
-        /// </summary>
-        /// <param name="netID"></param>
-        /// <returns></returns>
-        public static int MapBaseIdForVariantsBanner(int netID)
-        {
-            switch (netID)
-            {
-            case(-65) : return 42   ;                    
-            case(-64) : return 42   ;                  
-            case(-63) : return 42   ;                  
-            case(-62) : return 42   ;                  
-            case(-61) : return 42   ;                  
-            case(-60) : return 42   ;                  
-            case(-59) : return 42   ;                  
-            case(-58) : return 42   ;                  
-            case(-57) : return 42   ;                  
-            case(-56) : return 42   ;                  
-            case(-55) : return 223  ;                  
-            case(-54) : return 223  ;                  
-            case(-53) : return 21   ;                  
-            case(-52) : return 21   ;                  
-            case(-51) : return 21   ;                  
-            case(-50) : return 21   ;                  
-            case(-49) : return 21   ;                  
-            case(-48) : return 21   ;                  
-            case(-47) : return 21   ;                  
-            case(-46) : return 21   ;                  
-            case(-45) : return 3    ;                  
-            case(-44) : return 3    ;                  
-            case(-43) : return 2    ;                  
-            case(-42) : return 2    ;                  
-            case(-41) : return 2    ;                  
-            case(-40) : return 2    ;                  
-            case(-39) : return 2    ;                  
-            case(-38) : return 2    ;                  
-            case(-37) : return 3    ;                  
-            case(-36) : return 3    ;                  
-            case(-35) : return 3    ;                  
-            case(-34) : return 3    ;                  
-            case(-33) : return 3    ;                  
-            case(-32) : return 3    ;                  
-            case(-31) : return 186  ;                  
-            case(-30) : return 186  ;                  
-            case(-27) : return 3    ;                  
-            case(-26) : return 3    ;                  
-            case(-23) : return 173  ;                  
-            case(-22) : return 173  ;                  
-            case(-25) : return 183  ;                  
-            case(-24) : return 183  ;                  
-            case(-21) : return 176  ;                  
-            case(-20) : return 176  ;                  
-            case(-19) : return 176  ;                  
-            case(-18) : return 176  ;                  
-            case(-17) : return 42   ;                  
-            case(-16) : return 42   ;                  
-            case(-15) : return 77   ;                  
-            case(-14) : return 31   ;                  
-            case(-13) : return 31   ;                  
-            case(-12) : return 6    ;                  
-            case(-11) : return 6    ;                  
-            case(497) : return 496  ;                  
-            case(495) : return 494  ;                  
-            case(498) : return 499  ;                  
-            case(499) : return 499  ;                  
-            case(500) : return 499  ;                  
-            case(501) : return 499  ;                  
-            case(502) : return 499  ;                  
-            case(503) : return 499  ;                  
-            case(504) : return 499  ;                  
-            case(505) : return 499  ;                  
-            case(506) : return 499  ;                  
-            case(591) : return 590  ;                  
-            case(430) : return 3    ;                  
-            case(436) : return 200  ;                  
-            case(431) : return 161  ;                  
-            case(432) : return 186  ;                  
-            case(433) : return 187  ;                  
-            case(434) : return 188  ;                  
-            case(435) : return 189  ;                  
-            case(164) : return 165  ;                  
-            case(236) : return 237  ;                  
-            case(163) : return 238  ;                  
-            case(239) : return 240  ;                  
-            case(530) : return 531  ;                  
-            case(449) : return  21  ;                  
-            case(450) : return 201  ;                  
-            case(451) : return 202  ;                  
-            case(452) : return 203  ;                  
-            case(595) : return 599  ;                  
-            case(596) : return 599  ;                  
-            case(597) : return 599  ;                  
-            case(598) : return 599  ;                  
-            case(600) : return 599  ;                  
-            case(230) : return 55   ;                  
-            case(593) : return 592  ;                  
-            case(-2 ) : return 121  ;                   
-            case(195) : return 196  ;                   
-            case(198) : return 199  ;                   
-            case(158) : return 159  ;                   
-            case(568) : return 569  ;                   
-            case(566) : return 567  ;                   
-            case(576) : return 577  ;                   
-            case(558) : return 560  ;                   
-            case(559) : return 560  ;                   
-            case(552) : return 554  ;                   
-            case(553) : return 554  ;                   
-            case(564) : return 565  ;                   
-            case(570) : return 571  ;                   
-            case(555) : return 557  ;                   
-            case(556) : return 557  ;                   
-            case(574) : return 575  ;                   
-            case(561) : return 563  ;                   
-            case(562) : return 563  ;                   
-            case(572) : return 573  ;                   
-            case(14 ) : return 13   ;
-            case(15)  : return 13   ;
-            default   : return netID;
-		    }
-        }
-
-        public static List<NPC> GetListOfSameBannerVariants(NPC npc)
-        {
-            List<NPC> listOfSameBannerVariants = new();
-
-            for (int netId = -65; netId < NPCLoader.NPCCount; netId++)
-            {
-                NPC newNpc = ContentSamples.NpcsByNetId[netId];
-
-                int a = Item.NPCtoBanner(netId);
-                int b = Item.NPCtoBanner(npc.netID);
-
-                if (a == b && a > 0 && b > 0)
-                {
-                    listOfSameBannerVariants.Add(newNpc);
-                }
-            }
-            return listOfSameBannerVariants;
-        }
-
-
-
     }
-
-
-
-
 }

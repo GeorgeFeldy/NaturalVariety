@@ -17,6 +17,9 @@ namespace NaturalVariety.Mechanics
 
     public class BestiaryTallyGlobalNPC : GlobalNPC
     {
+
+        public override bool InstancePerEntity => false;
+
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
             return true;
@@ -33,7 +36,7 @@ namespace NaturalVariety.Mechanics
     {
 
         /// <summary>
-        /// Updates kill counts in bestiary for all loaded npcs 
+        /// Sets kill counts in bestiary for all loaded npcs 
         /// </summary>
         public static void SetKillCountsInBestiary() 
         {
@@ -48,15 +51,14 @@ namespace NaturalVariety.Mechanics
         /// Updates kill counts for a single NPC 
         /// </summary>
         /// <param name="npc"></param>
-        public static void SetKillCountsInBestiary(NPC npc) // for 1 npc 
+        public static void SetKillCountsInBestiary(NPC npc) 
         {
             
             BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(npc.netID);
 
-            if (BestiaryEntryIsHidden(entry) && npc.ModNPC != null)
+            if (BestiaryEntryIsTrash(entry))
             {
                 entry.Info.Clear();
-                Main.BestiaryDB.Register(entry);
                 return;
             }
 
@@ -64,38 +66,17 @@ namespace NaturalVariety.Mechanics
 
             tallyInfo = new BestiaryTallyInfoElement(npc, npc.netID);
             entry.Info.RemoveAll(IsTallyBestiaryInfoElement);
-            entry.Info.Add(tallyInfo);
-
-            Main.BestiaryDB.Register(entry);
+            entry.AddTags(tallyInfo);
         }
-
-        /// <summary>
-        /// Sets kill count in bestiary for all variants of a given npc 
-        /// </summary>
-        /// <param name="npc"></param>
-        // public static void SetKillCountsInBestiaryForAllVariants(NPC npc) 
-        // {
-        //     List<NPC> listOfVariants = NetIdHelper.GetListOfSameBannerVariants(npc);
-        // 
-        //     foreach (NPC varNpc in listOfVariants)
-        //     {
-        //         SetKillCountsInBestiary(varNpc);
-        //     }
-        // }
 
         public static bool IsTallyBestiaryInfoElement(IBestiaryInfoElement element)
         {
             return element.GetType() == typeof(BestiaryTallyInfoElement);
         }
 
-        public static bool BestiaryEntryIsHidden(BestiaryEntry entry)
+        public static bool BestiaryEntryIsTrash(BestiaryEntry entry)
         {
-            if(entry.Icon == null)
-            {
-                return true;
-            }
-
-            return (entry.Info.Count <= 0) || (entry.Icon.GetType() != typeof(UnlockableNPCEntryIcon));
+            return entry.Info.Count == 0;
         }
 
     }
