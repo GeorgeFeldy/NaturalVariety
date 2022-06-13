@@ -5,6 +5,8 @@ using Terraria.Utilities;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 
+using NaturalVariety.Utils;
+
 
 namespace NaturalVariety.NPCs.Critters
 {
@@ -29,6 +31,11 @@ namespace NaturalVariety.NPCs.Critters
             NPC.lifeMax = 5;
         }
 
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            return SpawnHelper.FlamingoChance(spawnInfo);
+        }
+
         public override bool PreAI()
         {
 
@@ -47,7 +54,7 @@ namespace NaturalVariety.NPCs.Critters
             for (int i = 0; i < flockSize; i++)
             {
 
-                flamingoTypePicker = Main.rand.Next(2) + 1;
+                flamingoTypePicker = Main.rand.Next(numberOfFlamingoes) + 1;
 
                 switch (flamingoTypePicker)
                 {

@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
-
+using NaturalVariety.Utils;
 
 
 // TODO: Eventually, merge the two classes with full custom AI  
@@ -52,9 +52,6 @@ namespace NaturalVariety.NPCs.Critters
 			NPC.aiStyle = -1;
 			AnimationType = NPCID.Duck;
 
-			Banner = Item.NPCtoBanner(NPCID.Duck);
-			BannerItem = Item.BannerToItem(Banner);
-
 			AI_State = 0;
 			AI_Timer = 0;
 			AI_NextDir = 0;
@@ -62,9 +59,7 @@ namespace NaturalVariety.NPCs.Critters
 
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
-			float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance;
-			//bool condition = Math.Abs(spawnInfo.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3; // inner third 
-			return chance;
+			return SpawnHelper.DuckChance(spawnInfo);
 		}
 
 		public override void HitEffect(int hitDirection, double damage)
@@ -265,19 +260,6 @@ namespace NaturalVariety.NPCs.Critters
             Banner = Item.NPCtoBanner(NPCID.Duck);
             BannerItem = Item.BannerToItem(Banner);
         }
-
-		public override float SpawnChance(NPCSpawnInfo spawnInfo)
-		{
-			float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance + SpawnCondition.TownOverworldWaterSurfaceCritter.Chance;
-
-			Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
-
-			bool modifier = (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass);
-
-			chance = modifier ? chance : 0f;
-
-			return chance;
-		}
 
 		public override void HitEffect(int hitDirection, double damage)
 		{

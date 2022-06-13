@@ -23,15 +23,6 @@ namespace NaturalVariety.NPCs.GlobalNPCs
                    entity.type == NPCID.Seagull;
         }
 
-
-        public override void SetDefaults(NPC npc)
-        {
-            base.SetDefaults(npc);
-            npc.ai[0] = (float)ActionState.Walk;
-            npc.ai[1] = 0;
-            npc.ai[2] = 0;
-        }
-
         /// <summary>
         /// Adapted custom Waterfowl AI for vanilla ducks 
         /// </summary>

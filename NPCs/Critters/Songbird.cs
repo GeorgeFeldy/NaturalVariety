@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using NaturalVariety.Utils;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -28,7 +29,7 @@ namespace NaturalVariety.NPCs.Critters
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnCondition.OverworldDayBirdCritter.Chance + SpawnCondition.TownGeneralCritter.Chance; // Spawn with regular bird chance. 
+            return SpawnHelper.ForestBirdChance(spawnInfo);
         }
 
         public override void SetDefaults()

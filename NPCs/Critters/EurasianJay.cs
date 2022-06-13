@@ -10,6 +10,12 @@ namespace NaturalVariety.NPCs.Critters
     public class EurasianJay : Songbird 
     {
 
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Jay");
+        }
+
         public override void SetDefaults()
         {
             base.SetDefaults();
