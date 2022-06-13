@@ -1,20 +1,54 @@
-﻿using Terraria;
+﻿using System.IO;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
+using NaturalVariety;
 using NaturalVariety.UI;
+using Microsoft.Xna.Framework;
+
+
+namespace NaturalVariety
+{
+    public partial class NaturalVariety
+    {
+        public enum BestiaryMessageType : byte
+        {
+            SyncBestiaryKillCount
+        }
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            BestiaryMessageType messageType = (BestiaryMessageType)reader.ReadByte();
+            if(messageType == BestiaryMessageType.SyncBestiaryKillCount)
+            {
+                if(Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    Mechanics.BestiaryTally.SetKillCountsInBestiary();
+                }
+            }
+        }
+    }
+}
 
 namespace NaturalVariety.Mechanics
 {
+
+    /// <summary>
+    /// Do a bestiary kill count update on world load
+    /// </summary>
     public class BestiaryTallyWorldLoad : ModSystem
     { 
         public override void OnWorldLoad()
         {
             BestiaryTally.SetKillCountsInBestiary();
         }
-
     }
 
+    /// <summary>
+    /// Do bestiary kill count update when a player equips/unequips Tally Counter items 
+    /// (Inventory included)
+    /// </summary>
     public class BestiaryTallyPlayer : ModPlayer
     {
         bool lastJarOfSoulsState;
@@ -33,10 +67,16 @@ namespace NaturalVariety.Mechanics
                 BestiaryTally.SetKillCountsInBestiary();
             }
         }
+
     }
 
+    /// <summary>
+    /// Update bestiary kill count on an NPC kill 
+    /// </summary>
     public class BestiaryTallyGlobalNPC : GlobalNPC
     {
+
+        public override bool InstancePerEntity => true;
 
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
@@ -45,8 +85,18 @@ namespace NaturalVariety.Mechanics
 
         public override void OnKill(NPC npc)
         {
-            BestiaryTally.SetKillCountsInBestiary();
+            if(Main.netMode == NetmodeID.SinglePlayer)
+            {
+                BestiaryTally.SetKillCountsInBestiary();
+            }
+            else if (Main.netMode == NetmodeID.Server)
+            {
+                ModPacket updateBestiaryPacket = Mod.GetPacket();
+                updateBestiaryPacket.Write((byte)NaturalVariety.BestiaryMessageType.SyncBestiaryKillCount);
+                updateBestiaryPacket.Send();
+            }
         }
+
     }
 
     public static class BestiaryTally
