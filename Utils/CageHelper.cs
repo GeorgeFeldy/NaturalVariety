@@ -11,10 +11,15 @@ namespace NaturalVariety.Utils
     /// </summary>
     public static class CageHelper
     {
+        /// <summary>
+        /// list of item IDs that are cage-like, stored by ID ascending
+        /// </summary>
+        public static readonly List<int> cageList;  
 
-        private static readonly List<int> cageList;  // only vanilla, ok to use <int> ID :-? 
-
-        public static readonly Dictionary<int,List<Item>> recipeItemDict;  // dict item recipes 
+        /// <summary>
+        /// dictionary of <cageID, List of items in its recipe>
+        /// </summary>
+        public static readonly Dictionary<int,List<Item>> recipeItemDict; 
 
         static CageHelper()
         {
@@ -99,7 +104,7 @@ namespace NaturalVariety.Utils
                 Recipe itemRecipe = Main.recipe[i];
                 Item recipeResult = itemRecipe.createItem;
 
-                if (ItemIsCage(recipeResult))
+                if (IsCageItem(recipeResult))
                 {
                     if (!recipeItemDict.ContainsKey(recipeResult.type))  // will add only the first recipe it finds (TODO: check if it's always vanilla)
                     {
@@ -109,7 +114,12 @@ namespace NaturalVariety.Utils
             }
         }
 
-        public static bool ItemIsCage(Item item)
+        /// <summary>
+        /// Returns true if item is cage type found in the list 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool IsCageItem(Item item)
         {
             return (cageList.BinarySearch(item.type) >= 0);
         }
