@@ -15,10 +15,28 @@ namespace NaturalVariety.Mechanics
 
     }
 
+    public class BestiaryTallyPlayer : ModPlayer
+    {
+        bool lastJarOfSoulsState;
+        bool currentJarOfSoulsState;
+
+        public override void PreUpdate()
+        {
+            this.lastJarOfSoulsState = Player.accJarOfSouls;
+        }
+
+        public override void PostUpdate()
+        {
+            this.currentJarOfSoulsState = Player.accJarOfSouls;
+            if(lastJarOfSoulsState != currentJarOfSoulsState)
+            {
+                BestiaryTally.SetKillCountsInBestiary();
+            }
+        }
+    }
+
     public class BestiaryTallyGlobalNPC : GlobalNPC
     {
-
-        public override bool InstancePerEntity => false;
 
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
@@ -27,7 +45,6 @@ namespace NaturalVariety.Mechanics
 
         public override void OnKill(NPC npc)
         {
-            base.OnKill(npc);
             BestiaryTally.SetKillCountsInBestiary();
         }
     }
