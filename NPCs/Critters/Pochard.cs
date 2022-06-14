@@ -44,28 +44,5 @@ namespace NaturalVariety.NPCs.Critters
             }
         }
     }
-
-    public class PochardFly : WaterfowlFly
-    {
-
-        public override string Texture => "NaturalVariety/NPCs/Critters/Pochard";
-
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<PochardItem>();
-        }
-
-        public override void AI()
-        {
-            base.AI();
-            if (Main.rand.NextBool(400) && !Main.dedServ)
-            {
-                SoundEngine.PlaySound(SoundID.Duck);
-            }
-        }
-
-    }
-
 }
 

@@ -24,7 +24,9 @@ namespace NaturalVariety.NPCs.Critters
 		private enum ActionState
 		{
 			Walk,
-			Wait
+			Wait,
+			Fly,
+			Swim
 		}
 
 		public ref float AI_State => ref NPC.ai[0];
@@ -50,7 +52,6 @@ namespace NaturalVariety.NPCs.Critters
 			NPC.width = 22;
 			NPC.height = 26;                                                           
 			NPC.aiStyle = -1;
-			AnimationType = NPCID.Duck;
 
 			AI_State = 0;
 			AI_Timer = 0;
@@ -129,34 +130,37 @@ namespace NaturalVariety.NPCs.Critters
 				NPC.netUpdate = true;
 			}
 
-			NPC.TargetClosest();
 			AI_Timer++;
 
 
-			// if touching water, falling or player is really close, transform to flying regardless of action state 
-			if (Main.netMode != NetmodeID.MultiplayerClient && 
-			   (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.wet || Main.player[NPC.target].Distance(NPC.Center) < spookDistance))
-            {
-				int direction = NPC.direction;
-
-				ConvertToFlying(); // convert to corresponding "Duck AI" WaterfowlFly child type NPC 
-
-				NPC.TargetClosest();
-				NPC.direction = direction;
-				NPC.netUpdate = true;
-				return;
-			}
+			int centerX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+			int centerY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
+			bool touchingWater = Main.tile[centerX, centerY].LiquidAmount > 0;
 
 			switch (AI_State)
             {
 				case (float)ActionState.Wait:
 
+					NPC.noGravity = false;
+					NPC.width = 22;
+					NPC.height = 26;
 
-					// start walking after a few seconds or when player is close 
-					if(Main.netMode != NetmodeID.MultiplayerClient && 
-					  (AI_Timer >= Main.rand.Next(240,480)		   || // (4sec <-> 8sec) 
+					NPC.TargetClosest();
+
+					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.life < NPC.lifeMax || touchingWater || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					{
+						AI_State = (float)ActionState.Fly;
+						AI_Timer = 0;
+						NPC.direction = (int)AI_NextDir;
+						NPC.velocity.X = 4f * NPC.direction;
+						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+					}
+
+					if (Main.netMode != NetmodeID.MultiplayerClient &&
+					  (AI_Timer >= Main.rand.Next(240, 480) || // (4sec <-> 8sec) 
 					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
 					{
+
 						AI_State = (float)ActionState.Walk;
 						AI_Timer = 0;
 						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
@@ -167,25 +171,41 @@ namespace NaturalVariety.NPCs.Critters
 
 				case (float)ActionState.Walk:
 
-					if(Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
-                    {
+					NPC.noGravity = false;
+					NPC.width = 22;
+					NPC.height = 26;
+
+					NPC.TargetClosest();
+
+					if (NPC.velocity.Y > 4f ||
+						NPC.velocity.Y < -4f ||
+						touchingWater ||
+						NPC.life < NPC.lifeMax ||
+						Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					{
+						AI_State = (float)ActionState.Fly;
+						AI_Timer = 0;
+					}
+
+					if (Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
+					{
 						NPC.direction = (int)AI_NextDir;     // if player is far enough, pick direction randomly 
 					}
 					else
-                    {
+					{
 						int direction = NPC.direction;
-						NPC.TargetClosest(true);	         // else, away from closest target 
+						NPC.TargetClosest(true);             // else, away from closest target 
 						NPC.direction = direction * -1;
 						AI_NextDir = (float)NPC.direction;
-    
+
 					}
-                    if (NPC.collideX) 
-                    {
+					if (NPC.collideX)
+					{
 
 						Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
 
-						if(NPC.velocity.X == 0)
-                        {
+						if (NPC.velocity.X == 0)
+						{
 							if (Main.player[NPC.target].Distance(NPC.Center) >= corneredDistance)
 							{
 								AI_NextDir *= -1;                // reverse direction if colliding with a block 
@@ -193,16 +213,19 @@ namespace NaturalVariety.NPCs.Critters
 							}
 							else
 							{
-								ConvertToFlying();              // fly away if cornered by player on collision
+								AI_State = (float)ActionState.Fly;
+								AI_Timer = 0;
+								NPC.direction = (int)AI_NextDir;
+								NPC.velocity.X = 4f * NPC.direction;
 							}
 						}
-					
-                    }
 
-						NPC.velocity.X = 1 * NPC.direction;
+					}
+
+					NPC.velocity.X = 1 * (float)NPC.direction;
 
 					if (Main.netMode != NetmodeID.MultiplayerClient && AI_Timer >= Main.rand.Next(180, 420)) // (3sec <-> 7sec) 
-					{ 
+					{
 						NPC.velocity.X = 0;
 						AI_State = (float)ActionState.Wait;
 						AI_Timer = 0;
@@ -210,138 +233,160 @@ namespace NaturalVariety.NPCs.Critters
 						NPC.netUpdate = true;
 					}
 					break;
-			}
-		}
-		/// <summary>
-		/// convert to corresponding "Duck AI" WaterfowlFly child type NPC 
-		/// </summary>
-		public void ConvertToFlying()
-		{
-			string nextTypeString = this.GetType().Name + "Fly";
-			Type nextType = System.Type.GetType("NaturalVariety.NPCs.Critters." + nextTypeString);
-			var func = typeof(ModContent).GetMethod("NPCType");
-			var genericFunc = func.MakeGenericMethod(nextType);
-			NPC.Transform((int)genericFunc.Invoke(this, null));
-		}
-	}
 
-	/// <summary>
-	/// Generic class for all flying/swimming duck-like critters in this mod 
-	/// </summary>
-	public abstract class WaterfowlFly : Critter
-    {
 
-        public override void SetStaticDefaults()
-        {
-            base.SetStaticDefaults();
+				case (float)ActionState.Fly: // from vanilla Duck AI 
 
-			//display name based on child class name, but drop "Fly" to match Passive AI variant 
-			DisplayName.SetDefault((this.GetType().Name).Replace("Fly", ""));
+					NPC.width = 28;
+					NPC.height = 22;
+					NPC.noGravity = true;
 
-			Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Duck2];          
+					if (Main.player[NPC.target].dead)
+						return;
 
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new(0)                   
-            {
-                //Position = new Vector2(3f, 0f),
-                //Velocity = 1f,
-				Hide = true
-            };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
-        }
+					bool attemptLand = false;
+					AI_Timer += 1f;
+					if (AI_Timer >= 600f)
+						attemptLand = true;
 
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            NPC.width = 28;
-            NPC.height = 22;
-            NPC.aiStyle = -1;
-            AnimationType = NPCID.Duck2;                  
+					int flyingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+					int flyingCenterY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
+					int belowY = (int)((NPC.position.Y + 60) / 16f); // offset is non-flying height 
 
-            Banner = Item.NPCtoBanner(NPCID.Duck);
-            BannerItem = Item.BannerToItem(Banner);
-        }
+					bool tileBelowSolid = (Main.tile[flyingCenterX, belowY].HasUnactuatedTile && Main.tileSolid[Main.tile[flyingCenterX, belowY].TileType]);
 
-		public override void HitEffect(int hitDirection, double damage)
-		{
-			if (NPC.life > 0)
-			{
-				for (int idx = 0; (double)idx < damage / (double)NPC.lifeMax * 20.0; idx++)
-				{
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hitDirection, -1f);
-				}
-				return; 
-			}
+					if (attemptLand)
+					{
 
-			if (Main.netMode == NetmodeID.Server)
-			{
-				return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
-			}
+						if (touchingWater) // restart flight if center is submerged in liquid 
+						{
+							AI_State = (float)ActionState.Swim;
+							return;
+						}
 
-			if (NPC.life <= 0)
-			{
+						if (NPC.velocity.Y == 0f || tileBelowSolid)
+						{
+							NPC.velocity.X = 0f;
+							NPC.velocity.Y = 0f;
+							NPC.ai[0] = 0f;
+							AI_Timer = 0f;
+							if (Main.netMode != NetmodeID.MultiplayerClient)
+							{
 
-				int headGoreType;
-				int bodyGoreType;
-				int wingGoreType;
+								int direction5 = NPC.direction;
 
-				string className = (this.GetType().Name).Replace("Fly", "");
+								AI_State = (float)ActionState.Walk;
 
-				try
-				{
-					headGoreType = Mod.Find<ModGore>(className + "_Gore_Head").Type;
-					bodyGoreType = Mod.Find<ModGore>(className + "_Gore_Body").Type;
-					wingGoreType = Mod.Find<ModGore>(className + "_Gore_Wing").Type;
-				}
-				catch
-				{
-					headGoreType = 555;
-					bodyGoreType = 556;
-					wingGoreType = 557;
-				}
+								NPC.TargetClosest();
+								NPC.direction = direction5;
+								AI_Timer = 200 + Main.rand.Next(200);
 
-				var entitySource = NPC.GetSource_Death();
+								NPC.netUpdate = true;
+							}
+						}
+						else
+						{
+							NPC.velocity.X *= 0.98f;
+							NPC.velocity.Y += 0.1f;
+							if (NPC.velocity.Y > 2f)
+								NPC.velocity.Y = 2f;
+						}
 
-				for (int idx = 0; idx < 10; idx++)
-				{
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, 2 * hitDirection, -2f);
-				}
+						return;
+					}
 
-				Gore.NewGore(entitySource, NPC.position, NPC.velocity, headGoreType);
-				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, bodyGoreType);
-				Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, wingGoreType);
-			}
-		}
+					if (NPC.collideX)
+					{
+						NPC.direction *= -1;
+						NPC.velocity.X = NPC.oldVelocity.X * -0.5f;
+						if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
+							NPC.velocity.X = 2f;
 
-		/// <summary>
-		/// Copy-paste adaption of Vanilla Duck AI (id 68) :) 
-		/// TODO: make code more readable with action states and NPC.ai refs
-		/// TODO: eventually merge with Waterfowl class
-		/// </summary>
-		public override void AI()
-        {
-			NPC.noGravity = true;
-			if (NPC.ai[0] == 0f)
-			{
-				NPC.noGravity = false;
-				int direction4 = NPC.direction;
-				int num1032 = NPC.target;
-				NPC.TargetClosest();
-				if (num1032 >= 0 && direction4 != 0)
-					NPC.direction = direction4;
+						if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
+							NPC.velocity.X = -2f;
+					}
 
-				if (NPC.wet)
-				{
+					if (NPC.collideY)
+					{
+						NPC.velocity.Y = NPC.oldVelocity.Y * -0.5f;
+						if (NPC.velocity.Y > 0f && NPC.velocity.Y < 1f)
+							NPC.velocity.Y = 1f;
+
+						if (NPC.velocity.Y < 0f && NPC.velocity.Y > -1f)
+							NPC.velocity.Y = -1f;
+					}
+
+					if (NPC.direction == -1 && NPC.velocity.X > -3f)
+					{
+						NPC.velocity.X -= 0.1f;
+						if (NPC.velocity.X > 3f)
+							NPC.velocity.X -= 0.1f;
+						else if (NPC.velocity.X > 0f)
+							NPC.velocity.X -= 0.05f;
+
+						if (NPC.velocity.X < -3f)
+							NPC.velocity.X = -3f;
+					}
+					else if (NPC.direction == 1 && NPC.velocity.X < 3f)
+					{
+						NPC.velocity.X += 0.1f;
+						if (NPC.velocity.X < -3f)
+							NPC.velocity.X += 0.1f;
+						else if (NPC.velocity.X < 0f)
+							NPC.velocity.X += 0.05f;
+
+						if (NPC.velocity.X > 3f)
+							NPC.velocity.X = 3f;
+					}
+
+					int num1038 = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
+					int num1039 = (int)((NPC.position.Y + (float)NPC.height) / 16f);
+					bool flag59 = true;
+					int num1040 = 15;
+					bool flag60 = false;
+					for (int num1041 = num1039; num1041 < num1039 + num1040; num1041++)
+					{
+						// if (Main.tile[num1038, num1041] == null)
+						// 	Main.tile[num1038, num1041] = new Tile();
+
+						if ((Main.tile[num1038, num1041].HasUnactuatedTile && Main.tileSolid[Main.tile[num1038, num1041].TileType]) || Main.tile[num1038, num1041].LiquidAmount > 0)
+						{
+							if (num1041 < num1039 + 5)
+								flag60 = true;
+
+							flag59 = false;
+							break;
+						}
+					}
+
+					if (flag59)
+						NPC.velocity.Y += 0.1f;
+					else
+						NPC.velocity.Y -= 0.1f;
+
+					if (flag60)
+						NPC.velocity.Y -= 0.2f;
+
+					if (NPC.velocity.Y > 3f)
+						NPC.velocity.Y = 3f;
+
+					if (NPC.velocity.Y < -4f)
+						NPC.velocity.Y = -4f;
+
+					break;
+
+
+				case (float)ActionState.Swim:
+
+					NPC.width = 28;
+					NPC.height = 22;
+
 					float num1033 = 2f;
 					NPC.velocity.X = (NPC.velocity.X * 19f + num1033 * (float)NPC.direction) / 20f;
 					int num1034 = (int)(NPC.Center.X + (float)((NPC.width / 2 + 8) * NPC.direction)) / 16;
 					int num1035 = (int)(NPC.Center.Y / 16f);
 					int j4 = (int)(NPC.position.Y / 16f);
 					int num1036 = (int)((NPC.position.Y + (float)NPC.height) / 16f);
-					// if (Main.tile[num1034, num1035] == null)
-					// 	Main.tile[num1034, num1035] = new Tile();
-					// 
-					// if (Main.tile[num1034, num1036] == null)
-					// 	Main.tile[num1034, num1036] = new Tile();
 
 					if (WorldGen.SolidTile(num1034, num1035) || WorldGen.SolidTile(num1034, j4) || WorldGen.SolidTile(num1034, num1036) || Main.tile[num1034, num1036].LiquidAmount == 0)
 						NPC.direction *= -1;
@@ -354,15 +399,6 @@ namespace NaturalVariety.NPCs.Critters
 					num1034 = (int)(NPC.Center.X / 16f);
 					num1035 = (int)(NPC.Center.Y / 16f);
 					float num1037 = NPC.position.Y + (float)NPC.height;
-
-					//if (Main.tile[num1034, num1035 - 1] == null)
-					//	Main.tile[num1034, num1035 - 1] = new Tile();
-					//
-					//if (Main.tile[num1034, num1035] == null)
-					//	Main.tile[num1034, num1035] = new Tile();
-					//
-					//if (Main.tile[num1034, num1035 + 1] == null)
-					//	Main.tile[num1034, num1035 + 1] = new Tile();
 
 					if (Main.tile[num1034, num1035 - 1].LiquidAmount > 0)
 					{
@@ -394,164 +430,63 @@ namespace NaturalVariety.NPCs.Critters
 					{
 						NPC.velocity.Y = num1037 - NPC.Center.Y;
 					}
-				}
 
-				if (Main.netMode == NetmodeID.MultiplayerClient)
-					return;
-
-				if (!NPC.wet)
-				{
-					NPC.ai[0] = 1f;
-					NPC.netUpdate = true;
-					NPC.direction = -NPC.direction;
-					return;
-				}
-
-				Rectangle rectangle4 = new Rectangle((int)Main.player[NPC.target].position.X, (int)Main.player[NPC.target].position.Y, Main.player[NPC.target].width, Main.player[NPC.target].height);
-				if (new Rectangle((int)NPC.position.X - 100, (int)NPC.position.Y - 100, NPC.width + 200, NPC.height + 200).Intersects(rectangle4) || NPC.life < NPC.lifeMax)
-				{
-
-
-					NPC.ai[0] = 1f;
-					NPC.velocity.Y -= 6f;
-					NPC.netUpdate = true;
-					NPC.direction = -NPC.direction;
-				}
-			}
-			else
-			{
-				if (Main.player[NPC.target].dead)
-					return;
-
-				bool flag58 = false;
-				NPC.ai[1] += 1f;
-				if (NPC.ai[1] >= 300f)
-					flag58 = true;
-
-				if (flag58)
-				{
-					if (NPC.velocity.Y == 0f || NPC.collideY || NPC.wet)
-					{
-						NPC.velocity.X = 0f;
-						NPC.velocity.Y = 0f;
-						NPC.ai[0] = 0f;
-						NPC.ai[1] = 0f;
-						if (Main.netMode != NetmodeID.MultiplayerClient)
-						{
-
-							int direction5 = NPC.direction;
-
-							ConvertToWalking();	
-
-							NPC.TargetClosest();
-							NPC.direction = direction5;
-							NPC.ai[0] = 0f;
-							NPC.ai[1] = 200 + Main.rand.Next(200);
-
-							NPC.netUpdate = true;
-						}
-					}
-					else
-					{
-						NPC.velocity.X *= 0.98f;
-						NPC.velocity.Y += 0.1f;
-						if (NPC.velocity.Y > 2f)
-							NPC.velocity.Y = 2f;
-					}
-
-					return;
-				}
-
-				if (NPC.collideX)
-				{
-					NPC.direction *= -1;
-					NPC.velocity.X = NPC.oldVelocity.X * -0.5f;
-					if (NPC.direction == -1 && NPC.velocity.X > 0f && NPC.velocity.X < 2f)
-						NPC.velocity.X = 2f;
-
-					if (NPC.direction == 1 && NPC.velocity.X < 0f && NPC.velocity.X > -2f)
-						NPC.velocity.X = -2f;
-				}
-
-				if (NPC.collideY)
-				{
-					NPC.velocity.Y = NPC.oldVelocity.Y * -0.5f;
-					if (NPC.velocity.Y > 0f && NPC.velocity.Y < 1f)
-						NPC.velocity.Y = 1f;
-
-					if (NPC.velocity.Y < 0f && NPC.velocity.Y > -1f)
-						NPC.velocity.Y = -1f;
-				}
-
-				if (NPC.direction == -1 && NPC.velocity.X > -3f)
-				{
-					NPC.velocity.X -= 0.1f;
-					if (NPC.velocity.X > 3f)
-						NPC.velocity.X -= 0.1f;
-					else if (NPC.velocity.X > 0f)
-						NPC.velocity.X -= 0.05f;
-
-					if (NPC.velocity.X < -3f)
-						NPC.velocity.X = -3f;
-				}
-				else if (NPC.direction == 1 && NPC.velocity.X < 3f)
-				{
-					NPC.velocity.X += 0.1f;
-					if (NPC.velocity.X < -3f)
-						NPC.velocity.X += 0.1f;
-					else if (NPC.velocity.X < 0f)
-						NPC.velocity.X += 0.05f;
-
-					if (NPC.velocity.X > 3f)
-						NPC.velocity.X = 3f;
-				}
-
-				int num1038 = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
-				int num1039 = (int)((NPC.position.Y + (float)NPC.height) / 16f);
-				bool flag59 = true;
-				int num1040 = 15;
-				bool flag60 = false;
-				for (int num1041 = num1039; num1041 < num1039 + num1040; num1041++)
-				{
-					// if (Main.tile[num1038, num1041] == null)
-					// 	Main.tile[num1038, num1041] = new Tile();
-
-					if ((Main.tile[num1038, num1041].HasUnactuatedTile && Main.tileSolid[Main.tile[num1038, num1041].TileType]) || Main.tile[num1038, num1041].LiquidAmount > 0)
-					{
-						if (num1041 < num1039 + 5)
-							flag60 = true;
-
-						flag59 = false;
-						break;
-					}
-				}
-
-				if (flag59)
-					NPC.velocity.Y += 0.1f;
-				else
-					NPC.velocity.Y -= 0.1f;
-
-				if (flag60)
-					NPC.velocity.Y -= 0.2f;
-
-				if (NPC.velocity.Y > 3f)
-					NPC.velocity.Y = 3f;
-
-				if (NPC.velocity.Y < -4f)
-					NPC.velocity.Y = -4f;
+					break;
 			}
 		}
 
-		/// <summary>
-		///  convert to corresponding Passive AI "Waterfowl" child type NPC
-		/// </summary>
-		public void ConvertToWalking()
+		public override void FindFrame(int frameHeight)
 		{
-			string nextTypeString = (this.GetType().Name).Replace("Fly", "");
-			Type nextType = System.Type.GetType("NaturalVariety.NPCs.Critters." + nextTypeString);
-			var func = typeof(ModContent).GetMethod("NPCType");
-			var genericFunc = func.MakeGenericMethod(nextType);
-			NPC.Transform((int)genericFunc.Invoke(this, null));
+
+
+			NPC.spriteDirection = NPC.direction;
+
+			switch (AI_State)
+			{
+				case (float)ActionState.Wait:
+
+					NPC.frameCounter = 0;
+					NPC.frame.Y = 0 * frameHeight; // frame 1 idle 
+
+					break;
+
+				case (float)ActionState.Walk:
+
+					NPC.frameCounter++;
+
+					if (NPC.frameCounter < 80) // 8 walking frames 
+					{
+						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 3) * frameHeight;  // (80 game frames / 10) + 3 frame offset 
+					}
+					else
+						NPC.frameCounter = 0;
+
+					break;
+
+				case (float)ActionState.Fly:
+
+					NPC.frameCounter++;
+					if (NPC.frameCounter < 20) // 4 flying frames 
+					{
+						NPC.frame.Y = ((int)NPC.frameCounter / 5 + 11) * frameHeight; // (20 game frames / 5) + 11 frame offset   
+
+					}
+					else
+						NPC.frameCounter = 0;
+
+					break;
+
+				case (float)ActionState.Swim:
+
+					NPC.frameCounter++;
+					if (NPC.frameCounter < 20) // 2 swimming frames
+                    {
+						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 1) * frameHeight; // (20 game frames / 10) + 1 frame offset   
+
+					}
+					break;
+
+			}
 		}
 
 	}
