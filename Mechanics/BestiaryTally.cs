@@ -1,35 +1,10 @@
-﻿using System.IO;
+﻿
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
-using NaturalVariety;
 using NaturalVariety.UI;
-using Microsoft.Xna.Framework;
 
-
-namespace NaturalVariety
-{
-    public partial class NaturalVariety
-    {
-        public enum BestiaryMessageType : byte
-        {
-            SyncBestiaryKillCount
-        }
-
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            BestiaryMessageType messageType = (BestiaryMessageType)reader.ReadByte();
-            if(messageType == BestiaryMessageType.SyncBestiaryKillCount)
-            {
-                if(Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    Mechanics.BestiaryTally.SetKillCountsInBestiary();
-                }
-            }
-        }
-    }
-}
 
 namespace NaturalVariety.Mechanics
 {
@@ -51,18 +26,18 @@ namespace NaturalVariety.Mechanics
     /// </summary>
     public class BestiaryTallyPlayer : ModPlayer
     {
-        bool lastJarOfSoulsState;
-        bool currentJarOfSoulsState;
+        bool lastPlayerTallyCounterState;
+        bool currentPlayerTallyCounterState;
 
         public override void PreUpdate()
         {
-            this.lastJarOfSoulsState = Player.accJarOfSouls;
+            this.lastPlayerTallyCounterState = Player.accJarOfSouls;
         }
 
         public override void PostUpdate()
         {
-            this.currentJarOfSoulsState = Player.accJarOfSouls;
-            if(lastJarOfSoulsState != currentJarOfSoulsState)
+            this.currentPlayerTallyCounterState = Player.accJarOfSouls;
+            if(lastPlayerTallyCounterState != currentPlayerTallyCounterState)
             {
                 BestiaryTally.SetKillCountsInBestiary();
             }
@@ -87,16 +62,15 @@ namespace NaturalVariety.Mechanics
         {
             if(Main.netMode == NetmodeID.SinglePlayer)
             {
-                BestiaryTally.SetKillCountsInBestiary();
+                BestiaryTally.SetKillCountsInBestiary(); 
             }
             else if (Main.netMode == NetmodeID.Server)
             {
                 ModPacket updateBestiaryPacket = Mod.GetPacket();
-                updateBestiaryPacket.Write((byte)NaturalVariety.BestiaryMessageType.SyncBestiaryKillCount);
+                updateBestiaryPacket.Write((byte)NaturalVariety.MessageType.SyncBestiaryKillCount);
                 updateBestiaryPacket.Send();
             }
         }
-
     }
 
     public static class BestiaryTally
@@ -123,15 +97,13 @@ namespace NaturalVariety.Mechanics
             
             BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(npc.netID);
 
-            if (BestiaryEntryIsTrash(entry))
+            if (BestiaryEntryIsHidden(entry))
             {
                 entry.Info.Clear();
                 return;
             }
 
-            IBestiaryInfoElement tallyInfo;
-
-            tallyInfo = new BestiaryTallyInfoElement(npc, npc.netID);
+            IBestiaryInfoElement tallyInfo = new BestiaryTallyInfoElement(npc, npc.netID);
             entry.Info.RemoveAll(IsTallyBestiaryInfoElement);
             entry.AddTags(tallyInfo);
         }
@@ -141,7 +113,7 @@ namespace NaturalVariety.Mechanics
             return element.GetType() == typeof(BestiaryTallyInfoElement);
         }
 
-        public static bool BestiaryEntryIsTrash(BestiaryEntry entry)
+        public static bool BestiaryEntryIsHidden(BestiaryEntry entry)
         {
             return entry.Info.Count == 0;
         }

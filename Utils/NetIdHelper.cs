@@ -282,7 +282,7 @@ namespace NaturalVariety.Utils
         /// <summary>
         /// Maps the NetID of some variants to their base type with entry in bestiary for bestiary update purposes
         /// Similar to Vanilla ContentSamples 
-        /// (yes i checked those manually for the sake of quality)
+        /// (yes i checked those manually)
         /// </summary>
         /// <param name="netId"></param>
         /// <returns></returns>

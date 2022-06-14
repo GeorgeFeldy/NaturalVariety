@@ -38,9 +38,9 @@ namespace NaturalVariety.UI
 
             bannerTally = NPC.killCount[Item.NPCtoBanner(npc.BannerID())];
 
-            bestiaryTally = Main.BestiaryTracker.Kills.GetKillCount(npc.GetBestiaryCreditId()); 
+            bestiaryTally = Main.BestiaryTracker.Kills.GetKillCount(npc.GetBestiaryCreditId());
 
-            if (!NetIdHelper.IsExcludedFromVariantsDisplay(npc) && bestiaryTally > 0 && Main.LocalPlayer.accJarOfSouls)
+            if (!NetIdHelper.IsExcludedFromVariantsDisplay(npc) && bestiaryTally > 0 && playerHasTallyCounter)
             {
                 noOfElements = 1;
                 bestiaryTallyText = bestiaryTally.ToString();

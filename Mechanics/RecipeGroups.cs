@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace NaturalVariety.Mechanics
 {
-    public class NaturalVarietyRecipeGroups : ModSystem
+    public class RecipeGroups : ModSystem
     {
         public override void AddRecipeGroups()
         {
