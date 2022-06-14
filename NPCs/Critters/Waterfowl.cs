@@ -132,11 +132,6 @@ namespace NaturalVariety.NPCs.Critters
 
 			AI_Timer++;
 
-
-			int centerX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
-			int centerY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
-			bool touchingWater = Main.tile[centerX, centerY].LiquidAmount > 0;
-
 			switch (AI_State)
             {
 				case (float)ActionState.Wait:
@@ -147,13 +142,18 @@ namespace NaturalVariety.NPCs.Critters
 
 					NPC.TargetClosest();
 
-					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.life < NPC.lifeMax || touchingWater || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f ||NPC.life < NPC.lifeMax || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
 					{
 						AI_State = (float)ActionState.Fly;
 						AI_Timer = 0;
 						NPC.direction = (int)AI_NextDir;
 						NPC.velocity.X = 4f * NPC.direction;
 						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+					}
+
+                    if (NPC.wet)
+                    {
+						AI_State = (float)ActionState.Swim;
 					}
 
 					if (Main.netMode != NetmodeID.MultiplayerClient &&
@@ -179,12 +179,16 @@ namespace NaturalVariety.NPCs.Critters
 
 					if (NPC.velocity.Y > 4f ||
 						NPC.velocity.Y < -4f ||
-						touchingWater ||
 						NPC.life < NPC.lifeMax ||
 						Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
 					{
 						AI_State = (float)ActionState.Fly;
 						AI_Timer = 0;
+					}
+
+					if (NPC.wet)
+					{
+						AI_State = (float)ActionState.Swim;
 					}
 
 					if (Main.player[NPC.target].Distance(NPC.Center) >= avoidDistance)
@@ -199,6 +203,7 @@ namespace NaturalVariety.NPCs.Critters
 						AI_NextDir = (float)NPC.direction;
 
 					}
+
 					if (NPC.collideX)
 					{
 
@@ -241,27 +246,26 @@ namespace NaturalVariety.NPCs.Critters
 					NPC.height = 22;
 					NPC.noGravity = true;
 
+
 					if (Main.player[NPC.target].dead)
 						return;
 
 					bool attemptLand = false;
 					AI_Timer += 1f;
-					if (AI_Timer >= 600f)
+					if (AI_Timer >= 600f && NPC.life == NPC.lifeMax)
 						attemptLand = true;
 
 					int flyingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
 					int flyingCenterY = (int)((NPC.position.Y + (float)(NPC.height / 2)) / 16f);
-					int belowY = (int)((NPC.position.Y + 60) / 16f); // offset is non-flying height 
+					int belowY = (int)((NPC.position.Y + NPC.height) / 16f); // offset is non-flying height 
 
-					bool tileBelowSolid = (Main.tile[flyingCenterX, belowY].HasUnactuatedTile && Main.tileSolid[Main.tile[flyingCenterX, belowY].TileType]);
+					bool tileBelowSolid = (Main.tile[flyingCenterX, flyingCenterY+1].HasUnactuatedTile && Main.tileSolid[Main.tile[flyingCenterX, flyingCenterY+1].TileType]);
 
 					if (attemptLand)
 					{
-
-						if (touchingWater) // restart flight if center is submerged in liquid 
+						if(NPC.wet)
 						{
 							AI_State = (float)ActionState.Swim;
-							return;
 						}
 
 						if (NPC.velocity.Y == 0f || tileBelowSolid)
@@ -279,7 +283,8 @@ namespace NaturalVariety.NPCs.Critters
 
 								NPC.TargetClosest();
 								NPC.direction = direction5;
-								AI_Timer = 200 + Main.rand.Next(200);
+								//AI_Timer = 200 + Main.rand.Next(200);
+								AI_Timer = 0;
 
 								NPC.netUpdate = true;
 							}
@@ -378,6 +383,17 @@ namespace NaturalVariety.NPCs.Critters
 
 				case (float)ActionState.Swim:
 
+					NPC.noGravity = false;
+
+					if (NPC.life < NPC.lifeMax || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					{
+						AI_State = (float)ActionState.Fly;
+						AI_Timer = 0;
+						NPC.direction = (int)AI_NextDir;
+						NPC.velocity.X = 4f * NPC.direction;
+						AI_NextDir = Main.rand.NextBool() ? 1f : -1f;
+					}
+
 					NPC.width = 28;
 					NPC.height = 22;
 
@@ -458,8 +474,10 @@ namespace NaturalVariety.NPCs.Critters
 					{
 						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 3) * frameHeight;  // (80 game frames / 10) + 3 frame offset 
 					}
-					else
+                    else
+                    {
 						NPC.frameCounter = 0;
+                    }
 
 					break;
 
@@ -471,8 +489,10 @@ namespace NaturalVariety.NPCs.Critters
 						NPC.frame.Y = ((int)NPC.frameCounter / 5 + 11) * frameHeight; // (20 game frames / 5) + 11 frame offset   
 
 					}
-					else
+                    else
+                    {
 						NPC.frameCounter = 0;
+                    }
 
 					break;
 
@@ -483,6 +503,10 @@ namespace NaturalVariety.NPCs.Critters
                     {
 						NPC.frame.Y = ((int)NPC.frameCounter / 10 + 1) * frameHeight; // (20 game frames / 10) + 1 frame offset   
 
+					}
+                    else
+                    {
+						NPC.frameCounter = 0;
 					}
 					break;
 

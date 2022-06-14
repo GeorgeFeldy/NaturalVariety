@@ -46,11 +46,6 @@ namespace NaturalVariety.Utils
 
             chance = modifier ? chance : 0f;
 
-            if(chance > 0)
-            {
-               int a;
-            }
-
             return chance;
         }
 

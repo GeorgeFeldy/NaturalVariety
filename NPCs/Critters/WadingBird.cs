@@ -201,7 +201,7 @@ namespace NaturalVariety.NPCs.Critters
 
 					bool attemptLand = false;
 					AI_Timer += 1f;
-					if (AI_Timer >= 600f)
+					if (AI_Timer >= 600f && NPC.life == NPC.lifeMax)
 						attemptLand = true;
 
 					int flyingCenterX = (int)((NPC.position.X + (float)(NPC.width / 2)) / 16f) + NPC.direction;
@@ -238,7 +238,8 @@ namespace NaturalVariety.NPCs.Critters
 
 								NPC.TargetClosest();
 								NPC.direction = direction5;
-								AI_Timer = 200 + Main.rand.Next(200);
+								//AI_Timer = 200 + Main.rand.Next(200);
+								AI_Timer = 0;
 
 								NPC.netUpdate = true;
 							}
