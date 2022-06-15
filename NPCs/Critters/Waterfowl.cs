@@ -15,7 +15,7 @@ using NaturalVariety.Utils;
 namespace NaturalVariety.NPCs.Critters
 {
 	/// <summary>
-	/// Generic class for all walking duck-like critters in this mod 
+	/// Generic class for all duck-like critters in this mod 
 	/// </summary>
 	public abstract class Waterfowl : Critter
 	{
@@ -58,12 +58,13 @@ namespace NaturalVariety.NPCs.Critters
 			AI_NextDir = 0;
 		}
 
-		public override float SpawnChance(NPCSpawnInfo spawnInfo)
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{
 			return SpawnHelper.DuckChance(spawnInfo);
 		}
 
-		public override void HitEffect(int hitDirection, double damage)
+        public override void HitEffect(int hitDirection, double damage)
 		{
 			if (NPC.life > 0)
 			{
@@ -76,7 +77,8 @@ namespace NaturalVariety.NPCs.Critters
 
 			if (Main.netMode == NetmodeID.Server)
 			{
-				return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
+				// We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
+				return; 
 			}
 
 			if (NPC.life <= 0)
@@ -115,7 +117,7 @@ namespace NaturalVariety.NPCs.Critters
 		}
 
 		/// <summary>
-		/// Adaption of Passive AI Duck-type NPC
+		/// Adaption of Passive AI & Duck AI for ducks 
 		/// </summary>
 		public override void AI()
 		{
@@ -142,7 +144,7 @@ namespace NaturalVariety.NPCs.Critters
 
 					NPC.TargetClosest();
 
-					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f ||NPC.life < NPC.lifeMax || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
+					if (NPC.velocity.Y > 4f || NPC.velocity.Y < -4f || NPC.life < NPC.lifeMax || Main.player[NPC.target].Distance(NPC.Center) < spookDistance)
 					{
 						AI_State = (float)ActionState.Fly;
 						AI_Timer = 0;
@@ -156,9 +158,7 @@ namespace NaturalVariety.NPCs.Critters
 						AI_State = (float)ActionState.Swim;
 					}
 
-					if (Main.netMode != NetmodeID.MultiplayerClient &&
-					  (AI_Timer >= Main.rand.Next(240, 480) || // (4sec <-> 8sec) 
-					  Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
+					if (Main.netMode != NetmodeID.MultiplayerClient && (AI_Timer >= Main.rand.Next(240, 480) || Main.player[NPC.target].Distance(NPC.Center) < avoidDistance)) // TODO: adjust distance based on critter friendliness
 					{
 
 						AI_State = (float)ActionState.Walk;
@@ -239,8 +239,7 @@ namespace NaturalVariety.NPCs.Critters
 					}
 					break;
 
-
-				case (float)ActionState.Fly: // from vanilla Duck AI 
+                case (float)ActionState.Fly: // from vanilla Duck AI 
 
 					NPC.width = 28;
 					NPC.height = 22;
@@ -451,7 +450,7 @@ namespace NaturalVariety.NPCs.Critters
 			}
 		}
 
-		public override void FindFrame(int frameHeight)
+        public override void FindFrame(int frameHeight)
 		{
 
 

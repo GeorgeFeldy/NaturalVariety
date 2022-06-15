@@ -9,6 +9,8 @@ namespace NaturalVariety.NPCs.GlobalNPCs
     public class VanillaDuckAI : GlobalNPC
     {
 
+        public override bool InstancePerEntity => true;
+
         private enum ActionState
         {
             Walk,
@@ -24,7 +26,7 @@ namespace NaturalVariety.NPCs.GlobalNPCs
         }
 
         /// <summary>
-        /// Adapted custom Waterfowl AI for vanilla ducks 
+        /// Adapted custom Waterfowl AI for walking vanilla ducks 
         /// </summary>
         /// <param name="npc"></param>
         public override bool PreAI(NPC npc)

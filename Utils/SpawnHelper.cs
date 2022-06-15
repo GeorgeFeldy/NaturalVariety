@@ -23,13 +23,21 @@ namespace NaturalVariety.Utils
             return newChance;
         }
 
+        public static float JungleCritterChance(NPCSpawnInfo spawnInfo)
+        {
+            float chance = SpawnCondition.SurfaceJungle.Chance +
+                           SpawnCondition.TownJungleCritter.Chance;
+
+            return chance;
+        }
+
+        
         public static float JungleBirdChance(NPCSpawnInfo spawnInfo)
         {
 
             bool modifier = DryTile(spawnInfo);
 
-            float chance = SpawnCondition.SurfaceJungle.Chance +
-                           SpawnCondition.TownJungleCritter.Chance;
+            float chance = JungleCritterChance(spawnInfo);
 
             float newChance = modifier ? chance : 0f;
 

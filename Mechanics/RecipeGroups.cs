@@ -33,6 +33,12 @@ namespace NaturalVariety.Mechanics
                 group.ValidItems.Add(ModContent.ItemType<Items.Critters.FerruginousDuckItem>());
 
             }
+
+            RecipeGroup frogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ModContent.ItemType<Items.Critters.BlueFrogItem>())}",
+                ItemID.Frog,
+                ModContent.ItemType<Items.Critters.BlueFrogItem>()
+                );
+
         }
     }
 
