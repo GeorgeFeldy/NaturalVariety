@@ -3,28 +3,27 @@ using NaturalVariety.Utils;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 namespace NaturalVariety.NPCs.Critters
 {
     /// <summary>
     /// Generic class for all "Bird AI" type critters in this mod 
     /// </summary>
-    public abstract class Songbird : Critter 
+    public abstract class BaseSongbird : BaseCritter
     {
 
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
-            Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Bird];           
+            Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Bird];
 
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new(0)                   
+            NPCID.Sets.NPCBestiaryDrawModifiers value = new(0)
             {
                 Position = new Vector2(1f, -14f),
                 Velocity = 0.05f,
                 PortraitPositionYOverride = -30f
             };
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);                  
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -35,11 +34,11 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.width = 14;                    
-            NPC.height = 14;                   
-            NPC.aiStyle = NPCAIStyleID.Bird;                                                   
+            NPC.width = 14;
+            NPC.height = 14;
+            NPC.aiStyle = NPCAIStyleID.Bird;
             AnimationType = NPCID.Bird; // Use vanilla bird's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
-                    
+
             Banner = Item.NPCtoBanner(NPCID.Bird);
             BannerItem = Item.BannerToItem(Banner);
         }
@@ -61,7 +60,7 @@ namespace NaturalVariety.NPCs.Critters
                 return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
             }
 
-            if(NPC.life <= 0)
+            if (NPC.life <= 0)
             {
                 int songbirdGore;
 

@@ -4,14 +4,13 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 namespace NaturalVariety.NPCs.Critters
 {
     /// <summary>
     /// Generic class for all frog type type critters in this mod 
     /// </summary>
-    public abstract class Frog : Critter 
+    public abstract class BaseFrog : BaseCritter
     {
 
         public enum ActionState
@@ -28,15 +27,7 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
-            Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Frog];           
-
-            //NPCID.Sets.NPCBestiaryDrawModifiers value = new(0)                   
-            //{
-            //    Position = new Vector2(1f, -14f),
-            //    Velocity = 0.05f,
-            //    PortraitPositionYOverride = -30f
-            //};
-            //NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, value);                  
+            Main.npcFrameCount[Type] = Main.npcFrameCount[NPCID.Frog];             
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -49,7 +40,7 @@ namespace NaturalVariety.NPCs.Critters
             base.SetDefaults();
             NPC.width = 12;
             NPC.height = 10;
-            NPC.aiStyle = -1;                                                 
+            NPC.aiStyle = -1;
             //AnimationType = NPCID.Frog;                   
         }
 
@@ -67,10 +58,10 @@ namespace NaturalVariety.NPCs.Critters
 
             if (Main.netMode == NetmodeID.Server)
             {
-                return; 
+                return;
             }
 
-            if(NPC.life <= 0)
+            if (NPC.life <= 0)
             {
                 int headGore;
                 int legsGore;
@@ -90,7 +81,7 @@ namespace NaturalVariety.NPCs.Critters
 
                 var entitySource = NPC.GetSource_Death();
 
-                
+
                 Gore.NewGore(entitySource, NPC.position, NPC.velocity, headGore);
                 Gore.NewGore(entitySource, new Vector2(NPC.position.X, NPC.position.Y), NPC.velocity, legsGore);
             }
@@ -136,8 +127,8 @@ namespace NaturalVariety.NPCs.Critters
                         AI_Timer = 0;
                     }
 
-					NPC.direction = (int)AI_NextDir; 
-			
+                    NPC.direction = (int)AI_NextDir;
+
                     if (NPC.collideX)
                     {
 
@@ -191,7 +182,7 @@ namespace NaturalVariety.NPCs.Critters
 
                         Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
 
-                        if(NPC.velocity.X == 0)
+                        if (NPC.velocity.X == 0)
                         {
                             NPC.velocity.Y = -6f;
                             NPC.direction *= -1;
@@ -230,8 +221,6 @@ namespace NaturalVariety.NPCs.Critters
                     }
 
                     break;
-
-
             }
         }
 
@@ -291,7 +280,7 @@ namespace NaturalVariety.NPCs.Critters
             }
             else if (NPC.velocity.Y > 0f)
             {
-                 NPC.frame.Y = frameHeight * 9;
+                NPC.frame.Y = frameHeight * 9;
             }
             else
             {

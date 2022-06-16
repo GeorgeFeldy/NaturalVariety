@@ -1,13 +1,12 @@
+using NaturalVariety.Items.Critters;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
-
-using NaturalVariety.Items.Critters;
 // using NaturalVariety.Items.Placeable.Banners;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class EurasianJay : Songbird 
+    public class EurasianJay : BaseSongbird
     {
 
         public override void SetStaticDefaults()
@@ -35,6 +34,6 @@ namespace NaturalVariety.NPCs.Critters
             });
         }
 
-      
+
     }
 }

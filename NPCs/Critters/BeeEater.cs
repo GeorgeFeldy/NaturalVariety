@@ -1,21 +1,26 @@
+using NaturalVariety.Items.Critters;
+using NaturalVariety.Utils;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
-
-using NaturalVariety.Items.Critters;
-using NaturalVariety.Utils;
 
 namespace NaturalVariety.NPCs.Critters
-{ 
-    public class BeeEater: Songbird 
+{
+    public class BeeEater : BaseSongbird
     {
+
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            DisplayName.SetDefault("Bee-eater");
+        }
+
         public override void SetDefaults()
         {
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<BeeEaterItem>();
         }
-     
+
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
@@ -32,7 +37,7 @@ namespace NaturalVariety.NPCs.Critters
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
 
-            return SpawnHelper.JungleBirdChance(spawnInfo); 
+            return SpawnHelper.JungleBirdChance(spawnInfo);
 
         }
     }

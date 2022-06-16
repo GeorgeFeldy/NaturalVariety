@@ -1,12 +1,10 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
 using NaturalVariety.NPCs.Critters;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class FerruginousDuckItem : CritterItem 
+    public class FerruginousDuckItem : BaseCritterItem
     {
         public override void SetStaticDefaults()
         {
@@ -20,12 +18,5 @@ namespace NaturalVariety.Items.Critters
             Item.value = Item.sellPrice(silver: 7, copper: 50);
         }
 
-        public override void AddRecipes()
-        {
-            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedDuck);
-            roastedRecipe.AddIngredient<FerruginousDuckItem>();
-            roastedRecipe.AddTile(TileID.CookingPots);
-            roastedRecipe.Register();
-        }
     }
 }

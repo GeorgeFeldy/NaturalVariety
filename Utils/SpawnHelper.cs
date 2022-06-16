@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -31,7 +30,7 @@ namespace NaturalVariety.Utils
             return chance;
         }
 
-        
+
         public static float JungleBirdChance(NPCSpawnInfo spawnInfo)
         {
 
@@ -98,8 +97,8 @@ namespace NaturalVariety.Utils
 
         public static float SeagullChance(NPCSpawnInfo spawnInfo)
         {
-            float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance / 2; 
-            float baseLandChance = SpawnCondition.Overworld.Chance / 2; 
+            float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance / 2;
+            float baseLandChance = SpawnCondition.Overworld.Chance / 2;
 
             //bool beachCondition = (spawnInfo.SpawnTileX < 250 || spawnInfo.SpawnTileX > Main.maxTilesX - 250); // only at the Ocean 
             bool beachCondition = spawnInfo.Player.ZoneBeach;
@@ -124,7 +123,7 @@ namespace NaturalVariety.Utils
 
         public static bool IsOnGrass(NPCSpawnInfo spawnInfo)
         {
-            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY]; 
+            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
 
             return (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass); // only on grass
         }

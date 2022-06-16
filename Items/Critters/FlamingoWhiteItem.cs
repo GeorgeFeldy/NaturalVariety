@@ -1,10 +1,10 @@
+using NaturalVariety.NPCs.Critters;
 using Terraria;
 using Terraria.ModLoader;
-using NaturalVariety.NPCs.Critters;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class FlamingoWhiteItem : CritterItem 
+    public class FlamingoWhiteItem : BaseCritterItem
     {
         public override void SetStaticDefaults()
         {

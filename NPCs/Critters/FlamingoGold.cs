@@ -1,6 +1,5 @@
-
 using NaturalVariety.Items.Critters;
-using NaturalVariety.Utils;
+using NaturalVariety.Sounds;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -9,15 +8,13 @@ using Terraria.ModLoader;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class GoldDuck : BaseWaterfowl
+    public class FlamingoGold : BaseWadingBird
     {
-
-        public override string Texture => "NaturalVariety/NPCs/Critters/GoldDuck";
-
 
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
+            DisplayName.SetDefault("Gold Flamingo");
             NPCID.Sets.NormalGoldCritterBestiaryPriority.Add(Type);
             NPCID.Sets.GoldCrittersCollection.Add(Type);
         }
@@ -25,13 +22,13 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<GoldDuckItem>();
+            NPC.catchItem = (short)ModContent.ItemType<FlamingoGoldItem>();
             NPC.rarity = 3;
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnHelper.GoldCritterModifier(spawnInfo, SpawnHelper.DuckChance(spawnInfo));
+            return 0f; // can only spawn via Flamingo spawner
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -42,7 +39,8 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "The golden duck (Anas midas) is a near-threatened species of duck with distinctive golden plumage. It is a common victim of illegal captures due to it's high value amongst collectors.")
+                   "The golden flamingo (Phoenicopterus midas) is a rare species of flamingo. It is found amongst other flamingoes in the genus Phoenicopterus, " +
+                   "but it's critically endangered due to poaching for it's highly valued plumage and significant consumption as a delicacy in some countries.")
             });
         }
 
@@ -51,7 +49,7 @@ namespace NaturalVariety.NPCs.Critters
             base.AI();
             if (Main.rand.NextBool(400) && !Main.dedServ)
             {
-                SoundEngine.PlaySound(SoundID.Duck);
+                SoundEngine.PlaySound(CustomSounds.FlamingoCall, NPC.position);
             }
 
             DisplayGoldenCritterParticles();
@@ -61,6 +59,7 @@ namespace NaturalVariety.NPCs.Critters
         {
             GoldenCritterHitEffect(hitDirection, damage);
         }
+
     }
 
 }

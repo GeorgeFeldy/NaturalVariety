@@ -1,8 +1,7 @@
 ﻿using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using NaturalVariety.NPCs.Critters;
-using Terraria.GameContent.Bestiary;
 
 namespace NaturalVariety.NPCs.GlobalNPCs.Critters
 {

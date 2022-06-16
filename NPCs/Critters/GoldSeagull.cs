@@ -1,19 +1,15 @@
 
-using Microsoft.Xna.Framework;
-
-using Terraria;
-using Terraria.ID;
-using Terraria.GameContent.Bestiary;
-using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
-using Terraria.Audio;
-
 using NaturalVariety.Items.Critters;
 using NaturalVariety.Utils;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class GoldSeagull : Waterfowl 
+    public class GoldSeagull : BaseWaterfowl
     {
 
         public override string Texture => "NaturalVariety/NPCs/Critters/GoldSeagull";
@@ -53,37 +49,17 @@ namespace NaturalVariety.NPCs.Critters
         public override void AI()
         {
             base.AI();
-            if(Main.rand.NextBool(400) && !Main.dedServ)
+            if (Main.rand.NextBool(400) && !Main.dedServ)
             {
-                SoundEngine.PlaySound(SoundID.Seagull);    
+                SoundEngine.PlaySound(SoundID.Seagull);
             }
 
-            if (Main.rand.NextBool(20))
-            {
-                int goldDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), 0, 0, 20); // not synced 
-                Main.dust[goldDust].velocity *= 0;
-                Main.dust[goldDust].noGravity = true;
-            }
+            DisplayGoldenCritterParticles();
         }
 
         public override void HitEffect(int hitDirection, double damage)
         {
-            // full override (no call to base) 
-
-            if (NPC.life > 0)
-            {
-                for (int idx = 0; idx < 10; idx++)
-                {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), hitDirection, -1f);
-                }
-            }
-            else
-            {
-                for (int idx = 0; idx < 20; idx++)
-                {
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, Main.rand.Next(232, 234), 2 * hitDirection, -2f);
-                }
-            }
+            GoldenCritterHitEffect(hitDirection, damage);
         }
     }
 }

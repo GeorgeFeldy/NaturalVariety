@@ -1,12 +1,11 @@
 ﻿using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using NaturalVariety.NPCs.Critters;
-using Terraria.GameContent.Bestiary;
 
 namespace NaturalVariety.NPCs.GlobalNPCs.Critters
 {
-    public class VanillaCardinal: GlobalNPC
+    public class VanillaCardinal : GlobalNPC
     {
 
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)

@@ -1,19 +1,18 @@
+using NaturalVariety.Items.Critters;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
-using NaturalVariety.Items.Critters;
-
 namespace NaturalVariety.NPCs.Critters
 {
-    public class Blackbird: Songbird 
+    public class Blackbird : BaseSongbird
     {
         public override void SetDefaults()
         {
             base.SetDefaults();
             NPC.catchItem = (short)ModContent.ItemType<BlackbirdItem>();
         }
-     
+
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
@@ -27,6 +26,6 @@ namespace NaturalVariety.NPCs.Critters
             });
         }
 
-      
+
     }
 }

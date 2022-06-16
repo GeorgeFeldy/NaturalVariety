@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace NaturalVariety.Utils
 {
@@ -14,12 +12,12 @@ namespace NaturalVariety.Utils
         /// <summary>
         /// list of item IDs that are cage-like, stored by ID ascending
         /// </summary>
-        public static readonly List<int> cageList;  
+        public static readonly List<int> cageList;
 
         /// <summary>
         /// dictionary of <cageID, List of items in its recipe>
         /// </summary>
-        public static readonly Dictionary<int,List<Item>> recipeItemDict; 
+        public static readonly Dictionary<int, List<Item>> recipeItemDict;
 
         static CageHelper()
         {
