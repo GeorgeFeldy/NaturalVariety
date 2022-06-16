@@ -1,9 +1,8 @@
-﻿using NaturalVariety.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace NaturalVariety.Mechanics
+namespace NaturalVariety.Mechanics.GrabBagCages
 {
     /// <summary>
     /// GlobalItem to edit each "cage" item found in Utils.CageHelper.cageList

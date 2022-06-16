@@ -23,12 +23,11 @@ namespace NaturalVariety.Mechanics
             {
                 vanillaGroupIndex = RecipeGroup.recipeGroupIDs["Birds"];
                 RecipeGroup group = RecipeGroup.recipeGroups[vanillaGroupIndex];
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.BlackbirdItem>());
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.EurasianJayItem>());
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.GoldfinchItem>());
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.BeeEaterItem>());
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.KingfisherItem>());
 
+                foreach (int item in NPCTypesHelper.SongbirdItems)
+                {
+                    group.ValidItems.Add(item);
+                }
             }
 
             // add mod ducks to recipe group
@@ -36,18 +35,18 @@ namespace NaturalVariety.Mechanics
             {
                 vanillaGroupIndex = RecipeGroup.recipeGroupIDs["Ducks"];
                 RecipeGroup group = RecipeGroup.recipeGroups[vanillaGroupIndex];
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.PochardItem>());
-                group.ValidItems.Add(ModContent.ItemType<Items.Critters.FerruginousDuckItem>());
+                group.ValidItems.Add(ModContent.ItemType<PochardItem>());
+                group.ValidItems.Add(ModContent.ItemType<FerruginousDuckItem>());
 
             }
 
             RecipeGroup frogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Frog)}",
                 ItemID.Frog,
-                ModContent.ItemType<Items.Critters.FrogBlueItem>()
+                ModContent.ItemType<FrogBlueItem>()
                 );
 
             RecipeGroup dartFrogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} Dart Frog",
-                ModContent.ItemType<Items.Critters.FrogBlueItem>()
+                ModContent.ItemType<FrogBlueItem>()
                 );
 
             frogRecipeGroupIndex = RecipeGroup.RegisterGroup("Frog", frogRecipeGroup);

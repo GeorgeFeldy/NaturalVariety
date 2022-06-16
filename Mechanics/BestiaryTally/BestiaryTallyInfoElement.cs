@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace NaturalVariety.Mechanics
+namespace NaturalVariety.Mechanics.BestiaryTally
 {
     public class BestiaryTallyInfoElement : NPCNetIdBestiaryInfoElement, IBestiaryInfoElement, IBestiaryPrioritizedElement
     {
@@ -40,7 +40,7 @@ namespace NaturalVariety.Mechanics
 
             bestiaryTally = Main.BestiaryTracker.Kills.GetKillCount(npc.GetBestiaryCreditId());
 
-            if (/*!NetIdHelper.IsExcludedFromVariantsDisplay(npc) && */bestiaryTally > 0 && playerHasTallyCounter)
+            if (!BestiaryTallyUtils.IsExcludedFromVariantsDisplay(npc) && bestiaryTally > 0 && playerHasTallyCounter)
             {
                 noOfElements = 1;
                 bestiaryTallyText = bestiaryTally.ToString();
@@ -55,12 +55,12 @@ namespace NaturalVariety.Mechanics
                 }
             }
 
-            if (!NetIdHelper.IsExcludedFromBannerTally(npc) && bannerTally > 0)
+            if (!BestiaryTallyUtils.IsExcludedFromBannerTally(npc) && bannerTally > 0)
             {
                 noOfElements = 1;
                 displayBannerTally = true;
-                npcTypeName = GetBannerTypeName(npc);
-                bannerTallyText = playerHasTallyCounter ? bannerTally.ToString() : "< " + (bannerTally / 50 * 50 + 50).ToString();
+                npcTypeName = BestiaryTallyUtils.GetBannerTypeName(npc);
+                bannerTallyText = BestiaryTallyUtils.FormatBannerDisplay(bannerTally, playerHasTallyCounter);
 
                 if (bestiaryTally == bannerTally)
                 {

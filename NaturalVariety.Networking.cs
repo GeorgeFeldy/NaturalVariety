@@ -1,4 +1,4 @@
-using NaturalVariety.Mechanics;
+using NaturalVariety.Mechanics.BestiaryTally;
 using System.IO;
 using Terraria;
 using Terraria.ID;

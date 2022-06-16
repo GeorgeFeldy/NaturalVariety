@@ -46,8 +46,8 @@ namespace NaturalVariety.Utils
 
         public static float DuckChance(NPCSpawnInfo spawnInfo)
         {
-            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance +    // both in the wild 
-                           SpawnCondition.TownOverworldWaterSurfaceCritter.Chance; // and in towns
+            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance +    
+                           SpawnCondition.TownOverworldWaterSurfaceCritter.Chance; 
 
             bool modifier = (InnerThird(spawnInfo) || spawnInfo.PlayerInTown);// && IsOnGrass(spawnInfo);
 
@@ -172,8 +172,6 @@ namespace NaturalVariety.Utils
             return tile.LiquidAmount == 0;
 
         }
-
-
 
         public static bool InnerThird(NPCSpawnInfo info)
         {

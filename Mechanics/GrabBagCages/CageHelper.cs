@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ID;
 
-namespace NaturalVariety.Utils
+namespace NaturalVariety.Mechanics.GrabBagCages
 {
     /// <summary>
     /// Helper for storing all item IDs that are "cage" type 
@@ -119,7 +119,7 @@ namespace NaturalVariety.Utils
         /// <returns></returns>
         public static bool IsCageItem(Item item)
         {
-            return (cageList.BinarySearch(item.type) >= 0);
+            return cageList.BinarySearch(item.type) >= 0;
         }
     }
 }

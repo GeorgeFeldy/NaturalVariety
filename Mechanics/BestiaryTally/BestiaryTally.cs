@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 
-namespace NaturalVariety.Mechanics
+namespace NaturalVariety.Mechanics.BestiaryTally
 {
 
     /// <summary>
@@ -29,12 +29,12 @@ namespace NaturalVariety.Mechanics
 
         public override void PreUpdate()
         {
-            this.lastPlayerTallyCounterState = Player.accJarOfSouls;
+            lastPlayerTallyCounterState = Player.accJarOfSouls;
         }
 
         public override void PostUpdate()
         {
-            this.currentPlayerTallyCounterState = Player.accJarOfSouls;
+            currentPlayerTallyCounterState = Player.accJarOfSouls;
             if (lastPlayerTallyCounterState != currentPlayerTallyCounterState)
             {
                 BestiaryTally.SetKillCountsInBestiary();
@@ -82,7 +82,7 @@ namespace NaturalVariety.Mechanics
             for (int npcId = -65; npcId < NPCLoader.NPCCount; npcId++)
             {
                 NPC npc = ContentSamples.NpcsByNetId[npcId];
-                BestiaryTally.SetKillCountsInBestiary(npc);
+                SetKillCountsInBestiary(npc);
             }
         }
 

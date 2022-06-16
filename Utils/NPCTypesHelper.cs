@@ -11,7 +11,7 @@ namespace NaturalVariety.Utils
     /// </summary>
 	public static class NPCTypesHelper
     {
-
+        // general list for critter and critter items in this mod 
         public static readonly List<int> Critters;
         public static readonly List<int> CritterItems;
 
@@ -29,7 +29,6 @@ namespace NaturalVariety.Utils
         public static readonly List<int> FlamingoeItems;
         public static readonly List<int> FrogItems;
         public static readonly List<int> GoldenCritterItems;
-
 
         static NPCTypesHelper()
         {
@@ -139,6 +138,12 @@ namespace NaturalVariety.Utils
             return result;
         }
 
+        /// <summary>
+        /// Get a copy of list with "item" type removed
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static List<int> NotIntersect(List<int> list, int item)
         {
             List<int> result = list;
