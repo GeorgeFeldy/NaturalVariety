@@ -1,12 +1,10 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
 using NaturalVariety.NPCs.Critters;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class BlackbirdItem : CritterItem 
+    public class BlackbirdItem : BaseCritterItem
     {
         public override void SetStaticDefaults()
         {
@@ -19,12 +17,5 @@ namespace NaturalVariety.Items.Critters
             Item.makeNPC = (short)ModContent.NPCType<Blackbird>();
         }
 
-        public override void AddRecipes()
-        {
-            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
-            roastedRecipe.AddIngredient<BlackbirdItem>();
-            roastedRecipe.AddTile(TileID.CookingPots);
-            roastedRecipe.Register();
-        }
     }
 }

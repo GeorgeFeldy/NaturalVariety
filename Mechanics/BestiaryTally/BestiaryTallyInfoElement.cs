@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NaturalVariety.Utils;
 using Terraria;
-using Terraria.ID;
-using Terraria.UI;
-using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.Elements;
-using NaturalVariety.Utils;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.UI;
 
-namespace NaturalVariety.UI
+namespace NaturalVariety.Mechanics.BestiaryTally
 {
     public class BestiaryTallyInfoElement : NPCNetIdBestiaryInfoElement, IBestiaryInfoElement, IBestiaryPrioritizedElement
     {
@@ -40,14 +40,14 @@ namespace NaturalVariety.UI
 
             bestiaryTally = Main.BestiaryTracker.Kills.GetKillCount(npc.GetBestiaryCreditId());
 
-            if (!NetIdHelper.IsExcludedFromVariantsDisplay(npc) && bestiaryTally > 0 && playerHasTallyCounter)
+            if (!BestiaryTallyUtils.IsExcludedFromVariantsDisplay(npc) && bestiaryTally > 0 && playerHasTallyCounter)
             {
                 noOfElements = 1;
                 bestiaryTallyText = bestiaryTally.ToString();
 
                 if (npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type])
                 {
-                    displayBossTally = true;              
+                    displayBossTally = true;
                 }
                 else
                 {
@@ -55,12 +55,12 @@ namespace NaturalVariety.UI
                 }
             }
 
-            if (!NetIdHelper.IsExcludedFromBannerTally(npc) && bannerTally > 0)
+            if (!BestiaryTallyUtils.IsExcludedFromBannerTally(npc) && bannerTally > 0)
             {
                 noOfElements = 1;
                 displayBannerTally = true;
-                npcTypeName = GetBannerTypeName(npc);
-                bannerTallyText = playerHasTallyCounter ? bannerTally.ToString() : "< " + ((bannerTally / 50) * 50 + 50).ToString();
+                npcTypeName = BestiaryTallyUtils.GetBannerTypeName(npc);
+                bannerTallyText = BestiaryTallyUtils.FormatBannerDisplay(bannerTally, playerHasTallyCounter);
 
                 if (bestiaryTally == bannerTally)
                 {
@@ -81,7 +81,7 @@ namespace NaturalVariety.UI
             if (info.UnlockState == BestiaryEntryUnlockState.NotKnownAtAll_0)
                 return null;
 
-            UIElement element = new UIElement 
+            UIElement element = new UIElement
             {
                 Width = new StyleDimension(0f, 1f),
                 Height = new StyleDimension(35f * noOfElements + (noOfElements > 0 ? 5f : 0), 0f),
@@ -145,7 +145,7 @@ namespace NaturalVariety.UI
                 Top = new StyleDimension(0 + 35 * noOfElements, 0f)
             };
 
-            if(noOfElements > 0)
+            if (noOfElements > 0)
             {
                 element.Append(separator);
             }
@@ -189,9 +189,9 @@ namespace NaturalVariety.UI
             else
             {
                 bannerTypeName = Lang.GetNPCNameValue(Item.BannerToNPC(npc.ModNPC.Banner));
-            }    
+            }
 
-                
+
             if (bannerTypeName != currentNpcTypeName)
             {
                 return "(" + bannerTypeName + ")";

@@ -1,0 +1,133 @@
+﻿/*
+using System;
+using System.Collections.Generic;
+using Terraria.GameContent.Bestiary;
+
+namespace Terraria.ID
+{
+	// Token: 0x0200018B RID: 395
+	public static partial class ContentSamples
+	{
+		// Token: 0x06001946 RID: 6470 RVA: 0x00499A94 File Offset: 0x00497C94
+		private static void ModifyNPCIds()
+		{
+			Dictionary<int, string> npcBestiaryCreditIdsByNpcNetIds = ContentSamples.NpcBestiaryCreditIdsByNpcNetIds;
+
+			npcBestiaryCreditIdsByNpcNetIds[NPCID.Duck2] = npcBestiaryCreditIdsByNpcNetIds[NPCID.Duck];
+			npcBestiaryCreditIdsByNpcNetIds[NPCID.DuckWhite2] = npcBestiaryCreditIdsByNpcNetIds[NPCID.DuckWhite];
+			npcBestiaryCreditIdsByNpcNetIds[NPCID.Grebe2] = npcBestiaryCreditIdsByNpcNetIds[NPCID.Grebe];
+			npcBestiaryCreditIdsByNpcNetIds[NPCID.Seagull2] = npcBestiaryCreditIdsByNpcNetIds[NPCID.Seagull];
+
+
+			npcBestiaryCreditIdsByNpcNetIds[-65] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetStingy];
+			npcBestiaryCreditIdsByNpcNetIds[-64] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetStingy];
+			npcBestiaryCreditIdsByNpcNetIds[-63] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetSpikey];
+			npcBestiaryCreditIdsByNpcNetIds[-62] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetSpikey];
+			npcBestiaryCreditIdsByNpcNetIds[-61] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetLeafy];
+			npcBestiaryCreditIdsByNpcNetIds[-60] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetLeafy];
+			npcBestiaryCreditIdsByNpcNetIds[-59] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetHoney];
+			npcBestiaryCreditIdsByNpcNetIds[-58] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetHoney];
+			npcBestiaryCreditIdsByNpcNetIds[-57] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetFatty];
+			npcBestiaryCreditIdsByNpcNetIds[-56] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HornetFatty];
+			npcBestiaryCreditIdsByNpcNetIds[-55] = npcBestiaryCreditIdsByNpcNetIds[223];
+			npcBestiaryCreditIdsByNpcNetIds[-54] = npcBestiaryCreditIdsByNpcNetIds[223];
+			npcBestiaryCreditIdsByNpcNetIds[-53] = npcBestiaryCreditIdsByNpcNetIds[NPCID.PantlessSkeleton];
+			npcBestiaryCreditIdsByNpcNetIds[-52] = npcBestiaryCreditIdsByNpcNetIds[NPCID.PantlessSkeleton];
+			npcBestiaryCreditIdsByNpcNetIds[-51] = npcBestiaryCreditIdsByNpcNetIds[NPCID.MisassembledSkeleton];
+			npcBestiaryCreditIdsByNpcNetIds[-50] = npcBestiaryCreditIdsByNpcNetIds[NPCID.MisassembledSkeleton];
+			npcBestiaryCreditIdsByNpcNetIds[-49] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HeadacheSkeleton];
+			npcBestiaryCreditIdsByNpcNetIds[-48] = npcBestiaryCreditIdsByNpcNetIds[NPCID.HeadacheSkeleton];
+			npcBestiaryCreditIdsByNpcNetIds[-47] = npcBestiaryCreditIdsByNpcNetIds[21];
+			npcBestiaryCreditIdsByNpcNetIds[-46] = npcBestiaryCreditIdsByNpcNetIds[21];
+			npcBestiaryCreditIdsByNpcNetIds[-45] = npcBestiaryCreditIdsByNpcNetIds[NPCID.FemaleZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-44] = npcBestiaryCreditIdsByNpcNetIds[NPCID.FemaleZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-43] = npcBestiaryCreditIdsByNpcNetIds[NPCID.DemonEye];
+			npcBestiaryCreditIdsByNpcNetIds[-42] = npcBestiaryCreditIdsByNpcNetIds[NPCID.PurpleEye];
+			npcBestiaryCreditIdsByNpcNetIds[-41] = npcBestiaryCreditIdsByNpcNetIds[NPCID.GreenEye];
+			npcBestiaryCreditIdsByNpcNetIds[-40] = npcBestiaryCreditIdsByNpcNetIds[NPCID.DialatedEye];
+			npcBestiaryCreditIdsByNpcNetIds[-39] = npcBestiaryCreditIdsByNpcNetIds[NPCID.SleepyEye];
+			npcBestiaryCreditIdsByNpcNetIds[-38] = npcBestiaryCreditIdsByNpcNetIds[NPCID.CataractEye];
+			npcBestiaryCreditIdsByNpcNetIds[-37] = npcBestiaryCreditIdsByNpcNetIds[NPCID.TwiggyZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-36] = npcBestiaryCreditIdsByNpcNetIds[NPCID.TwiggyZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-35] = npcBestiaryCreditIdsByNpcNetIds[NPCID.SwampZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-34] = npcBestiaryCreditIdsByNpcNetIds[NPCID.SwampZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-33] = npcBestiaryCreditIdsByNpcNetIds[NPCID.SlimedZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-32] = npcBestiaryCreditIdsByNpcNetIds[NPCID.SlimedZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-31] = npcBestiaryCreditIdsByNpcNetIds[186];
+			npcBestiaryCreditIdsByNpcNetIds[-30] = npcBestiaryCreditIdsByNpcNetIds[186];
+			npcBestiaryCreditIdsByNpcNetIds[-29] = npcBestiaryCreditIdsByNpcNetIds[NPCID.BaldZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-28] = npcBestiaryCreditIdsByNpcNetIds[NPCID.BaldZombie];
+			npcBestiaryCreditIdsByNpcNetIds[-27] = npcBestiaryCreditIdsByNpcNetIds[3];
+			npcBestiaryCreditIdsByNpcNetIds[-26] = npcBestiaryCreditIdsByNpcNetIds[3];
+			npcBestiaryCreditIdsByNpcNetIds[-23] = npcBestiaryCreditIdsByNpcNetIds[173];
+			npcBestiaryCreditIdsByNpcNetIds[-22] = npcBestiaryCreditIdsByNpcNetIds[173];
+			npcBestiaryCreditIdsByNpcNetIds[-25] = npcBestiaryCreditIdsByNpcNetIds[183];
+			npcBestiaryCreditIdsByNpcNetIds[-24] = npcBestiaryCreditIdsByNpcNetIds[183];
+			npcBestiaryCreditIdsByNpcNetIds[-21] = npcBestiaryCreditIdsByNpcNetIds[176];
+			npcBestiaryCreditIdsByNpcNetIds[-20] = npcBestiaryCreditIdsByNpcNetIds[176];
+			npcBestiaryCreditIdsByNpcNetIds[-19] = npcBestiaryCreditIdsByNpcNetIds[176];
+			npcBestiaryCreditIdsByNpcNetIds[-18] = npcBestiaryCreditIdsByNpcNetIds[176];
+			npcBestiaryCreditIdsByNpcNetIds[-17] = npcBestiaryCreditIdsByNpcNetIds[42];
+			npcBestiaryCreditIdsByNpcNetIds[-16] = npcBestiaryCreditIdsByNpcNetIds[42];
+			npcBestiaryCreditIdsByNpcNetIds[-15] = npcBestiaryCreditIdsByNpcNetIds[77];
+			npcBestiaryCreditIdsByNpcNetIds[-14] = npcBestiaryCreditIdsByNpcNetIds[31];
+			npcBestiaryCreditIdsByNpcNetIds[-13] = npcBestiaryCreditIdsByNpcNetIds[31];
+			npcBestiaryCreditIdsByNpcNetIds[-12] = npcBestiaryCreditIdsByNpcNetIds[6];
+			npcBestiaryCreditIdsByNpcNetIds[-11] = npcBestiaryCreditIdsByNpcNetIds[6];
+			npcBestiaryCreditIdsByNpcNetIds[497] = npcBestiaryCreditIdsByNpcNetIds[496];
+			npcBestiaryCreditIdsByNpcNetIds[495] = npcBestiaryCreditIdsByNpcNetIds[494];
+			short key = 499;
+			for (int i = 498; i <= 506; i++)
+			{
+				npcBestiaryCreditIdsByNpcNetIds[i] = npcBestiaryCreditIdsByNpcNetIds[(int)key];
+			}
+			npcBestiaryCreditIdsByNpcNetIds[591] = npcBestiaryCreditIdsByNpcNetIds[590];
+			npcBestiaryCreditIdsByNpcNetIds[430] = npcBestiaryCreditIdsByNpcNetIds[3];
+			npcBestiaryCreditIdsByNpcNetIds[436] = npcBestiaryCreditIdsByNpcNetIds[200];
+			npcBestiaryCreditIdsByNpcNetIds[431] = npcBestiaryCreditIdsByNpcNetIds[161];
+			npcBestiaryCreditIdsByNpcNetIds[432] = npcBestiaryCreditIdsByNpcNetIds[186];
+			npcBestiaryCreditIdsByNpcNetIds[433] = npcBestiaryCreditIdsByNpcNetIds[187];
+			npcBestiaryCreditIdsByNpcNetIds[434] = npcBestiaryCreditIdsByNpcNetIds[188];
+			npcBestiaryCreditIdsByNpcNetIds[435] = npcBestiaryCreditIdsByNpcNetIds[189];
+			npcBestiaryCreditIdsByNpcNetIds[164] = npcBestiaryCreditIdsByNpcNetIds[165];
+			npcBestiaryCreditIdsByNpcNetIds[236] = npcBestiaryCreditIdsByNpcNetIds[237];
+			npcBestiaryCreditIdsByNpcNetIds[163] = npcBestiaryCreditIdsByNpcNetIds[238];
+			npcBestiaryCreditIdsByNpcNetIds[239] = npcBestiaryCreditIdsByNpcNetIds[240];
+			npcBestiaryCreditIdsByNpcNetIds[530] = npcBestiaryCreditIdsByNpcNetIds[531];
+			npcBestiaryCreditIdsByNpcNetIds[449] = npcBestiaryCreditIdsByNpcNetIds[21];
+			npcBestiaryCreditIdsByNpcNetIds[450] = npcBestiaryCreditIdsByNpcNetIds[201];
+			npcBestiaryCreditIdsByNpcNetIds[451] = npcBestiaryCreditIdsByNpcNetIds[202];
+			npcBestiaryCreditIdsByNpcNetIds[452] = npcBestiaryCreditIdsByNpcNetIds[203];
+			npcBestiaryCreditIdsByNpcNetIds[595] = npcBestiaryCreditIdsByNpcNetIds[599];
+			npcBestiaryCreditIdsByNpcNetIds[596] = npcBestiaryCreditIdsByNpcNetIds[599];
+			npcBestiaryCreditIdsByNpcNetIds[597] = npcBestiaryCreditIdsByNpcNetIds[599];
+			npcBestiaryCreditIdsByNpcNetIds[598] = npcBestiaryCreditIdsByNpcNetIds[599];
+			npcBestiaryCreditIdsByNpcNetIds[600] = npcBestiaryCreditIdsByNpcNetIds[599];
+			npcBestiaryCreditIdsByNpcNetIds[230] = npcBestiaryCreditIdsByNpcNetIds[55];
+			npcBestiaryCreditIdsByNpcNetIds[593] = npcBestiaryCreditIdsByNpcNetIds[592];
+			npcBestiaryCreditIdsByNpcNetIds[-2] = npcBestiaryCreditIdsByNpcNetIds[121];
+			npcBestiaryCreditIdsByNpcNetIds[195] = npcBestiaryCreditIdsByNpcNetIds[196];
+			npcBestiaryCreditIdsByNpcNetIds[198] = npcBestiaryCreditIdsByNpcNetIds[199];
+			npcBestiaryCreditIdsByNpcNetIds[158] = npcBestiaryCreditIdsByNpcNetIds[159];
+			npcBestiaryCreditIdsByNpcNetIds[568] = npcBestiaryCreditIdsByNpcNetIds[569];
+			npcBestiaryCreditIdsByNpcNetIds[566] = npcBestiaryCreditIdsByNpcNetIds[567];
+			npcBestiaryCreditIdsByNpcNetIds[576] = npcBestiaryCreditIdsByNpcNetIds[577];
+			npcBestiaryCreditIdsByNpcNetIds[558] = npcBestiaryCreditIdsByNpcNetIds[560];
+			npcBestiaryCreditIdsByNpcNetIds[559] = npcBestiaryCreditIdsByNpcNetIds[560];
+			npcBestiaryCreditIdsByNpcNetIds[552] = npcBestiaryCreditIdsByNpcNetIds[554];
+			npcBestiaryCreditIdsByNpcNetIds[553] = npcBestiaryCreditIdsByNpcNetIds[554];
+			npcBestiaryCreditIdsByNpcNetIds[564] = npcBestiaryCreditIdsByNpcNetIds[565];
+			npcBestiaryCreditIdsByNpcNetIds[570] = npcBestiaryCreditIdsByNpcNetIds[571];
+			npcBestiaryCreditIdsByNpcNetIds[555] = npcBestiaryCreditIdsByNpcNetIds[557];
+			npcBestiaryCreditIdsByNpcNetIds[556] = npcBestiaryCreditIdsByNpcNetIds[557];
+			npcBestiaryCreditIdsByNpcNetIds[574] = npcBestiaryCreditIdsByNpcNetIds[575];
+			npcBestiaryCreditIdsByNpcNetIds[561] = npcBestiaryCreditIdsByNpcNetIds[563];
+			npcBestiaryCreditIdsByNpcNetIds[562] = npcBestiaryCreditIdsByNpcNetIds[563];
+			npcBestiaryCreditIdsByNpcNetIds[572] = npcBestiaryCreditIdsByNpcNetIds[573];
+			npcBestiaryCreditIdsByNpcNetIds[14] = npcBestiaryCreditIdsByNpcNetIds[13];
+			npcBestiaryCreditIdsByNpcNetIds[15] = npcBestiaryCreditIdsByNpcNetIds[13];
+		}
+	}
+}
+
+*/

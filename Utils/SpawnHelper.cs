@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -23,13 +22,21 @@ namespace NaturalVariety.Utils
             return newChance;
         }
 
+        public static float JungleCritterChance(NPCSpawnInfo spawnInfo)
+        {
+            float chance = SpawnCondition.SurfaceJungle.Chance +
+                           SpawnCondition.TownJungleCritter.Chance;
+
+            return chance;
+        }
+
+
         public static float JungleBirdChance(NPCSpawnInfo spawnInfo)
         {
 
             bool modifier = DryTile(spawnInfo);
 
-            float chance = SpawnCondition.SurfaceJungle.Chance +
-                           SpawnCondition.TownJungleCritter.Chance;
+            float chance = JungleCritterChance(spawnInfo);
 
             float newChance = modifier ? chance : 0f;
 
@@ -39,17 +46,12 @@ namespace NaturalVariety.Utils
 
         public static float DuckChance(NPCSpawnInfo spawnInfo)
         {
-            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance +    // both in the wild 
-                           SpawnCondition.TownOverworldWaterSurfaceCritter.Chance; // and in towns
+            float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance +    
+                           SpawnCondition.TownOverworldWaterSurfaceCritter.Chance; 
 
             bool modifier = (InnerThird(spawnInfo) || spawnInfo.PlayerInTown);// && IsOnGrass(spawnInfo);
 
             chance = modifier ? chance : 0f;
-
-            if(chance > 0)
-            {
-               int a;
-            }
 
             return chance;
         }
@@ -95,8 +97,8 @@ namespace NaturalVariety.Utils
 
         public static float SeagullChance(NPCSpawnInfo spawnInfo)
         {
-            float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance / 2; 
-            float baseLandChance = SpawnCondition.Overworld.Chance / 2; 
+            float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance / 2;
+            float baseLandChance = SpawnCondition.Overworld.Chance / 2;
 
             //bool beachCondition = (spawnInfo.SpawnTileX < 250 || spawnInfo.SpawnTileX > Main.maxTilesX - 250); // only at the Ocean 
             bool beachCondition = spawnInfo.Player.ZoneBeach;
@@ -121,7 +123,7 @@ namespace NaturalVariety.Utils
 
         public static bool IsOnGrass(NPCSpawnInfo spawnInfo)
         {
-            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY]; 
+            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
 
             return (tile.TileType == TileID.Grass) || (tile.TileType == TileID.HallowedGrass); // only on grass
         }
@@ -170,8 +172,6 @@ namespace NaturalVariety.Utils
             return tile.LiquidAmount == 0;
 
         }
-
-
 
         public static bool InnerThird(NPCSpawnInfo info)
         {

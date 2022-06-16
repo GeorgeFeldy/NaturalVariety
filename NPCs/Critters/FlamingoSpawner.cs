@@ -1,19 +1,27 @@
 
-using Terraria;
-using Terraria.ID;
-using Terraria.Utilities;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
-
 using NaturalVariety.Utils;
-
+using System;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class FlamingoSpawner : WadingBird 
+    public class FlamingoSpawner : BaseWadingBird
     {
 
         public override string Texture => NaturalVariety.EmptySprite;
+
+        private enum FlamingoTypes
+        {
+            PinkFlamingo,
+            WhiteFlamingo,
+            GoldFlamingo
+        }
+
+        private int numberOfFlamingoTypes = Enum.GetNames(typeof(FlamingoTypes)).Length;
 
         public override void SetStaticDefaults()
         {
@@ -33,35 +41,43 @@ namespace NaturalVariety.NPCs.Critters
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnHelper.FlamingoChance(spawnInfo);
+            return SpawnHelper.FlamingoChance(spawnInfo); ;
         }
 
         public override bool PreAI()
         {
 
-            const int numberOfFlamingoes = 2;
+            NPC.TargetClosest();
 
-            WeightedRandom<int> flockSize = new(Main.rand.Next(1,5));
+            WeightedRandom<int> flockSize = new(Main.rand.Next(1, 5));
             flockSize.Add(1, 2); // 2/5 to be single 
             for (int i = 2; i <= 5; i++)
             {
                 flockSize.Add(i, 3); // 3/5 to be multiple (2 to 5)
             }
 
-            int flamingoTypePicker; 
-            int flamingoType = ModContent.NPCType<Flamingo>();
+            int flamingoType = ModContent.NPCType<FlamingoPink>(); // default type
+
+            WeightedRandom<int> flamingoTypePicker = new(Main.rand.Next(numberOfFlamingoTypes));
+            flamingoTypePicker.Add((int)FlamingoTypes.PinkFlamingo, 1);
+            flamingoTypePicker.Add((int)FlamingoTypes.WhiteFlamingo, 1);
+
 
             for (int i = 0; i < flockSize; i++)
             {
 
-                flamingoTypePicker = Main.rand.Next(numberOfFlamingoes) + 1;
-
-                switch (flamingoTypePicker)
+                if (Main.player[NPC.target].RollLuck(NPC.goldCritterChance) == 0)
                 {
-                    case 1: flamingoType = ModContent.NPCType<Flamingo>();      break;
-                    case 2: flamingoType = ModContent.NPCType<FlamingoWhite>(); break;
+                    flamingoType = ModContent.NPCType<FlamingoGold>();
                 }
-
+                else
+                {
+                    switch (flamingoTypePicker)
+                    {
+                        case (int)FlamingoTypes.PinkFlamingo: flamingoType = ModContent.NPCType<FlamingoPink>(); break;
+                        case (int)FlamingoTypes.WhiteFlamingo: flamingoType = ModContent.NPCType<FlamingoWhite>(); break;
+                    }
+                }
 
                 int index = NPC.NewNPC(new EntitySource_SpawnNPC(), (int)NPC.position.X + Main.rand.Next(-30, NPC.width + 30), (int)NPC.position.Y + NPC.height,
                   flamingoType);

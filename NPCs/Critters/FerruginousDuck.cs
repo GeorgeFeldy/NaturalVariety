@@ -1,17 +1,14 @@
-using Microsoft.Xna.Framework;
+using NaturalVariety.Items.Critters;
 using Terraria;
-using Terraria.ID;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
+using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
-
-using NaturalVariety.Items.Critters;
 
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class FerruginousDuck : Waterfowl 
+    public class FerruginousDuck : BaseWaterfowl
     {
 
 
@@ -20,7 +17,7 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<FerruginousDuckItem>(); 
+            NPC.catchItem = (short)ModContent.ItemType<FerruginousDuckItem>();
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -38,41 +35,11 @@ namespace NaturalVariety.NPCs.Critters
         public override void AI()
         {
             base.AI();
-            if(Main.rand.NextBool(400) && !Main.dedServ)
-            {
-                SoundEngine.PlaySound(SoundID.Duck);    
-            }
-        }
-    }
-
-    public class FerruginousDuckFly : WaterfowlFly
-    {
-
-        public override string Texture => "NaturalVariety/NPCs/Critters/FerruginousDuck";
-
-        public override void SetStaticDefaults()
-        {
-            base.SetStaticDefaults();
-
-            DisplayName.SetDefault("Ferruginous Duck");
-        }
-
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<FerruginousDuckItem>();
-        }
-
-        public override void AI()
-        {
-            base.AI();
             if (Main.rand.NextBool(400) && !Main.dedServ)
             {
                 SoundEngine.PlaySound(SoundID.Duck);
             }
         }
-
     }
-
 }
 

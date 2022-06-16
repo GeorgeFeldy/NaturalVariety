@@ -1,12 +1,10 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.DataStructures;
 using NaturalVariety.NPCs.Critters;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class GoldfinchItem : CritterItem 
+    public class GoldfinchItem : BaseCritterItem
     {
         public override void SetStaticDefaults()
         {
@@ -17,14 +15,6 @@ namespace NaturalVariety.Items.Critters
         {
             base.SetDefaults();
             Item.makeNPC = (short)ModContent.NPCType<Goldfinch>();
-        }
-
-        public override void AddRecipes()
-        {
-            Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
-            roastedRecipe.AddIngredient<GoldfinchItem>();
-            roastedRecipe.AddTile(TileID.CookingPots);
-            roastedRecipe.Register();
         }
 
     }

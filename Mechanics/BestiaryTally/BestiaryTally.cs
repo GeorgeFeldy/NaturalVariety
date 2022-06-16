@@ -1,19 +1,17 @@
-﻿
-using Terraria;
+﻿using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.GameContent.Bestiary;
-using NaturalVariety.UI;
 
 
-namespace NaturalVariety.Mechanics
+namespace NaturalVariety.Mechanics.BestiaryTally
 {
 
     /// <summary>
     /// Do a bestiary kill count update on world load
     /// </summary>
     public class BestiaryTallyWorldLoad : ModSystem
-    { 
+    {
         public override void OnWorldLoad()
         {
             BestiaryTally.SetKillCountsInBestiary();
@@ -31,13 +29,13 @@ namespace NaturalVariety.Mechanics
 
         public override void PreUpdate()
         {
-            this.lastPlayerTallyCounterState = Player.accJarOfSouls;
+            lastPlayerTallyCounterState = Player.accJarOfSouls;
         }
 
         public override void PostUpdate()
         {
-            this.currentPlayerTallyCounterState = Player.accJarOfSouls;
-            if(lastPlayerTallyCounterState != currentPlayerTallyCounterState)
+            currentPlayerTallyCounterState = Player.accJarOfSouls;
+            if (lastPlayerTallyCounterState != currentPlayerTallyCounterState)
             {
                 BestiaryTally.SetKillCountsInBestiary();
             }
@@ -60,9 +58,9 @@ namespace NaturalVariety.Mechanics
 
         public override void OnKill(NPC npc)
         {
-            if(Main.netMode == NetmodeID.SinglePlayer)
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                BestiaryTally.SetKillCountsInBestiary(); 
+                BestiaryTally.SetKillCountsInBestiary();
             }
             else if (Main.netMode == NetmodeID.Server)
             {
@@ -79,12 +77,12 @@ namespace NaturalVariety.Mechanics
         /// <summary>
         /// Sets kill counts in bestiary for all loaded npcs 
         /// </summary>
-        public static void SetKillCountsInBestiary() 
+        public static void SetKillCountsInBestiary()
         {
             for (int npcId = -65; npcId < NPCLoader.NPCCount; npcId++)
             {
                 NPC npc = ContentSamples.NpcsByNetId[npcId];
-                BestiaryTally.SetKillCountsInBestiary(npc);  
+                SetKillCountsInBestiary(npc);
             }
         }
 
@@ -92,9 +90,9 @@ namespace NaturalVariety.Mechanics
         /// Updates kill counts for a single NPC 
         /// </summary>
         /// <param name="npc"></param>
-        public static void SetKillCountsInBestiary(NPC npc) 
+        public static void SetKillCountsInBestiary(NPC npc)
         {
-            
+
             BestiaryEntry entry = Main.BestiaryDB.FindEntryByNPCID(npc.netID);
 
             if (BestiaryEntryIsHidden(entry))

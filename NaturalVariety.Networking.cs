@@ -1,14 +1,13 @@
+using NaturalVariety.Mechanics.BestiaryTally;
 using System.IO;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using NaturalVariety.Mechanics;
 
 namespace NaturalVariety
 {
 
-	public partial class NaturalVariety
-	{
+    public partial class NaturalVariety
+    {
         public enum MessageType : byte
         {
             SyncBestiaryKillCount

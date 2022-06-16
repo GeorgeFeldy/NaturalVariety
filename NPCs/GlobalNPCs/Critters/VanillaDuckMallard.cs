@@ -1,8 +1,7 @@
 ﻿using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
-using NaturalVariety.NPCs.Critters;
-using Terraria.GameContent.Bestiary;
 
 namespace NaturalVariety.NPCs.GlobalNPCs.Critters
 {
@@ -11,15 +10,8 @@ namespace NaturalVariety.NPCs.GlobalNPCs.Critters
 
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
-            return entity.type == NPCID.Duck;// ||
-                                               //(entity.type == NPCID.Duck2);
+            return entity.type == NPCID.Duck;
         }
-
-        //public override bool PreAI(NPC npc)
-        //{
-        //    NPC.setNPCName("Mallard Duck", npc.type);
-        //    return true;
-        //}
 
         public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
