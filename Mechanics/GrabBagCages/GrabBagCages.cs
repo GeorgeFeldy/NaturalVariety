@@ -9,15 +9,10 @@ namespace NaturalVariety.Mechanics.GrabBagCages
     /// </summary>
     public class GrabBagCages : GlobalItem
     {
-        public override bool AppliesToEntity(Item item, bool lateInstatiation)
-        {
-            return CageHelper.IsCageItem(item);
-        }
+        public override bool AppliesToEntity(Item item, bool lateInstatiation) => CageHelper.IsCageItem(item);
 
-        public override bool CanRightClick(Item item)
-        {
-            return CageHelper.IsCageItem(item);
-        }
+        public override bool CanRightClick(Item item) => CageHelper.IsCageItem(item);
+
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {

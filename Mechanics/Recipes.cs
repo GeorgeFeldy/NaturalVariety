@@ -4,6 +4,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using NaturalVariety.Items;
+using NaturalVariety.Items.Ammo;
 
 
 namespace NaturalVariety.Mechanics
@@ -40,14 +42,19 @@ namespace NaturalVariety.Mechanics
 
             }
 
-            RecipeGroup frogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Frog)}",
-                ItemID.Frog,
-                ModContent.ItemType<FrogBlueItem>()
-                );
+            RecipeGroup frogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Frog)}", ItemID.Frog);
 
-            RecipeGroup dartFrogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} Dart Frog",
-                ModContent.ItemType<FrogBlueItem>()
-                );
+            foreach (int item in NPCTypesHelper.FrogItems)
+            {
+                frogRecipeGroup.ValidItems.Add(item);
+            }
+
+            RecipeGroup dartFrogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} Dart Frog", ModContent.ItemType<FrogBlueItem>()); // iconic is blue frog
+
+            foreach (int item in NPCTypesHelper.NotIntersect(NPCTypesHelper.FrogItems, ModContent.ItemType<FrogBlueItem>())) // add the rest of the frog items to the dart frog recipe group
+            {
+                dartFrogRecipeGroup.ValidItems.Add(item);
+            }
 
             frogRecipeGroupIndex = RecipeGroup.RegisterGroup("Frog", frogRecipeGroup);
             dartFrogRecipeGroupIndex = RecipeGroup.RegisterGroup("DartFrog", dartFrogRecipeGroup);
@@ -61,6 +68,10 @@ namespace NaturalVariety.Mechanics
             poisonKnifeRecipe.AddIngredient(ItemID.ThrowingKnife, 250);
             poisonKnifeRecipe.Register();
 
+            Recipe poisonArrowRecipe = Mod.CreateRecipe(ModContent.ItemType<PoisonArrow>(), 250);
+            poisonArrowRecipe.AddRecipeGroup(dartFrogRecipeGroupIndex);
+            poisonArrowRecipe.AddIngredient(ItemID.WoodenArrow, 250);
+            poisonArrowRecipe.Register();
 
             foreach (int item in NPCTypesHelper.SongbirdItems)
             {

@@ -18,14 +18,12 @@ namespace NaturalVariety.NPCs.GlobalNPCs.Critters
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
            {
                 new FlavorTextBestiaryInfoElement(
-                    NaturalVariety.ModTag + ":\nThe mallard or wild duck (Anas platyrhynchos) is a dabbling duck that breeds throughout " +
-                   "the temperate and subtropical Americas, Eurasia, and North Africa. Males have purple patches on their wings, while the " +
+                    NaturalVariety.ModTag + ":\nThe mallard or wild duck (Anas platyrhynchos) is a dabbling duck that breeds in " +
+                   "the temperate and subtropical areas. Males have purple patches on their wings, while the " +
                    "females (hens or ducks) have mainly brown-speckled plumage. Both sexes have an area of white-bordered black "+
                    "or iridescent blue feathers called a speculum on their wings; males especially tend to have blue speculum feathers.")
            });
 
         }
-
-
     }
 }

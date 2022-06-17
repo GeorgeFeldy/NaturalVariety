@@ -10,6 +10,9 @@ namespace NaturalVariety.Utils
     public static class SpawnHelper
     {
 
+        public static float GoldCritterModifier(NPCSpawnInfo spawnInfo, float chance) => (spawnInfo.Player.RollLuck(NPC.goldCritterChance) == 0) ? chance : 0f;
+
+
         public static float ForestBirdChance(NPCSpawnInfo spawnInfo)
         {
             float chance = SpawnCondition.OverworldDayBirdCritter.Chance +
@@ -21,6 +24,7 @@ namespace NaturalVariety.Utils
 
             return newChance;
         }
+
 
         public static float JungleCritterChance(NPCSpawnInfo spawnInfo)
         {
@@ -110,16 +114,7 @@ namespace NaturalVariety.Utils
             return newChance;
         }
 
-        public static float GoldCritterModifier(NPCSpawnInfo spawnInfo, float chance)
-        {
-            bool modifier = spawnInfo.Player.RollLuck(NPC.goldCritterChance) == 0;
-
-            float newChance = modifier ? chance : 0f;
-
-            return newChance;
-        }
-
-
+        
 
         public static bool IsOnGrass(NPCSpawnInfo spawnInfo)
         {
@@ -135,16 +130,12 @@ namespace NaturalVariety.Utils
             return (tile.TileType == TileID.Sand) || (tile.TileType == TileID.ShellPile); // only on sand or shell piles 
         }
 
-
-
-
         public static bool IsWaterNearby(NPCSpawnInfo spawnInfo)
         {
 
             bool waterFlag = false;
 
-            Tile tile;
-            tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
+            Tile tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
 
             // set spawn on solid ground modifier to true only if there is water in close vicinity
             for (int i = -15; i <= 15; i++)
@@ -160,28 +151,13 @@ namespace NaturalVariety.Utils
             }
 
             return waterFlag;
-
         }
 
-        public static bool DryTile(NPCSpawnInfo spawnInfo)
-        {
+        public static bool DryTile(NPCSpawnInfo spawnInfo) => Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].LiquidAmount == 0;
 
-            Tile tile;
-            tile = Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY];
+        public static bool InnerThird(NPCSpawnInfo info) => Math.Abs(info.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3;
 
-            return tile.LiquidAmount == 0;
-
-        }
-
-        public static bool InnerThird(NPCSpawnInfo info)
-        {
-            return Math.Abs(info.SpawnTileX - Main.spawnTileX) < Main.maxTilesX / 3;
-        }
-
-        public static bool OuterThird(NPCSpawnInfo info)
-        {
-            return Math.Abs(info.SpawnTileX - Main.spawnTileX) > Main.maxTilesX / 3;
-        }
-
+        public static bool OuterThird(NPCSpawnInfo info) => Math.Abs(info.SpawnTileX - Main.spawnTileX) >= Main.maxTilesX / 3;
+        
     }
 }

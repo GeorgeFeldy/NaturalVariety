@@ -54,7 +54,7 @@ namespace NaturalVariety.NPCs.Critters
                 SoundEngine.PlaySound(SoundID.Seagull);
             }
 
-            DisplayGoldenCritterParticles();
+            GoldenCritterParticleEffects();
         }
 
         public override void HitEffect(int hitDirection, double damage)

@@ -8,10 +8,7 @@ namespace NaturalVariety.NPCs.GlobalNPCs.Critters
     public class VanillaFrog : GlobalNPC
     {
 
-        public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
-        {
-            return entity.type == NPCID.Frog;
-        }
+        public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => entity.type == NPCID.Frog;
 
         public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {

@@ -51,7 +51,7 @@ namespace NaturalVariety.NPCs.Critters
             }
         }
 
-        public void DisplayGoldenCritterParticles()
+        public void GoldenCritterParticleEffects()
         {
             if (Main.rand.NextBool(20))
             {

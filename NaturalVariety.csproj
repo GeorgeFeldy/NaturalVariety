@@ -8,12 +8,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Misc\ContentSamplesPatch.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Misc\ContentSamplesPatch.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
 </Project>

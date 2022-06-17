@@ -29,11 +29,9 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "Eurasian Jay (Garrulus glandarius) is a species of passerine bird in the family Corvidae with boldly patterned " +
+                    "The Jay (Garrulus glandarius) is a species of passerine bird in the family Corvidae with boldly patterned " +
                     "plumage, typically having blue feathers in the wings or tail.")
             });
         }
-
-
     }
 }

@@ -26,10 +26,7 @@ namespace NaturalVariety.NPCs.Critters
             NPC.rarity = 3;
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            return 0f; // can only spawn via Flamingo spawner
-        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo) => 0f; // can only spawn via Flamingo spawner
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -47,12 +44,8 @@ namespace NaturalVariety.NPCs.Critters
         public override void AI()
         {
             base.AI();
-            if (Main.rand.NextBool(400) && !Main.dedServ)
-            {
-                SoundEngine.PlaySound(CustomSounds.FlamingoCall, NPC.position);
-            }
 
-            DisplayGoldenCritterParticles();
+            GoldenCritterParticleEffects();
         }
 
         public override void HitEffect(int hitDirection, double damage)

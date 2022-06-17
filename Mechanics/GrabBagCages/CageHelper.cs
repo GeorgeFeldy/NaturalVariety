@@ -19,6 +19,14 @@ namespace NaturalVariety.Mechanics.GrabBagCages
         /// </summary>
         public static readonly Dictionary<int, List<Item>> recipeItemDict;
 
+
+        /// <summary>
+        /// Returns true if item is cage type found in the list 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool IsCageItem(Item item) => cageList.BinarySearch(item.type) >= 0;
+
         static CageHelper()
         {
             cageList = new() // list of "cage" type items, sorted by ID 
@@ -110,16 +118,6 @@ namespace NaturalVariety.Mechanics.GrabBagCages
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Returns true if item is cage type found in the list 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool IsCageItem(Item item)
-        {
-            return cageList.BinarySearch(item.type) >= 0;
         }
     }
 }

@@ -8,10 +8,7 @@ namespace NaturalVariety.NPCs.GlobalNPCs.Critters
     public class VanillaRat : GlobalNPC
     {
 
-        public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
-        {
-            return entity.type == NPCID.Rat;
-        }
+        public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => entity.type == NPCID.Rat;
 
         public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {

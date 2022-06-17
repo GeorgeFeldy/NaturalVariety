@@ -28,7 +28,7 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
 
                 new FlavorTextBestiaryInfoElement(
-                    "The blue poison dart frog is a variant of the poison dart frog (Dendrobates tinctorius) found in the forests surrounded by the Sipaliwini Savanna, which is located in southern Suriname and adjacent far northern Brazil.")
+                    "The blue poison dart frog (Dendrobates tinctorius \"azureus\") is a spotted bright blue morph of the poison dart frog found in equatorial forests. Like most species of the genus Dendrobates, D. tinctorius is highly toxic if consumed.")
             });
         }
 

@@ -22,17 +22,12 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "The common kingfisher (Alcedo atthis), also known as the Eurasian kingfisher and river kingfisher, is a small kingfisher found across Eurasia and North Africa. It has the typical short-tailed, large-headed kingfisher profile; it has blue upperparts, orange underparts and a long bill. It feeds mainly on fish, caught by diving, and has special visual adaptations to enable it to see prey under water."
+                    "The common kingfisher (Alcedo atthis), also known as the river kingfisher, is a small kingfisher species. It has the typical short-tailed, large-headed kingfisher profile; it has blue upperparts, orange underparts and a long bill. It feeds mainly on fish, caught by diving, and has special visual adaptations to enable it to see prey under water."
                     )
             });
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-
-            return SpawnHelper.JungleBirdChance(spawnInfo);
-
-        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo) => SpawnHelper.JungleBirdChance(spawnInfo);
 
     }
 }

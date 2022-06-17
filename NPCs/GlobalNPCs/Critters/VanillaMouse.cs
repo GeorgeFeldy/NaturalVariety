@@ -8,10 +8,8 @@ namespace NaturalVariety.NPCs.GlobalNPCs.Critters
     public class VanillaMouse : GlobalNPC
     {
 
-        public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
-        {
-            return entity.type == NPCID.Mouse;
-        }
+        public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => entity.type == NPCID.Mouse;
+
 
         public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {

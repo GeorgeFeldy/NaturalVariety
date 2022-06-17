@@ -5,22 +5,22 @@ using Terraria.ModLoader;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class FrogBlueItem : BaseCritterItem
+    public class FrogRedItem : BaseCritterItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Blue Poison Dart Frog");
+            DisplayName.SetDefault("Strawberry Poison Dart Frog");
         }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.makeNPC = (short)ModContent.NPCType<FrogBlue>();
+            Item.makeNPC = (short)ModContent.NPCType<FrogRed>();
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            TooltipLine dartFrogTooltip = new TooltipLine(Mod, "PoisonousFrogTooltip", "You shouldn't eat this!");
+            TooltipLine dartFrogTooltip = new TooltipLine(Mod, "RedPoisonousFrogTooltip", "Not strawberry flavoured!");
             tooltips.Add(dartFrogTooltip);
         }
 

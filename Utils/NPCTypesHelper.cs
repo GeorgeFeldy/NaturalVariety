@@ -58,7 +58,9 @@ namespace NaturalVariety.Utils
 
             Frogs = new()
             {
-                ModContent.NPCType<BaseFrog>()
+                ModContent.NPCType<FrogBlue>(),
+                ModContent.NPCType<FrogRed>(),
+                ModContent.NPCType<FrogYellow>(),
             };
 
             GoldenCritters = new()
@@ -94,7 +96,9 @@ namespace NaturalVariety.Utils
 
             FrogItems = new()
             {
-                ModContent.ItemType<FrogBlueItem>()
+                ModContent.ItemType<FrogBlueItem>(),
+                ModContent.ItemType<FrogRedItem>(),
+                ModContent.ItemType<FrogYellowItem>(),
             };
 
             GoldenCritterItems = new()

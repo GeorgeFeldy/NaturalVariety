@@ -1,41 +1,36 @@
 using NaturalVariety.Items.Critters;
-using NaturalVariety.Utils;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
 namespace NaturalVariety.NPCs.Critters
 {
-    public class BeeEater : BaseSongbird
+    public class FrogYellow : BaseFrog
     {
 
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
-            DisplayName.SetDefault("Bee-eater");
+            DisplayName.SetDefault("Poison Dart Frog");
         }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<BeeEaterItem>();
+            NPC.catchItem = (short)ModContent.ItemType<FrogYellowItem>();
         }
+
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                    "The European bee-eater (Merops apiaster) is a near passerine bird in the bee-eater family, Meropidae. " +
-                    "This species, like other bee-eaters, is a richly coloured, slender bird. It has brown and yellow upper parts, whilst the wings and under parts are blueish-green."
-                    )
+                         "The Citronella poison dart frog (Dendrobates tinctorius \"citronella\") is a bright yellow and blue-black morph of the poison dart frog found in equatorial forests. Like most species of the genus Dendrobates, D. tinctorius is highly toxic if consumed.")
             });
         }
-
-        public override float SpawnChance(NPCSpawnInfo spawnInfo) => SpawnHelper.JungleBirdChance(spawnInfo);
 
     }
 }

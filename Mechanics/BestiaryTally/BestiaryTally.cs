@@ -40,7 +40,6 @@ namespace NaturalVariety.Mechanics.BestiaryTally
                 BestiaryTally.SetKillCountsInBestiary();
             }
         }
-
     }
 
     /// <summary>
@@ -51,10 +50,7 @@ namespace NaturalVariety.Mechanics.BestiaryTally
 
         public override bool InstancePerEntity => true;
 
-        public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
-        {
-            return true;
-        }
+        public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => true;
 
         public override void OnKill(NPC npc)
         {
@@ -106,15 +102,9 @@ namespace NaturalVariety.Mechanics.BestiaryTally
             entry.AddTags(tallyInfo);
         }
 
-        public static bool IsTallyBestiaryInfoElement(IBestiaryInfoElement element)
-        {
-            return element.GetType() == typeof(BestiaryTallyInfoElement);
-        }
+        public static bool IsTallyBestiaryInfoElement(IBestiaryInfoElement element) => element.GetType() == typeof(BestiaryTallyInfoElement);
 
-        public static bool BestiaryEntryIsHidden(BestiaryEntry entry)
-        {
-            return entry.Info.Count == 0;
-        }
+        public static bool BestiaryEntryIsHidden(BestiaryEntry entry) => entry.Info.Count == 0;
 
     }
 }

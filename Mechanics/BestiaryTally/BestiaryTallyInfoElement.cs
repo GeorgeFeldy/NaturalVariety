@@ -176,33 +176,6 @@ namespace NaturalVariety.Mechanics.BestiaryTally
 
         }
 
-        private string GetBannerTypeName(NPC npc)
-        {
-            string bannerTypeName;
-
-            string currentNpcTypeName = Lang.GetNPCNameValue(npc.netID);
-
-            if (npc.ModNPC == null)
-            {
-                bannerTypeName = Lang.GetNPCNameValue(Item.BannerToNPC(Item.NPCtoBanner(npc.BannerID())));
-            }
-            else
-            {
-                bannerTypeName = Lang.GetNPCNameValue(Item.BannerToNPC(npc.ModNPC.Banner));
-            }
-
-
-            if (bannerTypeName != currentNpcTypeName)
-            {
-                return "(" + bannerTypeName + ")";
-            }
-            else
-            {
-                return "";
-            }
-
-        }
-
         private void ShowNameBanner(UIElement element)
         {
             if (element.IsMouseHovering && element != null)

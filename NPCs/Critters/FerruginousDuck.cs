@@ -28,7 +28,9 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "The ferruginous duck, also ferruginous pochard, common white-eye or white-eyed pochard (Aythya nyroca) is a medium-sized diving duck from Eurosiberia. The breeding male is a rich, dark chestnut on the head, breast and flanks with contrasting pure white undertail coverts. In flight the white belly and underwing patch are visible. The females are duller and browner than the males. The male has a yellow eye and the females have a dark eye.")
+                   "The ferruginous duck, also ferruginous pochard, common white-eye or white-eyed pochard (Aythya nyroca) is a medium-sized diving duck. " +
+                   "The breeding male is a rich, dark chestnut on the head, breast and flanks with contrasting pure white undertail coverts. " +
+                   "In flight the white belly and underwing patch are visible. The females are duller and browner than the males. The male has a yellow eye and the females have a dark eye.")
             });
         }
 

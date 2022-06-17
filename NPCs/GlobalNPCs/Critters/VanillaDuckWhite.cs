@@ -8,10 +8,8 @@ namespace NaturalVariety.NPCs.GlobalNPCs.Critters
     public class VanillaDuckWhite : GlobalNPC
     {
 
-        public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
-        {
-            return entity.type == NPCID.DuckWhite;
-        }
+        public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => entity.type == NPCID.DuckWhite;
+
 
         public override void SetBestiary(NPC npc, BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {

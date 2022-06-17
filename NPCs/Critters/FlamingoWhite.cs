@@ -20,10 +20,7 @@ namespace NaturalVariety.NPCs.Critters
             NPC.catchItem = (short)ModContent.ItemType<FlamingoWhiteItem>();
         }
 
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
-        {
-            return 0f; // can only spawn via Flamingo spawner
-        }
+        public override float SpawnChance(NPCSpawnInfo spawnInfo) => 0f; // can only spawn via Flamingo spawner
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -33,17 +30,11 @@ namespace NaturalVariety.NPCs.Critters
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 
                 new FlavorTextBestiaryInfoElement(
-                   "The greater flamingo (Phoenicopterus roseus) is the most widespread and largest species of the flamingo family." +
-                   " It is found in Africa, the Indian subcontinent, the Middle East, and in southern Europe." +
-                   " Most of its plumage is white, but the primary and secondary flight feathers are black.")
+                   "The greater flamingo (Phoenicopterus roseus) is the most widespread and largest species of the flamingo family. " +
+                   "Most of its plumage is white, but the primary and secondary flight feathers are black.")
             });
         }
 
-        public override void AI()
-        {
-            base.AI();
-
-        }
     }
 
 }
