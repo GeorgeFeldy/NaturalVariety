@@ -1,5 +1,4 @@
-﻿- Add gores for frogs
-- Add ambients for frogs and birds
+﻿- Add ambients for frogs and birds
 - Workshop images 
 - Lawn flamingo recipe + white, gold. Remove from travelling merchant.
 - Mollusk whistle replace with ingredient for new mollusk whistle recipe
