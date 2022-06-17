@@ -1,5 +1,4 @@
-﻿- Add ambients for frogs and birds
-- Workshop images 
+﻿- Workshop images 
 - Lawn flamingo recipe + white, gold. Remove from travelling merchant.
 - Mollusk whistle replace with ingredient for new mollusk whistle recipe
 - Bird feeder tile that can spawn birds

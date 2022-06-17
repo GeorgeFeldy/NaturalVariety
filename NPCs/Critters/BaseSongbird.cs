@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using NaturalVariety.Utils;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -43,6 +44,15 @@ namespace NaturalVariety.NPCs.Critters
             BannerItem = Item.BannerToItem(Banner);
         }
 
+        public override void AI()
+        {
+            base.AI();
+            if (Main.rand.NextBool(400) && !Main.dedServ)
+            {
+                SoundEngine.PlaySound(SoundID.Bird);
+            }
+        }
+
         public override void HitEffect(int hitDirection, double damage)
         {
             if (NPC.life > 0)
@@ -57,7 +67,7 @@ namespace NaturalVariety.NPCs.Critters
 
             if (Main.netMode == NetmodeID.Server)
             {
-                return; // We don't want Mod.Find<ModGore> to run on servers as it will crash because gores are not loaded on servers
+                return; 
             }
 
             if (NPC.life <= 0)
