@@ -9,6 +9,7 @@ namespace NaturalVariety.Items.Critters
     {
         public override void SetStaticDefaults()
         {
+            base.SetStaticDefaults();
             DisplayName.SetDefault("Gold Flamingo");
         }
 

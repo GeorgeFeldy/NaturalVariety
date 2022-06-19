@@ -9,6 +9,7 @@ namespace NaturalVariety.Items.Critters
     {
         public override void SetStaticDefaults()
         {
+            base.SetStaticDefaults();
             DisplayName.SetDefault("Citronella Poison Dart Frog");
         }
 
