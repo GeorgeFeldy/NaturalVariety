@@ -7,21 +7,12 @@ namespace NaturalVariety.Utils
 {
 
     /// <summary>
-    /// List of NPC and Item IDs by categories in this mod, for various uses
+    /// List of critter Item IDs by categories in this mod, for various uses
     /// </summary>
-	public static class NPCTypesHelper
+	public static class ItemTypeCategorisation
     {
         // general list for critter and critter items in this mod 
-        public static readonly List<int> Critters;
         public static readonly List<int> CritterItems;
-
-        // Lists of all critter NPC types in this mod 
-        public static readonly List<int> Songbirds;
-        public static readonly List<int> Ducks;
-        public static readonly List<int> Flamingoes;
-        public static readonly List<int> Frogs;
-        public static readonly List<int> GoldenCritters;
-
 
         // Lists of all critter item types in this mod
         public static readonly List<int> SongbirdItems;
@@ -30,46 +21,9 @@ namespace NaturalVariety.Utils
         public static readonly List<int> FrogItems;
         public static readonly List<int> GoldenCritterItems;
 
-        static NPCTypesHelper()
+        static ItemTypeCategorisation()
         {
-            Songbirds = new()
-            {
-                ModContent.NPCType<Blackbird>(),
-                ModContent.NPCType<EurasianJay>(),
-                ModContent.NPCType<Goldfinch>(),
-                ModContent.NPCType<BeeEater>(),
-                ModContent.NPCType<Kingfisher>()
-            };
-
-            Ducks = new()
-            {
-                ModContent.NPCType<Pochard>(),
-                ModContent.NPCType<FerruginousDuck>(),
-                ModContent.NPCType<GoldDuck>(),
-                ModContent.NPCType<GoldSeagull>()
-            };
-
-            Flamingoes = new()
-            {
-                ModContent.NPCType<FlamingoPink>(),
-                ModContent.NPCType<FlamingoWhite>(),
-                ModContent.NPCType<FlamingoGold>()
-            };
-
-            Frogs = new()
-            {
-                ModContent.NPCType<FrogBlue>(),
-                ModContent.NPCType<FrogRed>(),
-                ModContent.NPCType<FrogYellow>(),
-            };
-
-            GoldenCritters = new()
-            {
-                ModContent.NPCType<GoldDuck>(),
-                ModContent.NPCType<GoldSeagull>(),
-                ModContent.NPCType<FlamingoGold>()
-            };
-
+           
             SongbirdItems = new()
             {
                 ModContent.ItemType<BlackbirdItem>(),
@@ -89,7 +43,7 @@ namespace NaturalVariety.Utils
 
             FlamingoeItems = new()
             {
-                ModContent.ItemType<FlamingoItem>(),
+                ModContent.ItemType<FlamingoPinkItem>(),
                 ModContent.ItemType<FlamingoWhiteItem>(),
                 ModContent.ItemType<FlamingoGoldItem>()
             };
@@ -108,12 +62,6 @@ namespace NaturalVariety.Utils
                 ModContent.ItemType<FlamingoGoldItem>()
             };
 
-            Critters = new();
-            Critters.AddRange(Songbirds);
-            Critters.AddRange(Ducks);
-            Critters.AddRange(Flamingoes);
-            Critters.AddRange(Frogs);
-            Critters.AddRange(GoldenCritters);
 
             CritterItems = new();
             CritterItems.AddRange(SongbirdItems);

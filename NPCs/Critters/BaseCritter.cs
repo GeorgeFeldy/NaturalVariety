@@ -1,3 +1,4 @@
+using NaturalVariety.Items.Critters;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,6 +11,7 @@ namespace NaturalVariety.NPCs.Critters
     /// </summary>
     public abstract class BaseCritter : ModNPC
     {
+
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault(" ");

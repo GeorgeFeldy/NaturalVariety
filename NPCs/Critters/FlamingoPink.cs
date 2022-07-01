@@ -19,7 +19,7 @@ namespace NaturalVariety.NPCs.Critters
         public override void SetDefaults()
         {
             base.SetDefaults();
-            NPC.catchItem = (short)ModContent.ItemType<FlamingoItem>();
+            NPC.catchItem = (short)ModContent.ItemType<FlamingoPinkItem>();
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo) => 0f; // can only spawn via Flamingo spawner
@@ -38,6 +38,17 @@ namespace NaturalVariety.NPCs.Critters
                    "brine fly larvae, and brine shrimp that flamingos eat in their wetland environment.")
             });
         }
+
+        public override void AI()
+        {
+            base.AI();
+            if (Main.rand.NextBool(400) && !Main.dedServ)
+            {
+                SoundEngine.PlaySound(CustomSounds.FlamingoCall, NPC.position);
+            }
+        }
+
+
     }
 }
 

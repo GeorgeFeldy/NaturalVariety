@@ -46,7 +46,13 @@ namespace NaturalVariety.NPCs.Critters
             base.AI();
 
             GoldenCritterParticleEffects();
+
+            if (Main.rand.NextBool(400) && !Main.dedServ)
+            {
+                SoundEngine.PlaySound(CustomSounds.FlamingoCall, NPC.position);
+            }
         }
+
 
         public override void HitEffect(int hitDirection, double damage)
         {

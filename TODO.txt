@@ -5,3 +5,5 @@
 - Tree shake spawn mod birds 
 - Add corrupt/crimson birds
 - Add golden penguin 
+- toucans
+- chameleons

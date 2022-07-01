@@ -69,14 +69,6 @@ namespace NaturalVariety.NPCs.Critters
             const float spookDistance = 100f;
             const float corneredDistance = avoidDistance + 50f;
 
-            if (NPCTypesHelper.Flamingoes.Contains(NPC.netID))
-            {
-                if (Main.rand.NextBool(400) && !Main.dedServ)
-                {
-                    SoundEngine.PlaySound(CustomSounds.FlamingoCall, NPC.position);
-                }
-            }
-
             // pick a random direction initally 
             if (AI_NextDir == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
