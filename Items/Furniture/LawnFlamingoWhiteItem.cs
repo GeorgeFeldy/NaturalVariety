@@ -1,3 +1,4 @@
+using NaturalVariety.Items.Critters;
 using NaturalVariety.NPCs.Critters;
 using NaturalVariety.Tiles;
 using Terraria;
@@ -21,6 +22,14 @@ namespace NaturalVariety.Items.Furniture
             Item.maxStack = 99;
             Item.width = 20;
             Item.height = 20;
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe recipe = Recipe.Create(Type);
+            recipe.AddIngredient<FlamingoWhiteItem>();
+            recipe.AddTile(TileID.Solidifier);
+            recipe.Register();
         }
     }
 }
