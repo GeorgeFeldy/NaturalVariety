@@ -22,7 +22,7 @@ namespace NaturalVariety.Items.Critters
 
         public override void AddRecipes()
         {
-            Recipe delightRecipe = Mod.CreateRecipe(ItemID.GoldenDelight, 2);
+            Recipe delightRecipe = Recipe.Create(ItemID.GoldenDelight, 2);
             delightRecipe.AddIngredient<FlamingoGoldItem>();
             delightRecipe.AddTile(TileID.CookingPots);
             delightRecipe.Register();

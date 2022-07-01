@@ -26,7 +26,7 @@ namespace NaturalVariety.Mechanics
                 vanillaGroupIndex = RecipeGroup.recipeGroupIDs["Birds"];
                 RecipeGroup group = RecipeGroup.recipeGroups[vanillaGroupIndex];
 
-                foreach (int item in NPCTypesHelper.SongbirdItems)
+                foreach (int item in ItemTypeCategorisation.SongbirdItems)
                 {
                     group.ValidItems.Add(item);
                 }
@@ -44,14 +44,14 @@ namespace NaturalVariety.Mechanics
 
             RecipeGroup frogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.Frog)}", ItemID.Frog);
 
-            foreach (int item in NPCTypesHelper.FrogItems)
+            foreach (int item in ItemTypeCategorisation.FrogItems)
             {
                 frogRecipeGroup.ValidItems.Add(item);
             }
 
             RecipeGroup dartFrogRecipeGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} Dart Frog", ModContent.ItemType<FrogBlueItem>()); // iconic is blue frog
 
-            foreach (int item in NPCTypesHelper.NotIntersect(NPCTypesHelper.FrogItems, ModContent.ItemType<FrogBlueItem>())) // add the rest of the frog items to the dart frog recipe group
+            foreach (int item in ItemTypeCategorisation.NotIntersect(ItemTypeCategorisation.FrogItems, ModContent.ItemType<FrogBlueItem>())) // add the rest of the frog items to the dart frog recipe group
             {
                 dartFrogRecipeGroup.ValidItems.Add(item);
             }
@@ -63,35 +63,35 @@ namespace NaturalVariety.Mechanics
 
         public override void AddRecipes()
         {
-            Recipe poisonKnifeRecipe = Mod.CreateRecipe(ItemID.PoisonedKnife, 250);
+            Recipe poisonKnifeRecipe = Recipe.Create(ItemID.PoisonedKnife, 250);
             poisonKnifeRecipe.AddRecipeGroup(dartFrogRecipeGroupIndex);
             poisonKnifeRecipe.AddIngredient(ItemID.ThrowingKnife, 250);
             poisonKnifeRecipe.Register();
 
-            Recipe poisonArrowRecipe = Mod.CreateRecipe(ModContent.ItemType<PoisonArrow>(), 250);
+            Recipe poisonArrowRecipe = Recipe.Create(ModContent.ItemType<PoisonArrow>(), 250);
             poisonArrowRecipe.AddRecipeGroup(dartFrogRecipeGroupIndex);
             poisonArrowRecipe.AddIngredient(ItemID.WoodenArrow, 250);
             poisonArrowRecipe.Register();
 
-            foreach (int item in NPCTypesHelper.SongbirdItems)
+            foreach (int item in ItemTypeCategorisation.SongbirdItems)
             {
-                Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedBird);
+                Recipe roastedRecipe = Recipe.Create(ItemID.RoastedBird);
                 roastedRecipe.AddIngredient(item);
                 roastedRecipe.AddTile(TileID.CookingPots);
                 roastedRecipe.Register();
             }
 
-            foreach (int item in NPCTypesHelper.NotIntersect(NPCTypesHelper.DuckItems, NPCTypesHelper.GoldenCritterItems))
+            foreach (int item in ItemTypeCategorisation.NotIntersect(ItemTypeCategorisation.DuckItems, ItemTypeCategorisation.GoldenCritterItems))
             {
-                Recipe roastedRecipe = Mod.CreateRecipe(ItemID.RoastedDuck);
+                Recipe roastedRecipe = Recipe.Create(ItemID.RoastedDuck);
                 roastedRecipe.AddIngredient(item);
                 roastedRecipe.AddTile(TileID.CookingPots);
                 roastedRecipe.Register();
             }
 
-            foreach (int item in NPCTypesHelper.NotIntersect(NPCTypesHelper.GoldenCritterItems, ModContent.ItemType<FlamingoGoldItem>()))
+            foreach (int item in ItemTypeCategorisation.NotIntersect(ItemTypeCategorisation.GoldenCritterItems, ModContent.ItemType<FlamingoGoldItem>()))
             {
-                Recipe delightRecipe = Mod.CreateRecipe(ItemID.GoldenDelight);
+                Recipe delightRecipe = Recipe.Create(ItemID.GoldenDelight);
                 delightRecipe.AddIngredient(item);
                 delightRecipe.AddTile(TileID.CookingPots);
                 delightRecipe.Register();

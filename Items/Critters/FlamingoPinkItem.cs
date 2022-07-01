@@ -1,10 +1,11 @@
 using NaturalVariety.NPCs.Critters;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace NaturalVariety.Items.Critters
 {
-    public class FlamingoItem : BaseCritterItem
+    public class FlamingoPinkItem : BaseCritterItem
     {
         public override void SetStaticDefaults()
         {
@@ -18,5 +19,6 @@ namespace NaturalVariety.Items.Critters
             Item.makeNPC = (short)ModContent.NPCType<FlamingoPink>();
             Item.value = Item.sellPrice(silver: 10);
         }
+
     }
 }

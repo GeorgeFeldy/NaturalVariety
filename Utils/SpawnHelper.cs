@@ -16,13 +16,11 @@ namespace NaturalVariety.Utils
         public static float ForestBirdChance(NPCSpawnInfo spawnInfo)
         {
             float chance = SpawnCondition.OverworldDayBirdCritter.Chance +
-                           SpawnCondition.TownGeneralCritter.Chance;
+                           SpawnCondition.TownCritter.Chance;
 
-            bool modifier = IsOnGrass(spawnInfo) && DryTile(spawnInfo);
+            bool modifier = IsOnGrass(spawnInfo) && DryTile(spawnInfo) && Main.dayTime;
 
-            float newChance = modifier ? chance : 0f;
-
-            return newChance;
+            return modifier ? chance : 0f;
         }
 
 
@@ -37,14 +35,11 @@ namespace NaturalVariety.Utils
 
         public static float JungleBirdChance(NPCSpawnInfo spawnInfo)
         {
-
-            bool modifier = DryTile(spawnInfo);
-
             float chance = JungleCritterChance(spawnInfo);
 
-            float newChance = modifier ? chance : 0f;
+            bool modifier = DryTile(spawnInfo) && Main.dayTime;
 
-            return newChance;
+            return modifier ? chance : 0f;
         }
 
 
@@ -53,7 +48,7 @@ namespace NaturalVariety.Utils
             float chance = SpawnCondition.OverworldWaterSurfaceCritter.Chance +    
                            SpawnCondition.TownOverworldWaterSurfaceCritter.Chance; 
 
-            bool modifier = (InnerThird(spawnInfo) || spawnInfo.PlayerInTown);// && IsOnGrass(spawnInfo);
+            bool modifier = (InnerThird(spawnInfo) || spawnInfo.PlayerInTown) && Main.dayTime;
 
             chance = modifier ? chance : 0f;
 
@@ -71,7 +66,7 @@ namespace NaturalVariety.Utils
 
             bool landModifier;
             bool waterModifier;
-            bool grassModifier = IsOnGrass(spawnInfo);
+            bool grassModifier = IsOnGrass(spawnInfo) && Main.dayTime;
 
             landModifier = IsWaterNearby(spawnInfo);
 
@@ -104,7 +99,6 @@ namespace NaturalVariety.Utils
             float baseWaterChance = SpawnCondition.OverworldWaterSurfaceCritter.Chance / 2;
             float baseLandChance = SpawnCondition.Overworld.Chance / 2;
 
-            //bool beachCondition = (spawnInfo.SpawnTileX < 250 || spawnInfo.SpawnTileX > Main.maxTilesX - 250); // only at the Ocean 
             bool beachCondition = spawnInfo.Player.ZoneBeach;
 
             bool sandCondition = IsOnBeachSand(spawnInfo);

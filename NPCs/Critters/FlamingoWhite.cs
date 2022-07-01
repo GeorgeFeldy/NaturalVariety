@@ -1,5 +1,7 @@
 using NaturalVariety.Items.Critters;
+using NaturalVariety.Sounds;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
@@ -33,6 +35,14 @@ namespace NaturalVariety.NPCs.Critters
                    "The greater flamingo (Phoenicopterus roseus) is the most widespread and largest species of the flamingo family. " +
                    "Most of its plumage is white, but the primary and secondary flight feathers are black.")
             });
+        }
+        public override void AI()
+        {
+            base.AI();
+            if (Main.rand.NextBool(400) && !Main.dedServ)
+            {
+                SoundEngine.PlaySound(CustomSounds.FlamingoCall, NPC.position);
+            }
         }
 
     }
